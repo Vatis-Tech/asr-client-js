@@ -4,7 +4,9 @@
   "description": "JavaScript client for Vatis Tech ASR services.",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && rm -rf .next && npm install",
+    "build": "babel src -d dist"
   },
   "repository": {
     "type": "git",
@@ -48,5 +50,10 @@
   "bugs": {
     "url": "https://gitlab.com/vatistech/asr-client-js/issues"
   },
-  "homepage": "https://gitlab.com/vatistech/asr-client-js#readme"
+  "homepage": "https://gitlab.com/vatistech/asr-client-js#readme",
+  "devDependencies": {
+    "@babel/cli": "7.16.0",
+    "@babel/core": "7.16.5",
+    "@babel/preset-env": "7.16.5"
+  }
 }
