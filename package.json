@@ -1,0 +1,52 @@
+{
+  "name": "@vatis-tech/asr-client-js",
+  "version": "1.0.0",
+  "description": "JavaScript client for Vatis Tech ASR services.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/vatistech/asr-client-js.git"
+  },
+  "keywords": [
+    "asr",
+    "client",
+    "js",
+    "asr-client",
+    "asr-js",
+    "asr-client-js",
+    "asr-js-client",
+    "javascript",
+    "react",
+    "angular",
+    "svelte",
+    "vue",
+    "speech-to-text",
+    "speech-recognition",
+    "speech recognition",
+    "vatis tech",
+    "vatis",
+    "tech",
+    "vatis-tech",
+    "vatis.tech"
+  ],
+  "author": {
+    "name": "Emanuel-Ioan Nazare",
+    "email": "emanuel@vatis.tech",
+    "url": "https://vatis.tech/"
+  },
+  "contributors": [
+    {
+      "name": "Emanuel-Ioan Nazare",
+      "email": "emanuel@vatis.tech",
+      "url": "https://vatis.tech/"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/vatistech/asr-client-js/issues"
+  },
+  "homepage": "https://gitlab.com/vatistech/asr-client-js#readme"
+}
