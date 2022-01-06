@@ -1,12 +1,31 @@
 import MicrophoneGenerator from "./MicrophoneGenerator.js";
+import ApiKeyGenerator from "./ApiKeyGenerator.js";
+
+import constants from "./helpers/constants/index.js";
+import functions from "./helpers/functions/index.js";
+
+const { API_URL } = constants;
+
+const { generateApiUrl } = functions;
 
 class VatisTechClient {
-  microphone;
-  constructor() {
-    this.microphone = new MicrophoneGenerator({
+  microphoneGenerator;
+  apiKeyGenerator;
+  constructor({ service, model, language, apiKey }) {
+    this.microphoneGenerator = new MicrophoneGenerator({
       onDataCallBack: this.onDataCallBack,
     });
-    this.microphone
+    this.apiKeyGenerator = new ApiKeyGenerator({
+      apiUrl: generateApiUrl({ service, model, language, API_URL }),
+      responseCallback: this.initMicrophone.bind(this),
+      apiKey: apiKey,
+    });
+  }
+
+  onDataCallBack(data) {}
+
+  initMicrophone() {
+    this.microphoneGenerator
       .init()
       .then(() => {
         // console.log(this);
@@ -18,7 +37,6 @@ class VatisTechClient {
         throw errorMessage;
       });
   }
-  onDataCallBack(data) {}
 }
 
 export default VatisTechClient;
