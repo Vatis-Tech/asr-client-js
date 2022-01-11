@@ -2,10 +2,7 @@ import ApiKeyGenerator from "./components/ApiKeyGenerator.js";
 import SocketIOClientGenerator from "./components/SocketIOClientGenerator.js";
 import MicrophoneGenerator from "./components/MicrophoneGenerator.js";
 
-import constants from "./helpers/constants/index.js";
 import functions from "./helpers/functions/index.js";
-
-const { API_URL } = constants;
 
 const { generateApiUrl } = functions;
 
@@ -16,7 +13,7 @@ class VatisTechClient {
   constructor({ service, model, language, apiKey, onDataCallback }) {
     // instantiante ApiKeyGenerator - this will return on the responseCallback the serviceHost and the authToken for the SocketIOClientGenerator to connect based on the apiUrl and apiKey
     this.apiKeyGenerator = new ApiKeyGenerator({
-      apiUrl: generateApiUrl({ service, model, language, API_URL }),
+      apiUrl: generateApiUrl({ service, model, language }),
       responseCallback: this.initSocketIOClient.bind(this),
       apiKey: apiKey,
     });
