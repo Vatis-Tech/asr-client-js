@@ -1,5 +1,5 @@
 const API_URL =
-  "http://localhost:8080/api/v1/asr-client/auth?service=<service>&model=<model>&language=<language>";
+  "https://vatis.tech/api/v1/asr-client/auth?service=<service>&model=<model>&language=<language>";
 
 const SOCKET_IO_CLIENT_NAMESPACE = "/asr_stream";
 const SOCKET_IO_CLIENT_TRANSPORTS = ["polling", "websocket"];
