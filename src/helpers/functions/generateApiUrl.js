@@ -1,4 +1,8 @@
-function generateApiUrl({ service, model, language, API_URL }) {
+import constants from "../constants/index.js";
+
+const { API_URL } = constants;
+
+function generateApiUrl({ service, model, language }) {
   let apiUrl = API_URL;
 
   if (service) {
