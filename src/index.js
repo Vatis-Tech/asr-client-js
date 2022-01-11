@@ -24,9 +24,9 @@ class VatisTechClient {
       onAsrResultCallback: onDataCallback,
     });
 
-    // instantiante MicrophoneGenerator - this will return on the onDataCallBack the data that it captures from the user's microphone
+    // instantiante MicrophoneGenerator - this will return on the onDataCallback the data that it captures from the user's microphone
     this.microphoneGenerator = new MicrophoneGenerator({
-      onDataCallBack: this.onDataCallBack.bind(this),
+      onDataCallback: this.onDataCallback.bind(this),
     });
 
     // initilize ApiKeyGenerator (if successful it will initilize SocketIOClientGenerator (if successful it will initilize the MicrophoneGenerator))
@@ -50,7 +50,7 @@ class VatisTechClient {
   }
 
   // initilize MicrophoneGenerator
-  // it will ask for user's microphone, and when the user gives permission for the microphone usage, it will start sending the data that it records using the this.onDataCallBack
+  // it will ask for user's microphone, and when the user gives permission for the microphone usage, it will start sending the data that it records using the this.onDataCallback
   // this is called as a callback after the successful initialization of the SocketIOClientGenerator
   initMicrophone() {
     this.microphoneGenerator
@@ -66,7 +66,7 @@ class VatisTechClient {
 
   // send data from MicrophoneGenerator through SocketIOClientGenerator to the ASR SERVICE
   // this is called each time the stream of the microphone records another frame / ArrayBuffer
-  onDataCallBack(data) {
+  onDataCallback(data) {
     this.socketIOClientGenerator.emitData(data);
   }
 }
