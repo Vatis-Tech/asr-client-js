@@ -1,5 +1,15 @@
 import io from "socket.io-client";
 
+import constants from "../helpers/constants/index.js";
+
+const {
+  SOCKET_IO_CLIENT_NAMESPACE,
+  SOCKET_IO_CLIENT_PATH,
+  SOCKET_IO_CLIENT_TRANSPORTS,
+  SOCKET_IO_CLIENT_RESULT_PATH,
+  SOCKET_IO_CLIENT_REQUEST_PATH,
+} = constants;
+
 class SocketIOClientGenerator {
   socketRef;
   serviceHost;
@@ -13,11 +23,11 @@ class SocketIOClientGenerator {
   init({ serviceHost, authToken }) {
     this.serviceHost = serviceHost;
     this.authToken = authToken;
-    const serviceHostStream = `${serviceHost}/asr_stream`;
+    const serviceHostStream = `${serviceHost}${SOCKET_IO_CLIENT_NAMESPACE}`;
     this.socketRef = io(serviceHostStream, {
-      path: "/asr/v1/live/transcribe/socket.io",
-      transports: ["polling", "websocket"],
-      namespace: "/asr_stream",
+      path: SOCKET_IO_CLIENT_PATH,
+      transports: SOCKET_IO_CLIENT_TRANSPORTS,
+      namespace: SOCKET_IO_CLIENT_NAMESPACE,
       extraHeaders: {
         Authorization: authToken,
         FrameLength: 1,
@@ -34,7 +44,7 @@ class SocketIOClientGenerator {
       console.error(errorMessage);
       throw errorMessage;
     });
-    this.socketRef.on("/asr_result", (args) => {
+    this.socketRef.on(SOCKET_IO_CLIENT_RESULT_PATH, (args) => {
       this.onAsrResultCallback(args);
     });
     // TODO: add some callbacks for all states
@@ -50,7 +60,7 @@ class SocketIOClientGenerator {
     // });
   }
   emitData(data) {
-    this.socketRef.emit("/asr_request", {
+    this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, {
       data,
     });
   }
