@@ -1,8 +1,8 @@
 class MicrophoneGenerator {
   stream;
-  onDataCallBack;
-  constructor({ onDataCallBack }) {
-    this.onDataCallBack = onDataCallBack;
+  onDataCallback;
+  constructor({ onDataCallback }) {
+    this.onDataCallback = onDataCallback;
   }
   async init() {
     await navigator.mediaDevices
@@ -17,7 +17,7 @@ class MicrophoneGenerator {
         processor.connect(context.destination);
 
         processor.onaudioprocess = function (e) {
-          this.onDataCallBack(e.inputBuffer);
+          this.onDataCallback(e.inputBuffer);
         }.bind(this);
       })
       .catch((err) => {
