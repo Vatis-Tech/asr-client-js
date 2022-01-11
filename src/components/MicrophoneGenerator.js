@@ -1,5 +1,5 @@
 class MicrophoneGenerator {
-  localStream;
+  stream;
   onDataCallBack;
   constructor({ onDataCallBack }) {
     this.onDataCallBack = onDataCallBack;
@@ -8,7 +8,7 @@ class MicrophoneGenerator {
     await navigator.mediaDevices
       .getUserMedia({ video: false, audio: true })
       .then((stream) => {
-        this.localStream = stream;
+        this.stream = stream;
         const context = new AudioContext();
         const source = context.createMediaStreamSource(stream);
         const processor = context.createScriptProcessor(16384, 1, 1);
@@ -28,7 +28,7 @@ class MicrophoneGenerator {
       });
   }
   getStream() {
-    return this.localStream;
+    return this.stream;
   }
 }
 
