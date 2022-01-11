@@ -12,8 +12,10 @@ class ApiKeyGenerator {
     this.xmlHttp = new XMLHttpRequest();
     this.xmlHttp.onload = this.onLoad.bind(this);
     this.xmlHttp.onerror = this.onError;
-    this.xmlHttp.open("GET", apiUrl);
-    this.xmlHttp.setRequestHeader("Authorization", "Bearer " + apiKey);
+  }
+  init() {
+    this.xmlHttp.open("GET", this.apiUrl);
+    this.xmlHttp.setRequestHeader("Authorization", "Bearer " + this.apiKey);
     this.xmlHttp.send();
   }
   onError(e) {
