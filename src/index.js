@@ -1,16 +1,34 @@
 import ApiKeyGenerator from "./components/ApiKeyGenerator.js";
 import SocketIOClientGenerator from "./components/SocketIOClientGenerator.js";
 import MicrophoneGenerator from "./components/MicrophoneGenerator.js";
+import MicrophoneQueue from "./components/MicrophoneQueue.js";
 
+// import constants from "../helpers/constants/index.js";
 import functions from "./helpers/functions/index.js";
 
-const { generateApiUrl } = functions;
+// const {
+//
+// } = constants;
+
+const { generateApiUrl, checkIfFinalPacket } = functions;
 
 class VatisTechClient {
   microphoneGenerator;
   apiKeyGenerator;
   socketIOClientGenerator;
-  constructor({ service, model, language, apiKey, onDataCallback }) {
+  microphoneQueue;
+  onData;
+  waitingForFinalPacket;
+  constructor({ service, model, language, apiKey, onData }) {
+    // this is a flag that says if the whole response for the previous packet was received or not
+    this.waitingForFinalPacket = false;
+
+    // callback for sending to the user the data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
+    this.onData = onData;
+
+    // instantiante MicrophoneQueue - this will keep all the microphone buffers until they can be sent to the ASR SERVICE through the SocketIOClientGenerator
+    this.microphoneQueue = new MicrophoneQueue();
+
     // instantiante ApiKeyGenerator - this will return on the responseCallback the serviceHost and the authToken for the SocketIOClientGenerator to connect based on the apiUrl and apiKey
     this.apiKeyGenerator = new ApiKeyGenerator({
       apiUrl: generateApiUrl({ service, model, language }),
@@ -21,12 +39,13 @@ class VatisTechClient {
     // instantiante SocketIOClientGenerator - this will return on the onAsrResultCallback the results that it gets back from the ASR SERVICE and when it connects to the ASR SERVICE it will initilize the MicrophoneGenerator through the onConnectCallback
     this.socketIOClientGenerator = new SocketIOClientGenerator({
       onConnectCallback: this.initMicrophone.bind(this),
-      onAsrResultCallback: onDataCallback,
+      onAsrResultCallback:
+        this.onSocketIOClientGeneratorOnAsrResultCallback.bind(this),
     });
 
-    // instantiante MicrophoneGenerator - this will return on the onDataCallback the data that it captures from the user's microphone
+    // instantiante MicrophoneGenerator - this will return on the this.onMicrophoneGeneratorDataCallback the data that it captures from the user's microphone
     this.microphoneGenerator = new MicrophoneGenerator({
-      onDataCallback: this.onDataCallback.bind(this),
+      onDataCallback: this.onMicrophoneGeneratorDataCallback.bind(this),
     });
 
     // initilize ApiKeyGenerator (if successful it will initilize SocketIOClientGenerator (if successful it will initilize the MicrophoneGenerator))
@@ -50,7 +69,7 @@ class VatisTechClient {
   }
 
   // initilize MicrophoneGenerator
-  // it will ask for user's microphone, and when the user gives permission for the microphone usage, it will start sending the data that it records using the this.onDataCallback
+  // it will ask for user's microphone, and when the user gives permission for the microphone usage, it will start sending the data that it records using the this.onMicrophoneGeneratorDataCallback
   // this is called as a callback after the successful initialization of the SocketIOClientGenerator
   initMicrophone() {
     this.microphoneGenerator
@@ -64,10 +83,31 @@ class VatisTechClient {
       });
   }
 
-  // send data from MicrophoneGenerator through SocketIOClientGenerator to the ASR SERVICE
-  // this is called each time the stream of the microphone records another frame / ArrayBuffer
-  onDataCallback(data) {
-    this.socketIOClientGenerator.emitData(data);
+  // get data from MicrophoneGenerator and add it to the queue
+  // if the SocketIOClientGenerator is not waiting for a packet response then it should emit a new pachet with the data that is waiting in the queue
+  onMicrophoneGeneratorDataCallback(data) {
+    this.microphoneQueue.enqueue(data);
+
+    if (this.waitingForFinalPacket === false && this.microphoneQueue.peek()) {
+      this.waitingForFinalPacket = true;
+      this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
+    }
+  }
+
+  // get data from SocketIOClientGenerator from the SOCKET_IO_CLIENT_RESULT_PATH and send it to user's callback function
+  // if the data was final, and the MicrophoneQueue was not empty, send a new data to the ASR SERVICE through the SocketIOClientGenerator
+  // if the data was final, and the MicrophoneQueue was empty, let the MicrophoneGenerator know that, when it gets new data, it can send it to the ASR SERVICE through the SocketIOClientGenerator
+  onSocketIOClientGeneratorOnAsrResultCallback(data) {
+    this.onData(data);
+
+    if (checkIfFinalPacket(data)) {
+      if (this.microphoneQueue.peek()) {
+        this.waitingForFinalPacket = true;
+        this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
+      } else {
+        this.waitingForFinalPacket = false;
+      }
+    }
   }
 }
 
