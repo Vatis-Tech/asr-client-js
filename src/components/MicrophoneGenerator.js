@@ -9,16 +9,21 @@ class MicrophoneGenerator {
       .getUserMedia({ video: false, audio: true })
       .then((stream) => {
         this.stream = stream;
-        const context = new AudioContext();
-        const source = context.createMediaStreamSource(stream);
-        const processor = context.createScriptProcessor(16384, 1, 1);
 
-        source.connect(processor);
-        processor.connect(context.destination);
+        const options = { mimeType: "audio/mpeg-3", bitsPerSecond: 256000 };
 
-        processor.onaudioprocess = function (e) {
-          this.onDataCallback(e.inputBuffer);
-        }.bind(this);
+        const mediaRecorder = new MediaRecorder(stream, options);
+
+        mediaRecorder.addEventListener(
+          "dataavailable",
+          function (e) {
+            if (e.data.size > 0) {
+              this.onDataCallback(e.data);
+            }
+          }.bind(this)
+        );
+
+        mediaRecorder.start(1000);
       })
       .catch((err) => {
         const errorMessage =
