@@ -1,10 +1,23 @@
 class MicrophoneGenerator {
   stream;
   onDataCallback;
-  constructor({ onDataCallback }) {
+  logger;
+  constructor({ onDataCallback, logger }) {
+    this.logger = logger;
+
+    this.logger({
+      currentState: `@vatis-tech/asr-client-js: Instantianting the "MicrophoneGenerator" plugin.`,
+      description: `@vatis-tech/asr-client-js: This is the constructor of MicrophoneGenerator class. This class, when it will be initialized, will ask user's permission for microphone usage. If accepted, the data from the microphone will be sent to the LIVE ASR service, using the SocketIOClientGenerator instance.`,
+    });
+
     this.onDataCallback = onDataCallback;
   }
   async init() {
+    this.logger({
+      currentState: `@vatis-tech/asr-client-js: Initializing the "MicrophoneGenerator" plugin.`,
+      description: `@vatis-tech/asr-client-js: The MicrophoneGenerator will request for the user's microphone.`,
+    });
+
     await navigator.mediaDevices
       .getUserMedia({ video: false, audio: true })
       .then((stream) => {
@@ -24,6 +37,11 @@ class MicrophoneGenerator {
         );
 
         mediaRecorder.start(1000);
+
+        this.logger({
+          currentState: `@vatis-tech/asr-client-js: Initialized the "MicrophoneGenerator" plugin.`,
+          description: `@vatis-tech/asr-client-js: The MicrophoneGenerator was successful into getting user's microphone, and will start sending data each 1 second.`,
+        });
       })
       .catch((err) => {
         const errorMessage =
