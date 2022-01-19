@@ -10,7 +10,7 @@ class MicrophoneGenerator {
       .then((stream) => {
         this.stream = stream;
 
-        const options = { mimeType: "audio/mpeg-3", bitsPerSecond: 256000 };
+        const options = { mimeType: "audio/webm", bitsPerSecond: 256000 };
 
         const mediaRecorder = new MediaRecorder(stream, options);
 
