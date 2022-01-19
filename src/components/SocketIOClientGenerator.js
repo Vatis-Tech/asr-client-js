@@ -16,11 +16,24 @@ class SocketIOClientGenerator {
   authToken;
   onConnectCallback;
   onAsrResultCallback;
-  constructor({ onConnectCallback, onAsrResultCallback }) {
+  logger;
+  constructor({ onConnectCallback, onAsrResultCallback, logger }) {
+    this.logger = logger;
+
+    this.logger({
+      currentState: `@vatis-tech/asr-client-js: Instantianting the "SocketIOClientGenerator" plugin.`,
+      description: `@vatis-tech/asr-client-js: In this plugin, the connection between @vatis-tech/asr-client-js plugin and Vatis Tech LIVE ASR service is established. This plugin will send the data that is stored inside the MicrophoneQueue to the LIVE ASR service, and will receive the transcript for that data. And on the "onData" callback, will send the received transcript.`,
+    });
+
     this.onConnectCallback = onConnectCallback;
     this.onAsrResultCallback = onAsrResultCallback;
   }
   init({ serviceHost, authToken }) {
+    this.logger({
+      currentState: `@vatis-tech/asr-client-js: Initializing the "SocketIOClientGenerator" plugin.`,
+      description: `@vatis-tech/asr-client-js: Here, the socket.io-client gets instantianted and initialized.`,
+    });
+
     this.serviceHost = serviceHost;
     this.authToken = authToken;
     const serviceHostStream = `${serviceHost}${SOCKET_IO_CLIENT_NAMESPACE}`;
@@ -36,7 +49,18 @@ class SocketIOClientGenerator {
       },
     });
     this.socketRef.on("connect", () => {
+      this.logger({
+        currentState: `@vatis-tech/asr-client-js: Initialized the "SocketIOClientGenerator" plugin.`,
+        description: `@vatis-tech/asr-client-js: A successful connection between @vatis-tech/asr-client-js and Vatis Tech LIVE ASR service has been established.`,
+      });
+
       this.onConnectCallback();
+    });
+    this.socketRef.on("disconnect", () => {
+      this.logger({
+        currentState: `@vatis-tech/asr-client-js: Destroy the "SocketIOClientGenerator" plugin.`,
+        description: `@vatis-tech/asr-client-js: The connection between @vatis-tech/asr-client-js and Vatis Tech LIVE ASR service has been closed by the Vatis Tech LIVE ASR service.`,
+      });
     });
     this.socketRef.on("connect_error", (error) => {
       const errorMessage =
