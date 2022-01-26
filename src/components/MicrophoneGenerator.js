@@ -2,6 +2,7 @@ class MicrophoneGenerator {
   stream;
   onDataCallback;
   logger;
+  blobState;
   constructor({ onDataCallback, logger }) {
     this.logger = logger;
 
@@ -23,7 +24,11 @@ class MicrophoneGenerator {
       .then((stream) => {
         this.stream = stream;
 
-        const options = { mimeType: "audio/webm", bitsPerSecond: 256000 };
+        const options = {
+          mimeType: "audio/webm",
+          bitsPerSecond: 128000,
+          audioBitrateMode: "constant",
+        };
 
         const mediaRecorder = new MediaRecorder(stream, options);
 
@@ -31,7 +36,27 @@ class MicrophoneGenerator {
           "dataavailable",
           function (e) {
             if (e.data.size > 0) {
-              this.onDataCallback(e.data);
+              if (this.blobState) {
+                this.blobState = new Blob([this.blobState, e.data]);
+              } else {
+                this.blobState = e.data;
+              }
+              if (this.blobState.size > 16000) {
+                this.blobState.arrayBuffer().then((buffer) => {
+                  for (
+                    var i = 0;
+                    i < Math.trunc(this.blobState.size / 16000);
+                    i++
+                  ) {
+                    let data16000 = buffer.slice(i * 16000, 16000 + i * 16000);
+                    this.onDataCallback(new Int32Array(data16000));
+                  }
+                  this.blobState = this.blobState.slice(
+                    i * 16000,
+                    this.blobState.size
+                  );
+                });
+              }
             }
           }.bind(this)
         );
