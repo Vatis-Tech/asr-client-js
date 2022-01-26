@@ -5,7 +5,7 @@
 ![GitHub issues open](https://img.shields.io/github/issues/Vatis-Tech/asr-client-js.svg)
 ![GitHub issues closed](https://img.shields.io/github/issues-closed-raw/Vatis-Tech/asr-client-js.svg)
 
-<div align="center"><img src="https://github.com/Vatis-Tech/asr-client-js/blob/feature/VAT-243/github-assets/logos/logo.png?raw=true" alt="@vatis-tech/asr-client-js" width="128"/></div>
+<div align="center"><img src="https://github.com/Vatis-Tech/asr-client-js/blob/feature/VAT-243/github-assets/logos/logo.png?raw=true" alt="@vatis-tech/asr-client-js"/></div>
 
 #### Client JavaScript implementation for Vatis Tech's live ASR service.
 
