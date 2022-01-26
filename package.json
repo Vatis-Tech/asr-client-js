@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/vatistech/asr-client-js.git"
+    "url": "git+https://github.com/Vatis-Tech/asr-client-js.git"
   },
   "keywords": [
     "asr",
@@ -49,9 +49,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://gitlab.com/vatistech/asr-client-js/issues"
+    "url": "https://github.com/Vatis-Tech/asr-client-js/issues"
   },
-  "homepage": "https://gitlab.com/vatistech/asr-client-js#readme",
+  "homepage": "https://github.com/Vatis-Tech/asr-client-js#readme",
   "devDependencies": {
     "@babel/cli": "7.16.0",
     "@babel/core": "7.16.5",
