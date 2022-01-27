@@ -16,9 +16,9 @@ Do you have any better ideas how to fix this problem? Let us know.
 
 We have three types of issues:
 
-- [Bug report](https://github.com/Vatis-Tech/asr-client-js/issues)
-- [Feature request](https://github.com/Vatis-Tech/asr-client-js/issues)
-- [Help wanted](https://github.com/Vatis-Tech/asr-client-js/issues)
+- [Bug report](https://github.com/Vatis-Tech/asr-client-js/issues/new?assignees=einazare&labels=bug&template=bug_report.yml&title=%5BBug%5D%3A+)
+- [Feature request](https://github.com/Vatis-Tech/asr-client-js/issues/new?assignees=einazare&labels=feature&template=feature_request.yml&title=%5BFeature%5D%3A+)
+- [Help wanted](https://github.com/Vatis-Tech/asr-client-js/issues/new?assignees=einazare&labels=help+wanted&template=help_wanted.yml&title=%5BHelp+wanted%5D%3A+)
 
 You can always help, by commenting on already opened issues.
 
