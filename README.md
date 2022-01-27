@@ -201,9 +201,9 @@ If you have questions, you need some help, you've found a bug, or you have an im
 
 There are three types of issues:
 
-- [Bug report](https://github.com/Vatis-Tech/asr-client-js/issues)
-- [Feature request](https://github.com/Vatis-Tech/asr-client-js/issues)
-- [Help wanted](https://github.com/Vatis-Tech/asr-client-js/issues)
+- [Bug report](https://github.com/Vatis-Tech/asr-client-js/issues/new?assignees=einazare&labels=bug&template=bug_report.yml&title=%5BBug%5D%3A+)
+- [Feature request](https://github.com/Vatis-Tech/asr-client-js/issues/new?assignees=einazare&labels=feature&template=feature_request.yml&title=%5BFeature%5D%3A+)
+- [Help wanted](https://github.com/Vatis-Tech/asr-client-js/issues/new?assignees=einazare&labels=help+wanted&template=help_wanted.yml&title=%5BHelp+wanted%5D%3A+)
 
 ## Changelog
 
