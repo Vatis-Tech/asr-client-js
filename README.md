@@ -14,6 +14,7 @@
 - **[Installation 📀](#installation)**
 - **[Constructor 🦺](#constructor)**
 - **[Props 📦](#props)**
+- **[Methods 🖇](#methods)**
 - **[Browser Support 🔮](#browser-support)**
 - **[Contributing 🏗](#contributing)**
 - **[Getting Help ☎️](#getting-help)**
@@ -64,12 +65,6 @@ const vtc = new VTC({
   onData: (data) => { console.log(data); },
   log: true,
 });
-```
-
-To stop recording, please call the `destroy` function, on the `@vatis-tech/asr-client-js` object:
-
-```
-vtc.destroy();
 ```
 
 ## Props
@@ -180,6 +175,22 @@ function onData(info) {
 The `info` object that is received has the props from above.
 
 If `log` prop is set to `true` and the `logger` prop is not set, or is not a function with the above signature, the plugin will default the `logger` to `console.log`.
+
+## Methods
+
+### `destroy`
+
+This will destroy the instantiated `@vatis-tech/asr-client-js`.
+
+Also, the destroy method will be invoked if any error will come through the `socket.io-client` as a response from Vatis Tech ASR SERVICE.
+
+### `pause`
+
+Call this method, if you want to pause for a while the recording.
+
+### `resume`
+
+After calling the `pause` method, you can call this one to resume recording.
 
 ## Browser Support
 
