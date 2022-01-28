@@ -62,6 +62,7 @@ class VatisTechClient {
       onAsrResultCallback:
         this.onSocketIOClientGeneratorOnAsrResultCallback.bind(this),
       logger: this.logger.bind(this),
+      destroy: this.destroy.bind(this),
     });
 
     // instantiante MicrophoneGenerator - this will return on the this.onMicrophoneGeneratorDataCallback the data that it captures from the user's microphone
@@ -72,6 +73,39 @@ class VatisTechClient {
 
     // initilize ApiKeyGenerator (if successful it will initilize SocketIOClientGenerator (if successful it will initilize the MicrophoneGenerator))
     this.initApiKey();
+  }
+
+  // this will make everything undefined on the this instance - i.e. this instance will not be of any use anymore
+  destroy() {
+    // stop the microphone - i.e. stop data being recorded by the MediaRecorder
+    this.microphoneGenerator.destroy();
+
+    // delete data members
+    this.microphoneGenerator = undefined;
+    this.apiKeyGenerator = undefined;
+    this.socketIOClientGenerator = undefined;
+    this.microphoneQueue = undefined;
+    this.onData = undefined;
+    this.waitingForFinalPacket = undefined;
+    this.logger = undefined;
+    this.log = undefined;
+
+    // delete methods
+    this.initApiKey = false;
+    this.initSocketIOClient = false;
+    this.initMicrophone = false;
+    this.onMicrophoneGeneratorDataCallback = false;
+    this.onSocketIOClientGeneratorOnAsrResultCallback = false;
+  }
+
+  // lets the user pause recording
+  pause() {
+    this.microphoneGenerator.pause();
+  }
+
+  // lets the user resume recording
+  resume() {
+    this.microphoneGenerator.resume();
   }
 
   // initilize ApiKeyGenerator
