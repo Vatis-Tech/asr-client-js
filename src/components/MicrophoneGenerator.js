@@ -3,6 +3,7 @@ class MicrophoneGenerator {
   onDataCallback;
   logger;
   blobState;
+  mediaRecorder;
   constructor({ onDataCallback, logger }) {
     this.logger = logger;
 
@@ -13,6 +14,24 @@ class MicrophoneGenerator {
 
     this.onDataCallback = onDataCallback;
   }
+
+  // on destroy we want to stop the MediaRecorder from recording
+  destroy() {
+    if (this.mediaRecorder) {
+      this.mediaRecorder.stop();
+    }
+  }
+
+  // lets the user pause recording
+  pause() {
+    this.mediaRecorder.pause();
+  }
+
+  // lets the user resume recording
+  resume() {
+    this.mediaRecorder.resume();
+  }
+
   async init() {
     this.logger({
       currentState: `@vatis-tech/asr-client-js: Initializing the "MicrophoneGenerator" plugin.`,
@@ -30,9 +49,9 @@ class MicrophoneGenerator {
           audioBitrateMode: "constant",
         };
 
-        const mediaRecorder = new MediaRecorder(stream, options);
+        this.mediaRecorder = new MediaRecorder(stream, options);
 
-        mediaRecorder.addEventListener(
+        this.mediaRecorder.addEventListener(
           "dataavailable",
           function (e) {
             if (e.data.size > 0) {
@@ -61,7 +80,7 @@ class MicrophoneGenerator {
           }.bind(this)
         );
 
-        mediaRecorder.start(1000);
+        this.mediaRecorder.start(1000);
 
         this.logger({
           currentState: `@vatis-tech/asr-client-js: Initialized the "MicrophoneGenerator" plugin.`,
@@ -75,6 +94,7 @@ class MicrophoneGenerator {
         throw errorMessage;
       });
   }
+
   getStream() {
     return this.stream;
   }
