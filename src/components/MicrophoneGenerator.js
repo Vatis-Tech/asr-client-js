@@ -20,6 +20,11 @@ class MicrophoneGenerator {
     if (this.mediaRecorder) {
       this.mediaRecorder.stop();
     }
+    if (this.stream) {
+      this.stream.getTracks().forEach(function (track) {
+        track.stop();
+      });
+    }
   }
 
   // lets the user pause recording
@@ -41,6 +46,7 @@ class MicrophoneGenerator {
     await navigator.mediaDevices
       .getUserMedia({ video: false, audio: true })
       .then((stream) => {
+        console.log(stream);
         this.stream = stream;
 
         const options = {
