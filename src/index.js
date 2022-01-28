@@ -142,6 +142,8 @@ class VatisTechClient {
   // get data from MicrophoneGenerator and add it to the queue
   // if the SocketIOClientGenerator is not waiting for a packet response then it should emit a new pachet with the data that is waiting in the queue
   onMicrophoneGeneratorDataCallback(data) {
+    if (this.microphoneQueue === undefined) return;
+
     this.microphoneQueue.enqueue(data);
 
     if (this.waitingForFinalPacket === false && this.microphoneQueue.peek()) {
