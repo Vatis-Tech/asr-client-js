@@ -17,13 +17,16 @@ class SocketIOClientGenerator {
   onConnectCallback;
   onAsrResultCallback;
   logger;
-  constructor({ onConnectCallback, onAsrResultCallback, logger }) {
+  destroy;
+  constructor({ onConnectCallback, onAsrResultCallback, logger, destroy }) {
     this.logger = logger;
 
     this.logger({
       currentState: `@vatis-tech/asr-client-js: Instantianting the "SocketIOClientGenerator" plugin.`,
       description: `@vatis-tech/asr-client-js: In this plugin, the connection between @vatis-tech/asr-client-js plugin and Vatis Tech LIVE ASR service is established. This plugin will send the data that is stored inside the MicrophoneQueue to the LIVE ASR service, and will receive the transcript for that data. And on the "onData" callback, will send the received transcript.`,
     });
+
+    this.destroy = destroy;
 
     this.onConnectCallback = onConnectCallback;
     this.onAsrResultCallback = onAsrResultCallback;
@@ -61,6 +64,8 @@ class SocketIOClientGenerator {
         currentState: `@vatis-tech/asr-client-js: Destroy the "SocketIOClientGenerator" plugin.`,
         description: `@vatis-tech/asr-client-js: The connection between @vatis-tech/asr-client-js and Vatis Tech LIVE ASR service has been closed by the Vatis Tech LIVE ASR service.`,
       });
+
+      this.destroy();
     });
     this.socketRef.on("connect_error", (error) => {
       const errorMessage =
