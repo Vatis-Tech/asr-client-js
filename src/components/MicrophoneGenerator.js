@@ -46,7 +46,6 @@ class MicrophoneGenerator {
     await navigator.mediaDevices
       .getUserMedia({ video: false, audio: true })
       .then((stream) => {
-        console.log(stream);
         this.stream = stream;
 
         const options = {
