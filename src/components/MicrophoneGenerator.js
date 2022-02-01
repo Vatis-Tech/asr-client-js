@@ -1,3 +1,7 @@
+import constants from "../helpers/constants/index.js";
+
+const { MICROPHONE_BIT_RATE_SAMPLES, MICROPHONE_TIMESLICE } = constants;
+
 class MicrophoneGenerator {
   stream;
   onDataCallback;
@@ -65,18 +69,25 @@ class MicrophoneGenerator {
               } else {
                 this.blobState = e.data;
               }
-              if (this.blobState.size > 16000) {
+              if (this.blobState.size > MICROPHONE_BIT_RATE_SAMPLES) {
                 this.blobState.arrayBuffer().then((buffer) => {
                   for (
                     var i = 0;
-                    i < Math.trunc(this.blobState.size / 16000);
+                    i <
+                    Math.trunc(
+                      this.blobState.size / MICROPHONE_BIT_RATE_SAMPLES
+                    );
                     i++
                   ) {
-                    let data16000 = buffer.slice(i * 16000, 16000 + i * 16000);
-                    this.onDataCallback(new Int32Array(data16000));
+                    let dataSamples = buffer.slice(
+                      i * MICROPHONE_BIT_RATE_SAMPLES,
+                      MICROPHONE_BIT_RATE_SAMPLES +
+                        i * MICROPHONE_BIT_RATE_SAMPLES
+                    );
+                    this.onDataCallback(new Int32Array(dataSamples));
                   }
                   this.blobState = this.blobState.slice(
-                    i * 16000,
+                    i * MICROPHONE_BIT_RATE_SAMPLES,
                     this.blobState.size
                   );
                 });
@@ -85,7 +96,7 @@ class MicrophoneGenerator {
           }.bind(this)
         );
 
-        this.mediaRecorder.start(1000);
+        this.mediaRecorder.start(MICROPHONE_TIMESLICE);
 
         this.logger({
           currentState: `@vatis-tech/asr-client-js: Initialized the "MicrophoneGenerator" plugin.`,
