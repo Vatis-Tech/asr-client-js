@@ -8,6 +8,8 @@ const {
   SOCKET_IO_CLIENT_TRANSPORTS,
   SOCKET_IO_CLIENT_RESULT_PATH,
   SOCKET_IO_CLIENT_REQUEST_PATH,
+
+  MICROPHONE_TIMESLICE,
 } = constants;
 
 class SocketIOClientGenerator {
@@ -46,7 +48,7 @@ class SocketIOClientGenerator {
       namespace: SOCKET_IO_CLIENT_NAMESPACE,
       extraHeaders: {
         Authorization: authToken,
-        FrameLength: 1,
+        FrameLength: MICROPHONE_TIMESLICE / 1000,
         FrameOverlap: 0.5,
         BufferOffset: 0.5,
       },
