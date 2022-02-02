@@ -41,7 +41,11 @@ class VatisTechClient {
     this.waitingForFinalPacket = false;
 
     // callback for sending to the user the data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
-    this.onData = onData;
+    if (onData === undefined) {
+      this.onData = () => {};
+    } else {
+      this.onData = onData;
+    }
 
     // instantiante MicrophoneQueue - this will keep all the microphone buffers until they can be sent to the ASR SERVICE through the SocketIOClientGenerator
     this.microphoneQueue = new MicrophoneQueue({
