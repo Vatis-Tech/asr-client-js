@@ -160,9 +160,9 @@ class VatisTechClient {
   // if the data was final, and the MicrophoneQueue was not empty, send a new data to the ASR SERVICE through the SocketIOClientGenerator
   // if the data was final, and the MicrophoneQueue was empty, let the MicrophoneGenerator know that, when it gets new data, it can send it to the ASR SERVICE through the SocketIOClientGenerator
   onSocketIOClientGeneratorOnAsrResultCallback(data) {
-    this.onData(data);
+    this.onData(JSON.parse(data));
 
-    if (checkIfFinalPacket(data)) {
+    if (checkIfFinalPacket(JSON.parse(data))) {
       if (this.microphoneQueue.peek()) {
         this.waitingForFinalPacket = true;
         this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
