@@ -1,6 +1,8 @@
 import constants from "../helpers/constants/index.js";
+import functions from "../helpers/functions/index.js";
 
 const { MICROPHONE_BIT_RATE_SAMPLES, MICROPHONE_TIMESLICE } = constants;
+const { base64ArrayBuffer } = functions;
 
 class MicrophoneGenerator {
   stream;
@@ -84,7 +86,8 @@ class MicrophoneGenerator {
                       MICROPHONE_BIT_RATE_SAMPLES +
                         i * MICROPHONE_BIT_RATE_SAMPLES
                     );
-                    this.onDataCallback(new Int32Array(dataSamples));
+                    // this.onDataCallback(new Int32Array(dataSamples));
+                    this.onDataCallback(base64ArrayBuffer(dataSamples));
                   }
                   this.blobState = this.blobState.slice(
                     i * MICROPHONE_BIT_RATE_SAMPLES,
