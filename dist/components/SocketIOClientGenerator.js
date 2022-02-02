@@ -73,14 +73,13 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
       this.serviceHost = serviceHost;
       this.authToken = authToken;
       var serviceHostStream = "".concat(serviceHost).concat(SOCKET_IO_CLIENT_NAMESPACE);
-      console.log(MICROPHONE_TIMESLICE / 1000);
       this.socketRef = (0, _socket["default"])(serviceHostStream, {
         path: SOCKET_IO_CLIENT_PATH,
         transports: SOCKET_IO_CLIENT_TRANSPORTS,
         namespace: SOCKET_IO_CLIENT_NAMESPACE,
         extraHeaders: {
           Authorization: authToken,
-          FrameLength: 0.5,
+          FrameLength: MICROPHONE_TIMESLICE / 1000,
           FrameOverlap: 0.5,
           BufferOffset: 0.5
         }
