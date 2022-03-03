@@ -8,6 +8,12 @@ const {
   SOCKET_IO_CLIENT_TRANSPORTS,
   SOCKET_IO_CLIENT_RESULT_PATH,
   SOCKET_IO_CLIENT_REQUEST_PATH,
+  SOCKET_IO_CLIENT_FRAME_OVERLAP,
+  SOCKET_IO_CLIENT_BUFFER_OFFSET,
+  SOCKET_IO_CLIENT_AUDIO_FORMAT,
+  SOCKET_IO_CLIENT_SENDING_HEADERS,
+  SOCKET_IO_CLIENT_ACCESS_CONTROL_ALLOW_ORIGIN,
+  SOCKET_IO_CLIENT_ACCESS_CONTROL_ALLOW_METHODS,
 
   MICROPHONE_TIMESLICE,
 } = constants;
@@ -49,8 +55,14 @@ class SocketIOClientGenerator {
       extraHeaders: {
         Authorization: authToken,
         FrameLength: MICROPHONE_TIMESLICE / 1000,
-        FrameOverlap: 0.5,
-        BufferOffset: 0.5,
+        FrameOverlap: SOCKET_IO_CLIENT_FRAME_OVERLAP,
+        BufferOffset: SOCKET_IO_CLIENT_BUFFER_OFFSET,
+        AudioFormat: SOCKET_IO_CLIENT_AUDIO_FORMAT,
+        SendingHeaders: SOCKET_IO_CLIENT_SENDING_HEADERS,
+        "Access-Control-Allow-Origin":
+          SOCKET_IO_CLIENT_ACCESS_CONTROL_ALLOW_ORIGIN,
+        "Access-Control-Allow-Methods":
+          SOCKET_IO_CLIENT_ACCESS_CONTROL_ALLOW_METHODS,
       },
     });
     this.socketRef.on("connect", () => {
