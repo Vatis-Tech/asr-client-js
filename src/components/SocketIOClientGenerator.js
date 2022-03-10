@@ -52,7 +52,19 @@ class SocketIOClientGenerator {
       path: SOCKET_IO_CLIENT_PATH,
       transports: SOCKET_IO_CLIENT_TRANSPORTS,
       namespace: SOCKET_IO_CLIENT_NAMESPACE,
-      extraHeaders: {
+      // extraHeaders: {
+      //   Authorization: authToken,
+      //   FrameLength: MICROPHONE_TIMESLICE / 1000,
+      //   FrameOverlap: SOCKET_IO_CLIENT_FRAME_OVERLAP,
+      //   BufferOffset: SOCKET_IO_CLIENT_BUFFER_OFFSET,
+      //   AudioFormat: SOCKET_IO_CLIENT_AUDIO_FORMAT,
+      //   SendingHeaders: SOCKET_IO_CLIENT_SENDING_HEADERS,
+      //   "Access-Control-Allow-Origin":
+      //     SOCKET_IO_CLIENT_ACCESS_CONTROL_ALLOW_ORIGIN,
+      //   "Access-Control-Allow-Methods":
+      //     SOCKET_IO_CLIENT_ACCESS_CONTROL_ALLOW_METHODS,
+      // },
+      query: {
         Authorization: authToken,
         FrameLength: MICROPHONE_TIMESLICE / 1000,
         FrameOverlap: SOCKET_IO_CLIENT_FRAME_OVERLAP,
