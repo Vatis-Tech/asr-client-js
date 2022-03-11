@@ -39,7 +39,8 @@ var VatisTechClient = /*#__PURE__*/function () {
         apiKey = _ref.apiKey,
         onData = _ref.onData,
         log = _ref.log,
-        logger = _ref.logger;
+        logger = _ref.logger,
+        onDestroyCallback = _ref.onDestroyCallback;
 
     _classCallCheck(this, VatisTechClient);
 
@@ -61,6 +62,8 @@ var VatisTechClient = /*#__PURE__*/function () {
 
     _defineProperty(this, "shouldDestroy", void 0);
 
+    _defineProperty(this, "onDestroyCallback", void 0);
+
     this.log = log;
 
     if (this.log === true && typeof logger === "function") {
@@ -80,7 +83,14 @@ var VatisTechClient = /*#__PURE__*/function () {
     // but since there might be data to be received by the socket, or to be sent by the socket
     // the VTC client will wait for that to finis
 
-    this.shouldDestroy = false; // callback for sending to the user the data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
+    this.shouldDestroy = false; // callback when successfully destroyed
+
+    if (onDestroyCallback === undefined) {
+      this.onDestroyCallback = function () {};
+    } else {
+      this.onDestroyCallback = onDestroyCallback;
+    } // callback for sending to the user the data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
+
 
     if (onData === undefined) {
       this.onData = function () {};
@@ -133,7 +143,9 @@ var VatisTechClient = /*#__PURE__*/function () {
         // stop the microphone - i.e. stop data being recorded by the MediaRecorder
         this.microphoneGenerator.destroy(); // destroy the socket
 
-        this.socketIOClientGenerator.destroy(); // delete data members
+        this.socketIOClientGenerator.destroy(); // notify destruction
+
+        this.onDestroyCallback(); // delete data members
 
         this.microphoneGenerator = undefined;
         this.apiKeyGenerator = undefined;
@@ -142,13 +154,15 @@ var VatisTechClient = /*#__PURE__*/function () {
         this.onData = undefined;
         this.waitingForFinalPacket = undefined;
         this.logger = undefined;
-        this.log = undefined; // delete methods
+        this.log = undefined;
+        this.shouldDestroy = undefined; // delete methods
 
         this.initApiKey = false;
         this.initSocketIOClient = false;
         this.initMicrophone = false;
         this.onMicrophoneGeneratorDataCallback = false;
         this.onSocketIOClientGeneratorOnAsrResultCallback = false;
+        this.onDestroyCallback = false;
       }
     } // lets the user pause recording
 
