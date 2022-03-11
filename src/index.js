@@ -22,7 +22,17 @@ class VatisTechClient {
   logger;
   log;
   shouldDestroy;
-  constructor({ service, model, language, apiKey, onData, log, logger }) {
+  onDestroyCallback;
+  constructor({
+    service,
+    model,
+    language,
+    apiKey,
+    onData,
+    log,
+    logger,
+    onDestroyCallback,
+  }) {
     this.log = log;
 
     if (this.log === true && typeof logger === "function") {
@@ -45,6 +55,13 @@ class VatisTechClient {
     // but since there might be data to be received by the socket, or to be sent by the socket
     // the VTC client will wait for that to finis
     this.shouldDestroy = false;
+
+    // callback when successfully destroyed
+    if (onDestroyCallback === undefined) {
+      this.onDestroyCallback = () => {};
+    } else {
+      this.onDestroyCallback = onDestroyCallback;
+    }
 
     // callback for sending to the user the data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
     if (onData === undefined) {
@@ -100,6 +117,9 @@ class VatisTechClient {
       // destroy the socket
       this.socketIOClientGenerator.destroy();
 
+      // notify destruction
+      this.onDestroyCallback();
+
       // delete data members
       this.microphoneGenerator = undefined;
       this.apiKeyGenerator = undefined;
@@ -117,6 +137,7 @@ class VatisTechClient {
       this.initMicrophone = false;
       this.onMicrophoneGeneratorDataCallback = false;
       this.onSocketIOClientGeneratorOnAsrResultCallback = false;
+      this.onDestroyCallback = false;
     }
   }
 
