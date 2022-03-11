@@ -20,6 +20,9 @@ class MicrophoneQueue {
   peek() {
     return this.queue.at(0);
   }
+  isEmpty() {
+    return this.queue.length > 0 ? false : true;
+  }
 }
 
 export default MicrophoneQueue;
