@@ -46,6 +46,11 @@ var MicrophoneQueue = /*#__PURE__*/function () {
     value: function peek() {
       return this.queue.at(0);
     }
+  }, {
+    key: "isEmpty",
+    value: function isEmpty() {
+      return this.queue.length > 0 ? false : true;
+    }
   }]);
 
   return MicrophoneQueue;
