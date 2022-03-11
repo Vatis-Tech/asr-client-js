@@ -23,7 +23,7 @@ class MicrophoneGenerator {
 
   // on destroy we want to stop the MediaRecorder from recording
   destroy() {
-    if (this.mediaRecorder) {
+    if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
       this.mediaRecorder.stop();
     }
     if (this.stream) {
