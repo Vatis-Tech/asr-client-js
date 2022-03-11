@@ -109,6 +109,7 @@ class VatisTechClient {
       this.waitingForFinalPacket = undefined;
       this.logger = undefined;
       this.log = undefined;
+      this.shouldDestroy = undefined;
 
       // delete methods
       this.initApiKey = false;
