@@ -176,6 +176,10 @@ The `info` object that is received has the props from above.
 
 If `log` prop is set to `true` and the `logger` prop is not set, or is not a function with the above signature, the plugin will default the `logger` to `console.log`.
 
+### `onDestroyCallback`
+
+This is a **Function** that will be called upon successful destruction;
+
 ## Methods
 
 ### `destroy`
@@ -183,6 +187,9 @@ If `log` prop is set to `true` and the `logger` prop is not set, or is not a fun
 This will destroy the instantiated `@vatis-tech/asr-client-js`.
 
 Also, the destroy method will be invoked if any error will come through the `socket.io-client` as a response from Vatis Tech ASR SERVICE.
+
+**NOTE! If the VTC plugin did not send all messages, or it did not receive all messages, the destruction will not happen instantly.**
+**NOTE! The destruction of the VTC plugin will happen only when all messages have been sent and received.**
 
 ### `pause`
 
