@@ -111,14 +111,14 @@ class VatisTechClient {
       // pause the microphone so it won't record anymore
       this.microphoneGenerator.pause();
     } else {
+      // notify destruction
+      this.onDestroyCallback();
+
       // stop the microphone - i.e. stop data being recorded by the MediaRecorder
       this.microphoneGenerator.destroy();
 
       // destroy the socket
       this.socketIOClientGenerator.destroy();
-
-      // notify destruction
-      this.onDestroyCallback();
 
       // delete data members
       this.microphoneGenerator = undefined;
