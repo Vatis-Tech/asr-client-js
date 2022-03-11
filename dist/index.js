@@ -59,6 +59,8 @@ var VatisTechClient = /*#__PURE__*/function () {
 
     _defineProperty(this, "log", void 0);
 
+    _defineProperty(this, "shouldDestroy", void 0);
+
     this.log = log;
 
     if (this.log === true && typeof logger === "function") {
@@ -74,7 +76,11 @@ var VatisTechClient = /*#__PURE__*/function () {
       description: "@vatis-tech/asr-client-js: This is the base constructor which initilizez everything for the LIVE ASR service of Vatis Tech."
     }); // this is a flag that says if the whole response for the previous packet was received or not
 
-    this.waitingForFinalPacket = false; // callback for sending to the user the data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
+    this.waitingForFinalPacket = false; // this is a flag that says if the user wants to destroy the VTC client
+    // but since there might be data to be received by the socket, or to be sent by the socket
+    // the VTC client will wait for that to finis
+
+    this.shouldDestroy = false; // callback for sending to the user the data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
 
     if (onData === undefined) {
       this.onData = function () {};
@@ -102,7 +108,7 @@ var VatisTechClient = /*#__PURE__*/function () {
       onConnectCallback: this.initMicrophone.bind(this),
       onAsrResultCallback: this.onSocketIOClientGeneratorOnAsrResultCallback.bind(this),
       logger: this.logger.bind(this),
-      destroy: this.destroy.bind(this)
+      destroyVTC: this.destroy.bind(this)
     }); // instantiante MicrophoneGenerator - this will return on the this.onMicrophoneGeneratorDataCallback the data that it captures from the user's microphone
 
     this.microphoneGenerator = new _MicrophoneGenerator["default"]({
@@ -117,23 +123,33 @@ var VatisTechClient = /*#__PURE__*/function () {
   _createClass(VatisTechClient, [{
     key: "destroy",
     value: function destroy() {
-      // stop the microphone - i.e. stop data being recorded by the MediaRecorder
-      this.microphoneGenerator.destroy(); // delete data members
+      // check if there is still data to be received or to be sent
+      if (this.waitingForFinalPacket || !this.microphoneQueue.isEmpty) {
+        // let the messaging know that we want the client to be destroyed
+        this.shouldDestroy = true; // pause the microphone so it won't record anymore
 
-      this.microphoneGenerator = undefined;
-      this.apiKeyGenerator = undefined;
-      this.socketIOClientGenerator = undefined;
-      this.microphoneQueue = undefined;
-      this.onData = undefined;
-      this.waitingForFinalPacket = undefined;
-      this.logger = undefined;
-      this.log = undefined; // delete methods
+        this.microphoneGenerator.pause();
+      } else {
+        // stop the microphone - i.e. stop data being recorded by the MediaRecorder
+        this.microphoneGenerator.destroy(); // destroy the socket
 
-      this.initApiKey = false;
-      this.initSocketIOClient = false;
-      this.initMicrophone = false;
-      this.onMicrophoneGeneratorDataCallback = false;
-      this.onSocketIOClientGeneratorOnAsrResultCallback = false;
+        this.socketIOClientGenerator.destroy(); // delete data members
+
+        this.microphoneGenerator = undefined;
+        this.apiKeyGenerator = undefined;
+        this.socketIOClientGenerator = undefined;
+        this.microphoneQueue = undefined;
+        this.onData = undefined;
+        this.waitingForFinalPacket = undefined;
+        this.logger = undefined;
+        this.log = undefined; // delete methods
+
+        this.initApiKey = false;
+        this.initSocketIOClient = false;
+        this.initMicrophone = false;
+        this.onMicrophoneGeneratorDataCallback = false;
+        this.onSocketIOClientGeneratorOnAsrResultCallback = false;
+      }
     } // lets the user pause recording
 
   }, {
@@ -207,6 +223,11 @@ var VatisTechClient = /*#__PURE__*/function () {
         } else {
           this.waitingForFinalPacket = false;
         }
+      } // check if the user tried to destroy the VTC client
+
+
+      if (!this.waitingForFinalPacket && this.microphoneQueue.isEmpty && this.shouldDestroy) {
+        this.destroy();
       }
     }
   }]);
