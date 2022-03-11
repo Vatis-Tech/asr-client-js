@@ -56,7 +56,7 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
   _createClass(MicrophoneGenerator, [{
     key: "destroy",
     value: function destroy() {
-      if (this.mediaRecorder) {
+      if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
         this.mediaRecorder.stop();
       }
 
