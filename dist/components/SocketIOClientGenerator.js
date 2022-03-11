@@ -37,7 +37,7 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
     var onConnectCallback = _ref.onConnectCallback,
         onAsrResultCallback = _ref.onAsrResultCallback,
         logger = _ref.logger,
-        destroy = _ref.destroy;
+        destroyVTC = _ref.destroyVTC;
 
     _classCallCheck(this, SocketIOClientGenerator);
 
@@ -53,14 +53,14 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
 
     _defineProperty(this, "logger", void 0);
 
-    _defineProperty(this, "destroy", void 0);
+    _defineProperty(this, "destroyVTC", void 0);
 
     this.logger = logger;
     this.logger({
       currentState: "@vatis-tech/asr-client-js: Instantianting the \"SocketIOClientGenerator\" plugin.",
       description: "@vatis-tech/asr-client-js: In this plugin, the connection between @vatis-tech/asr-client-js plugin and Vatis Tech LIVE ASR service is established. This plugin will send the data that is stored inside the MicrophoneQueue to the LIVE ASR service, and will receive the transcript for that data. And on the \"onData\" callback, will send the received transcript."
     });
-    this.destroy = destroy;
+    this.destroyVTC = destroyVTC;
     this.onConnectCallback = onConnectCallback;
     this.onAsrResultCallback = onAsrResultCallback;
   }
@@ -120,7 +120,7 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
           description: "@vatis-tech/asr-client-js: The connection between @vatis-tech/asr-client-js and Vatis Tech LIVE ASR service has been closed by the Vatis Tech LIVE ASR service."
         });
 
-        _this.destroy();
+        _this.destroyVTC();
       });
       this.socketRef.on("connect_error", function (error) {
         var errorMessage = 'Could not initilize the "socket.io-client" with error: ' + error;
@@ -147,6 +147,11 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
       this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, {
         data: data
       });
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.socketRef.disconnect();
     }
   }]);
 
