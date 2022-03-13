@@ -139,6 +139,7 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
   }, {
     key: "destroy",
     value: function destroy() {
+      this.socketRef.off("disconnect");
       this.socketRef.disconnect();
     }
   }]);
