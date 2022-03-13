@@ -108,6 +108,7 @@ class SocketIOClientGenerator {
     });
   }
   destroy() {
+    this.socketRef.off("disconnect");
     this.socketRef.disconnect();
   }
 }
