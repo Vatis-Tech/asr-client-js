@@ -103,7 +103,7 @@ class VatisTechClient {
   }
 
   // this will make everything undefined on the this instance - i.e. this instance will not be of any use anymore
-  destroy({ hard }) {
+  destroy({ hard } = { hard: false }) {
     // check if there is still data to be received or to be sent
     if (
       (this.waitingForFinalPacket || !this.microphoneQueue.isEmpty) &&
