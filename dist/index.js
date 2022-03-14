@@ -132,9 +132,11 @@ var VatisTechClient = /*#__PURE__*/function () {
 
   _createClass(VatisTechClient, [{
     key: "destroy",
-    value: function destroy() {
+    value: function destroy(_ref2) {
+      var hard = _ref2.hard;
+
       // check if there is still data to be received or to be sent
-      if (this.waitingForFinalPacket || !this.microphoneQueue.isEmpty) {
+      if ((this.waitingForFinalPacket || !this.microphoneQueue.isEmpty) && hard !== true) {
         // let the messaging know that we want the client to be destroyed
         this.shouldDestroy = true; // pause the microphone so it won't record anymore
 
@@ -189,9 +191,9 @@ var VatisTechClient = /*#__PURE__*/function () {
 
   }, {
     key: "initSocketIOClient",
-    value: function initSocketIOClient(_ref2) {
-      var serviceHost = _ref2.serviceHost,
-          authToken = _ref2.authToken;
+    value: function initSocketIOClient(_ref3) {
+      var serviceHost = _ref3.serviceHost,
+          authToken = _ref3.authToken;
       this.socketIOClientGenerator.init({
         serviceHost: serviceHost,
         authToken: authToken
