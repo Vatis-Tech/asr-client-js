@@ -190,6 +190,7 @@ Also, the destroy method will be invoked if any error will come through the `soc
 
 **NOTE! If the VTC plugin did not send all messages, or it did not receive all messages, the destruction will not happen instantly.**
 **NOTE! The destruction of the VTC plugin will happen only when all messages have been sent and received.**
+**NOTE! If you wish to destroy the VTC plugin without waiting for all messages to be sent and received, you can pass `{ hard: true}` as a parameter to the `.destroy` call.**
 
 ### `pause`
 
