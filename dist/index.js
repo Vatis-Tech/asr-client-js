@@ -132,8 +132,11 @@ var VatisTechClient = /*#__PURE__*/function () {
 
   _createClass(VatisTechClient, [{
     key: "destroy",
-    value: function destroy(_ref2) {
-      var hard = _ref2.hard;
+    value: function destroy() {
+      var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+        hard: false
+      },
+          hard = _ref2.hard;
 
       // check if there is still data to be received or to be sent
       if ((this.waitingForFinalPacket || !this.microphoneQueue.isEmpty) && hard !== true) {
