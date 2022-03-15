@@ -65,37 +65,47 @@ class MicrophoneGenerator {
         this.mediaRecorder.addEventListener(
           "dataavailable",
           function (e) {
-            if (e.data.size > 0) {
-              if (this.blobState) {
-                this.blobState = new Blob([this.blobState, e.data]);
-              } else {
-                this.blobState = e.data;
-              }
-              if (this.blobState.size > MICROPHONE_BIT_RATE_SAMPLES) {
-                this.blobState.arrayBuffer().then((buffer) => {
-                  for (
-                    var i = 0;
-                    i <
-                    Math.trunc(
-                      this.blobState.size / MICROPHONE_BIT_RATE_SAMPLES
-                    );
-                    i++
-                  ) {
-                    let dataSamples = buffer.slice(
-                      i * MICROPHONE_BIT_RATE_SAMPLES,
-                      MICROPHONE_BIT_RATE_SAMPLES +
-                        i * MICROPHONE_BIT_RATE_SAMPLES
-                    );
-                    // this.onDataCallback(new Int32Array(dataSamples));
-                    this.onDataCallback(base64ArrayBuffer(dataSamples));
-                  }
-                  this.blobState = this.blobState.slice(
-                    i * MICROPHONE_BIT_RATE_SAMPLES,
-                    this.blobState.size
-                  );
-                });
-              }
-            }
+            // Converting audio blob to base64
+            let reader = new FileReader();
+            reader.onloadend = () => {
+              // You can upload the base64 to server here.
+              this.onDataCallback(
+                reader.result.replace("data:audio/webm;codecs=opus;base64,", "")
+              );
+            };
+
+            reader.readAsDataURL(e.data);
+            // if (e.data.size > 0) {
+            //   if (this.blobState) {
+            //     this.blobState = new Blob([this.blobState, e.data]);
+            //   } else {
+            //     this.blobState = e.data;
+            //   }
+            //   if (this.blobState.size > MICROPHONE_BIT_RATE_SAMPLES) {
+            //     this.blobState.arrayBuffer().then((buffer) => {
+            //       for (
+            //         var i = 0;
+            //         i <
+            //         Math.trunc(
+            //           this.blobState.size / MICROPHONE_BIT_RATE_SAMPLES
+            //         );
+            //         i++
+            //       ) {
+            //         let dataSamples = buffer.slice(
+            //           i * MICROPHONE_BIT_RATE_SAMPLES,
+            //           MICROPHONE_BIT_RATE_SAMPLES +
+            //             i * MICROPHONE_BIT_RATE_SAMPLES
+            //         );
+            //         // this.onDataCallback(new Int32Array(dataSamples));
+            //         this.onDataCallback(base64ArrayBuffer(dataSamples));
+            //       }
+            //       this.blobState = this.blobState.slice(
+            //         i * MICROPHONE_BIT_RATE_SAMPLES,
+            //         this.blobState.size
+            //       );
+            //     });
+            //   }
+            // }
           }.bind(this)
         );
 
