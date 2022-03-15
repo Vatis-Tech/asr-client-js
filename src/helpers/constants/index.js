@@ -3,6 +3,7 @@ const API_URL =
 
 const SOCKET_IO_CLIENT_NAMESPACE = "/asr_stream";
 const SOCKET_IO_CLIENT_TRANSPORTS = ["websocket"];
+// const SOCKET_IO_CLIENT_PATH = "/asr/v1/live/transcribe/socket.io";
 const SOCKET_IO_CLIENT_PATH = "/asr/v1/service/live/transcribe/socket.io";
 const SOCKET_IO_CLIENT_RESULT_PATH = "/asr_result";
 const SOCKET_IO_CLIENT_REQUEST_PATH = "/asr_request";
