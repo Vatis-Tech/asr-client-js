@@ -1,7 +1,7 @@
 const API_URL =
   "https://vatis.tech/api/v1/asr-client/auth?service=<service>&model=<model>&language=<language>";
 
-const RESERVATION_URL = "http://<service_host>/asr/v1/registry/stream/reserve";
+const RESERVATION_URL = "<service_host>/asr/v1/registry/stream/reserve";
 
 const SOCKET_IO_CLIENT_NAMESPACE = "/asr_stream";
 const SOCKET_IO_CLIENT_TRANSPORTS = ["websocket"];
