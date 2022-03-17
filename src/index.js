@@ -1,4 +1,5 @@
 import ApiKeyGenerator from "./components/ApiKeyGenerator.js";
+import InstanceReservation from "./components/InstanceReservation.js";
 import SocketIOClientGenerator from "./components/SocketIOClientGenerator.js";
 import MicrophoneGenerator from "./components/MicrophoneGenerator.js";
 import MicrophoneQueue from "./components/MicrophoneQueue.js";
@@ -14,6 +15,7 @@ const { generateApiUrl, checkIfFinalPacket } = functions;
 
 class VatisTechClient {
   microphoneGenerator;
+  instanceReservation;
   apiKeyGenerator;
   socketIOClientGenerator;
   microphoneQueue;
@@ -75,11 +77,17 @@ class VatisTechClient {
       logger: this.logger.bind(this),
     });
 
-    // instantiante ApiKeyGenerator - this will return on the responseCallback the serviceHost and the authToken for the SocketIOClientGenerator to connect based on the apiUrl and apiKey
+    // instantiante ApiKeyGenerator - this will return on the responseCallback the serviceHost and the authToken for the InstanceReservation to reserve a live asr instance based on the apiUrl and apiKey
     this.apiKeyGenerator = new ApiKeyGenerator({
       apiUrl: generateApiUrl({ service, model, language }),
-      responseCallback: this.initSocketIOClient.bind(this),
+      responseCallback: this.initInstanceReservation.bind(this),
       apiKey: apiKey,
+      logger: this.logger.bind(this),
+    });
+
+    // instantiante InstanceReservation - this will return on the responseCallback the streamUrl, reservationToken, and podName for the SocketIOClientGenerator to connect based on the serviceHost and authToken
+    this.instanceReservation = new InstanceReservation({
+      responseCallback: this.initSocketIOClient.bind(this),
       logger: this.logger.bind(this),
     });
 
@@ -160,13 +168,21 @@ class VatisTechClient {
     this.apiKeyGenerator.init();
   }
 
+  // initilize InstanceReservation
+  // get a reserved link for socket.io-client
+  initInstanceReservation({ serviceHost, authToken }) {
+    this.instanceReservation.init({ serviceHost, authToken });
+  }
+
   // initilize SocketIOClientGenerator
   // connect to the ASR SERVICE based on the serviceHost and authToken of ApiKeyGenerator
   // this is called as a callback after the successful initialization of the ApiKeyGenerator
-  initSocketIOClient({ serviceHost, authToken }) {
+  initSocketIOClient({ streamUrl, reservationToken }) {
     this.socketIOClientGenerator.init({
       serviceHost,
       authToken,
+      streamUrl,
+      reservationToken,
     });
   }
 
