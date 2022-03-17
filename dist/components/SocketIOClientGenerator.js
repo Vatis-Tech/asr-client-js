@@ -71,20 +71,23 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
       var _this = this;
 
       var serviceHost = _ref2.serviceHost,
-          authToken = _ref2.authToken;
+          authToken = _ref2.authToken,
+          streamUrl = _ref2.streamUrl,
+          reservationToken = _ref2.reservationToken;
       this.logger({
         currentState: "@vatis-tech/asr-client-js: Initializing the \"SocketIOClientGenerator\" plugin.",
         description: "@vatis-tech/asr-client-js: Here, the socket.io-client gets instantianted and initialized."
       });
       this.serviceHost = serviceHost;
       this.authToken = authToken;
-      var serviceHostStream = "".concat(serviceHost).concat(SOCKET_IO_CLIENT_NAMESPACE);
+      var serviceHostStream = "".concat(serviceHost, "/").concat(streamUrl).concat(SOCKET_IO_CLIENT_NAMESPACE);
       this.socketRef = (0, _socket["default"])(serviceHostStream, {
         path: SOCKET_IO_CLIENT_PATH,
         transports: SOCKET_IO_CLIENT_TRANSPORTS,
         namespace: SOCKET_IO_CLIENT_NAMESPACE,
         query: {
           Authorization: authToken,
+          ReservationKey: reservationToken,
           FrameLength: MICROPHONE_TIMESLICE / 1000,
           FrameOverlap: SOCKET_IO_CLIENT_FRAME_OVERLAP,
           BufferOffset: SOCKET_IO_CLIENT_BUFFER_OFFSET,
