@@ -14,7 +14,7 @@ var RESERVATION_URL = _index["default"].RESERVATION_URL;
 function generateReservationUrl(_ref) {
   var serviceHost = _ref.serviceHost;
   var reservationUrl = RESERVATION_URL;
-  reservationUrl.replace("<service_host>", serviceHost);
+  reservationUrl = reservationUrl.replace("<service_host>", serviceHost);
   return reservationUrl;
 }
 
