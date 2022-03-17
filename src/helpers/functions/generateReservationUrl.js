@@ -5,7 +5,7 @@ const { RESERVATION_URL } = constants;
 function generateReservationUrl({ serviceHost }) {
   let reservationUrl = RESERVATION_URL;
 
-  reservationUrl.replace("<service_host>", serviceHost);
+  reservationUrl = reservationUrl.replace("<service_host>", serviceHost);
 
   return reservationUrl;
 }
