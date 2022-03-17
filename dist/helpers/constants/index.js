@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 var API_URL = "http://localhost:8080/api/v1/asr-client/auth?service=<service>&model=<model>&language=<language>";
+var RESERVATION_URL = "http://<service_host>/asr/v1/registry/stream/reserve";
 var SOCKET_IO_CLIENT_NAMESPACE = "/asr_stream";
 var SOCKET_IO_CLIENT_TRANSPORTS = ["websocket"]; // const SOCKET_IO_CLIENT_PATH = "/asr/v1/live/transcribe/socket.io";
 
@@ -23,6 +24,7 @@ var MICROPHONE_BIT_RATE_SAMPLES = 8000;
 var MICROPHONE_TIMESLICE = 1000;
 var projectConstants = {
   API_URL: API_URL,
+  RESERVATION_URL: RESERVATION_URL,
   SOCKET_IO_CLIENT_NAMESPACE: SOCKET_IO_CLIENT_NAMESPACE,
   SOCKET_IO_CLIENT_TRANSPORTS: SOCKET_IO_CLIENT_TRANSPORTS,
   SOCKET_IO_CLIENT_PATH: SOCKET_IO_CLIENT_PATH,
