@@ -31,7 +31,10 @@ class InstanceReservation {
       description: `@vatis-tech/asr-client-js: Here it is where the XMLHttpRequest happens to reserve a live asr instance.`,
     });
 
-    this.xmlHttp.open("GET", generateReservationUrl(this.serviceHost));
+    this.xmlHttp.open(
+      "GET",
+      generateReservationUrl({ serviceHost: this.serviceHost })
+    );
     this.xmlHttp.setRequestHeader("Authorization", this.authToken);
     this.xmlHttp.send();
   }
