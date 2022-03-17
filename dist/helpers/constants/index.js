@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 var API_URL = "http://localhost:8080/api/v1/asr-client/auth?service=<service>&model=<model>&language=<language>";
-var RESERVATION_URL = "http://<service_host>/asr/v1/registry/stream/reserve";
+var RESERVATION_URL = "<service_host>/asr/v1/registry/stream/reserve";
 var SOCKET_IO_CLIENT_NAMESPACE = "/asr_stream";
 var SOCKET_IO_CLIENT_TRANSPORTS = ["websocket"]; // const SOCKET_IO_CLIENT_PATH = "/asr/v1/live/transcribe/socket.io";
 
