@@ -7,6 +7,8 @@ exports["default"] = void 0;
 
 var _ApiKeyGenerator = _interopRequireDefault(require("./components/ApiKeyGenerator.js"));
 
+var _InstanceReservation = _interopRequireDefault(require("./components/InstanceReservation.js"));
+
 var _SocketIOClientGenerator = _interopRequireDefault(require("./components/SocketIOClientGenerator.js"));
 
 var _MicrophoneGenerator = _interopRequireDefault(require("./components/MicrophoneGenerator.js"));
@@ -45,6 +47,8 @@ var VatisTechClient = /*#__PURE__*/function () {
     _classCallCheck(this, VatisTechClient);
 
     _defineProperty(this, "microphoneGenerator", void 0);
+
+    _defineProperty(this, "instanceReservation", void 0);
 
     _defineProperty(this, "apiKeyGenerator", void 0);
 
@@ -101,7 +105,7 @@ var VatisTechClient = /*#__PURE__*/function () {
 
     this.microphoneQueue = new _MicrophoneQueue["default"]({
       logger: this.logger.bind(this)
-    }); // instantiante ApiKeyGenerator - this will return on the responseCallback the serviceHost and the authToken for the SocketIOClientGenerator to connect based on the apiUrl and apiKey
+    }); // instantiante ApiKeyGenerator - this will return on the responseCallback the serviceHost and the authToken for the InstanceReservation to reserve a live asr instance based on the apiUrl and apiKey
 
     this.apiKeyGenerator = new _ApiKeyGenerator["default"]({
       apiUrl: generateApiUrl({
@@ -109,8 +113,13 @@ var VatisTechClient = /*#__PURE__*/function () {
         model: model,
         language: language
       }),
-      responseCallback: this.initSocketIOClient.bind(this),
+      responseCallback: this.initInstanceReservation.bind(this),
       apiKey: apiKey,
+      logger: this.logger.bind(this)
+    }); // instantiante InstanceReservation - this will return on the responseCallback the streamUrl, reservationToken, and podName for the SocketIOClientGenerator to connect based on the serviceHost and authToken
+
+    this.instanceReservation = new _InstanceReservation["default"]({
+      responseCallback: this.initSocketIOClient.bind(this),
       logger: this.logger.bind(this)
     }); // instantiante SocketIOClientGenerator - this will return on the onAsrResultCallback the results that it gets back from the ASR SERVICE and when it connects to the ASR SERVICE it will initilize the MicrophoneGenerator through the onConnectCallback
 
@@ -188,18 +197,32 @@ var VatisTechClient = /*#__PURE__*/function () {
     key: "initApiKey",
     value: function initApiKey() {
       this.apiKeyGenerator.init();
+    } // initilize InstanceReservation
+    // get a reserved link for socket.io-client
+
+  }, {
+    key: "initInstanceReservation",
+    value: function initInstanceReservation(_ref3) {
+      var serviceHost = _ref3.serviceHost,
+          authToken = _ref3.authToken;
+      this.instanceReservation.init({
+        serviceHost: serviceHost,
+        authToken: authToken
+      });
     } // initilize SocketIOClientGenerator
     // connect to the ASR SERVICE based on the serviceHost and authToken of ApiKeyGenerator
     // this is called as a callback after the successful initialization of the ApiKeyGenerator
 
   }, {
     key: "initSocketIOClient",
-    value: function initSocketIOClient(_ref3) {
-      var serviceHost = _ref3.serviceHost,
-          authToken = _ref3.authToken;
+    value: function initSocketIOClient(_ref4) {
+      var streamUrl = _ref4.streamUrl,
+          reservationToken = _ref4.reservationToken;
       this.socketIOClientGenerator.init({
         serviceHost: serviceHost,
-        authToken: authToken
+        authToken: authToken,
+        streamUrl: streamUrl,
+        reservationToken: reservationToken
       });
     } // initilize MicrophoneGenerator
     // it will ask for user's microphone, and when the user gives permission for the microphone usage, it will start sending the data that it records using the this.onMicrophoneGeneratorDataCallback
