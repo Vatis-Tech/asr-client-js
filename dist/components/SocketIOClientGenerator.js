@@ -43,7 +43,7 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
 
     _defineProperty(this, "socketRef", void 0);
 
-    _defineProperty(this, "serviceHost", void 0);
+    _defineProperty(this, "streamHost", void 0);
 
     _defineProperty(this, "authToken", void 0);
 
@@ -70,7 +70,7 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
     value: function init(_ref2) {
       var _this = this;
 
-      var serviceHost = _ref2.serviceHost,
+      var streamHost = _ref2.streamHost,
           authToken = _ref2.authToken,
           streamUrl = _ref2.streamUrl,
           reservationToken = _ref2.reservationToken;
@@ -78,11 +78,10 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
         currentState: "@vatis-tech/asr-client-js: Initializing the \"SocketIOClientGenerator\" plugin.",
         description: "@vatis-tech/asr-client-js: Here, the socket.io-client gets instantianted and initialized."
       });
-      this.serviceHost = serviceHost;
+      this.streamHost = streamHost;
       this.authToken = authToken;
-      var serviceHostStream = "".concat(serviceHost).concat(streamUrl).concat(SOCKET_IO_CLIENT_PATH).concat(SOCKET_IO_CLIENT_NAMESPACE);
-      console.log(serviceHostStream);
-      this.socketRef = (0, _socket["default"])(serviceHostStream, {
+      var streamHostStream = "".concat(streamHost).concat(streamUrl).concat(SOCKET_IO_CLIENT_PATH).concat(SOCKET_IO_CLIENT_NAMESPACE);
+      this.socketRef = (0, _socket["default"])(streamHostStream, {
         path: "".concat(streamUrl).concat(SOCKET_IO_CLIENT_PATH),
         transports: SOCKET_IO_CLIENT_TRANSPORTS,
         namespace: SOCKET_IO_CLIENT_NAMESPACE,
