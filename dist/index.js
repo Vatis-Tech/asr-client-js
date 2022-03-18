@@ -217,16 +217,15 @@ var VatisTechClient = /*#__PURE__*/function () {
   }, {
     key: "initSocketIOClient",
     value: function initSocketIOClient(_ref4) {
-      var streamUrl = _ref4.streamUrl,
+      var streamHost = _ref4.streamHost,
+          streamUrl = _ref4.streamUrl,
           reservationToken = _ref4.reservationToken,
-          serviceHost = _ref4.serviceHost,
-          authToken = _ref4.authToken,
-          podName = _ref4.podName;
+          authToken = _ref4.authToken;
       this.socketIOClientGenerator.init({
-        serviceHost: serviceHost,
-        authToken: authToken,
+        streamHost: streamHost,
         streamUrl: streamUrl,
-        reservationToken: reservationToken
+        reservationToken: reservationToken,
+        authToken: authToken
       });
     } // initilize MicrophoneGenerator
     // it will ask for user's microphone, and when the user gives permission for the microphone usage, it will start sending the data that it records using the this.onMicrophoneGeneratorDataCallback
