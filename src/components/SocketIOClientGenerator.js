@@ -47,7 +47,7 @@ class SocketIOClientGenerator {
 
     this.streamHost = streamHost;
     this.authToken = authToken;
-    const streamHostStream = `${streamHost}${streamUrl}${SOCKET_IO_CLIENT_PATH}${SOCKET_IO_CLIENT_NAMESPACE}`;
+    const streamHostStream = `http://${streamHost}${SOCKET_IO_CLIENT_NAMESPACE}`;
     this.socketRef = io(streamHostStream, {
       path: `${streamUrl}${SOCKET_IO_CLIENT_PATH}`,
       transports: SOCKET_IO_CLIENT_TRANSPORTS,
