@@ -80,9 +80,10 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
       });
       this.serviceHost = serviceHost;
       this.authToken = authToken;
-      var serviceHostStream = "".concat(serviceHost, "/").concat(streamUrl).concat(SOCKET_IO_CLIENT_NAMESPACE);
+      var serviceHostStream = "".concat(serviceHost).concat(streamUrl).concat(SOCKET_IO_CLIENT_PATH).concat(SOCKET_IO_CLIENT_NAMESPACE);
+      console.log(serviceHostStream);
       this.socketRef = (0, _socket["default"])(serviceHostStream, {
-        path: SOCKET_IO_CLIENT_PATH,
+        path: "".concat(streamUrl).concat(SOCKET_IO_CLIENT_PATH),
         transports: SOCKET_IO_CLIENT_TRANSPORTS,
         namespace: SOCKET_IO_CLIENT_NAMESPACE,
         query: {
