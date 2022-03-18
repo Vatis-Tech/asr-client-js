@@ -134,6 +134,7 @@ class VatisTechClient {
       // delete data members
       this.microphoneGenerator = undefined;
       this.apiKeyGenerator = undefined;
+      this.instanceReservation = undefined;
       this.socketIOClientGenerator = undefined;
       this.microphoneQueue = undefined;
       this.onData = undefined;
@@ -177,7 +178,13 @@ class VatisTechClient {
   // initilize SocketIOClientGenerator
   // connect to the ASR SERVICE based on the serviceHost and authToken of ApiKeyGenerator
   // this is called as a callback after the successful initialization of the ApiKeyGenerator
-  initSocketIOClient({ streamUrl, reservationToken }) {
+  initSocketIOClient({
+    streamUrl,
+    reservationToken,
+    serviceHost,
+    authToken,
+    podName,
+  }) {
     this.socketIOClientGenerator.init({
       serviceHost,
       authToken,
