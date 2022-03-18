@@ -163,6 +163,7 @@ var VatisTechClient = /*#__PURE__*/function () {
 
         this.microphoneGenerator = undefined;
         this.apiKeyGenerator = undefined;
+        this.instanceReservation = undefined;
         this.socketIOClientGenerator = undefined;
         this.microphoneQueue = undefined;
         this.onData = undefined;
@@ -217,7 +218,10 @@ var VatisTechClient = /*#__PURE__*/function () {
     key: "initSocketIOClient",
     value: function initSocketIOClient(_ref4) {
       var streamUrl = _ref4.streamUrl,
-          reservationToken = _ref4.reservationToken;
+          reservationToken = _ref4.reservationToken,
+          serviceHost = _ref4.serviceHost,
+          authToken = _ref4.authToken,
+          podName = _ref4.podName;
       this.socketIOClientGenerator.init({
         serviceHost: serviceHost,
         authToken: authToken,
