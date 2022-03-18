@@ -20,7 +20,7 @@ const {
 
 class SocketIOClientGenerator {
   socketRef;
-  serviceHost;
+  streamHost;
   authToken;
   onConnectCallback;
   onAsrResultCallback;
@@ -39,17 +39,16 @@ class SocketIOClientGenerator {
     this.onConnectCallback = onConnectCallback;
     this.onAsrResultCallback = onAsrResultCallback;
   }
-  init({ serviceHost, authToken, streamUrl, reservationToken }) {
+  init({ streamHost, authToken, streamUrl, reservationToken }) {
     this.logger({
       currentState: `@vatis-tech/asr-client-js: Initializing the "SocketIOClientGenerator" plugin.`,
       description: `@vatis-tech/asr-client-js: Here, the socket.io-client gets instantianted and initialized.`,
     });
 
-    this.serviceHost = serviceHost;
+    this.streamHost = streamHost;
     this.authToken = authToken;
-    const serviceHostStream = `${serviceHost}${streamUrl}${SOCKET_IO_CLIENT_PATH}${SOCKET_IO_CLIENT_NAMESPACE}`;
-    console.log(serviceHostStream);
-    this.socketRef = io(serviceHostStream, {
+    const streamHostStream = `${streamHost}${streamUrl}${SOCKET_IO_CLIENT_PATH}${SOCKET_IO_CLIENT_NAMESPACE}`;
+    this.socketRef = io(streamHostStream, {
       path: `${streamUrl}${SOCKET_IO_CLIENT_PATH}`,
       transports: SOCKET_IO_CLIENT_TRANSPORTS,
       namespace: SOCKET_IO_CLIENT_NAMESPACE,
