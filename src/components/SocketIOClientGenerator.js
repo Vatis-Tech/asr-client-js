@@ -47,9 +47,10 @@ class SocketIOClientGenerator {
 
     this.serviceHost = serviceHost;
     this.authToken = authToken;
-    const serviceHostStream = `${serviceHost}/${streamUrl}${SOCKET_IO_CLIENT_NAMESPACE}`;
+    const serviceHostStream = `${serviceHost}${streamUrl}${SOCKET_IO_CLIENT_PATH}${SOCKET_IO_CLIENT_NAMESPACE}`;
+    console.log(serviceHostStream);
     this.socketRef = io(serviceHostStream, {
-      path: SOCKET_IO_CLIENT_PATH,
+      path: `${streamUrl}${SOCKET_IO_CLIENT_PATH}`,
       transports: SOCKET_IO_CLIENT_TRANSPORTS,
       namespace: SOCKET_IO_CLIENT_NAMESPACE,
       query: {
