@@ -178,18 +178,12 @@ class VatisTechClient {
   // initilize SocketIOClientGenerator
   // connect to the ASR SERVICE based on the serviceHost and authToken of ApiKeyGenerator
   // this is called as a callback after the successful initialization of the ApiKeyGenerator
-  initSocketIOClient({
-    streamUrl,
-    reservationToken,
-    serviceHost,
-    authToken,
-    podName,
-  }) {
+  initSocketIOClient({ streamHost, streamUrl, reservationToken, authToken }) {
     this.socketIOClientGenerator.init({
-      serviceHost,
-      authToken,
+      streamHost,
       streamUrl,
       reservationToken,
+      authToken,
     });
   }
 
