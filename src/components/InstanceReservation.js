@@ -52,13 +52,12 @@ class InstanceReservation {
     const response = JSON.parse(this.xmlHttp.responseText);
     this.streamUrl = response.stream_url;
     this.reservationToken = response.token;
-    this.podName = response.pod_name;
+    this.streamHost = response.stream_host;
     this.responseCallback({
-      serviceHost: this.serviceHost,
-      authToken: this.authToken,
+      streamHost: this.streamHost,
       streamUrl: this.streamUrl,
       reservationToken: this.reservationToken,
-      podName: this.podName,
+      authToken: this.authToken,
     });
   }
 }
