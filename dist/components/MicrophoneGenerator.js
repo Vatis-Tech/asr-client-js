@@ -113,7 +113,7 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
 
                     reader.onloadend = function () {
                       // You can upload the base64 to server here.
-                      _this2.onDataCallback(reader.result.replace("data:audio/webm;codecs=opus;base64,", ""));
+                      _this2.onDataCallback(reader.result.replace("data:audio/webm;codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus; base64,", ""));
                     };
 
                     reader.readAsDataURL(e.data); // if (e.data.size > 0) {
