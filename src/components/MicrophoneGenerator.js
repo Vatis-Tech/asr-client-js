@@ -115,7 +115,7 @@ class MicrophoneGenerator {
 
         this.logger({
           currentState: `@vatis-tech/asr-client-js: Initialized the "MicrophoneGenerator" plugin.`,
-          description: `@vatis-tech/asr-client-js: The MicrophoneGenerator was successful into getting user's microphone, and will start sending data each 1 second.`,
+          description: `@vatis-tech/asr-client-js: The MicrophoneGenerator was successful into getting user's microphone, and will start sending data each ${MICROPHONE_TIMESLICE} miliseconds.`,
         });
       })
       .catch((err) => {
