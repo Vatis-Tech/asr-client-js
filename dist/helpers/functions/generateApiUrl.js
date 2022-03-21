@@ -17,7 +17,7 @@ function generateApiUrl(_ref) {
       model = _ref.model,
       language = _ref.language,
       host = _ref.host;
-  var apiUrl = (host ? host : API_URL) + path;
+  var apiUrl = (host ? host : API_URL) + API_URL_PATH;
 
   if (service) {
     apiUrl = apiUrl.replace("<service>", service);
