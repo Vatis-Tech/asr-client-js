@@ -42,7 +42,8 @@ var VatisTechClient = /*#__PURE__*/function () {
         onData = _ref.onData,
         log = _ref.log,
         logger = _ref.logger,
-        onDestroyCallback = _ref.onDestroyCallback;
+        onDestroyCallback = _ref.onDestroyCallback,
+        host = _ref.host;
 
     _classCallCheck(this, VatisTechClient);
 
@@ -111,7 +112,8 @@ var VatisTechClient = /*#__PURE__*/function () {
       apiUrl: generateApiUrl({
         service: service,
         model: model,
-        language: language
+        language: language,
+        host: host
       }),
       responseCallback: this.initInstanceReservation.bind(this),
       apiKey: apiKey,
