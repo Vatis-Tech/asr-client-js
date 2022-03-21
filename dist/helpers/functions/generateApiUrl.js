@@ -9,13 +9,15 @@ var _index = _interopRequireDefault(require("../constants/index.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var API_URL = _index["default"].API_URL;
+var API_URL = _index["default"].API_URL,
+    API_URL_PATH = _index["default"].API_URL_PATH;
 
 function generateApiUrl(_ref) {
   var service = _ref.service,
       model = _ref.model,
-      language = _ref.language;
-  var apiUrl = API_URL;
+      language = _ref.language,
+      host = _ref.host;
+  var apiUrl = (host ? host : API_URL) + path;
 
   if (service) {
     apiUrl = apiUrl.replace("<service>", service);
