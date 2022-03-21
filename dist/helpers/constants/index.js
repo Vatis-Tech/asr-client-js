@@ -4,7 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-var API_URL = "https://vatis.tech/api/v1/asr-client/auth?service=<service>&model=<model>&language=<language>";
+var API_URL = "https://vatis.tech/api/v1";
+var API_URL_PATH = "/asr-client/auth?service=<service>&model=<model>&language=<language>";
 var RESERVATION_URL = "<service_host>/asr/v1/registry/stream/reserve";
 var SOCKET_IO_CLIENT_NAMESPACE = "/asr_stream";
 var SOCKET_IO_CLIENT_TRANSPORTS = ["websocket"];
@@ -22,6 +23,7 @@ var SOCKET_IO_CLIENT_ACCESS_CONTROL_ALLOW_METHODS = "GET,POST";
 var MICROPHONE_BIT_RATE_SAMPLES = 8000;
 var MICROPHONE_TIMESLICE = 250;
 var projectConstants = {
+  API_URL_PATH: API_URL_PATH,
   API_URL: API_URL,
   RESERVATION_URL: RESERVATION_URL,
   SOCKET_IO_CLIENT_NAMESPACE: SOCKET_IO_CLIENT_NAMESPACE,
