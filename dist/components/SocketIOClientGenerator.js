@@ -111,7 +111,9 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
           description: "@vatis-tech/asr-client-js: The connection between @vatis-tech/asr-client-js and Vatis Tech LIVE ASR service has been closed by the Vatis Tech LIVE ASR service."
         });
 
-        _this.destroyVTC();
+        _this.destroyVTC({
+          hard: true
+        });
       });
       this.socketRef.on("connect_error", function (error) {
         var errorMessage = 'Could not initilize the "socket.io-client" with error: ' + error;
