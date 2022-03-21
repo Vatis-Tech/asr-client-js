@@ -1,5 +1,6 @@
-const API_URL =
-  "https://vatis.tech/api/v1/asr-client/auth?service=<service>&model=<model>&language=<language>";
+const API_URL = "https://vatis.tech/api/v1";
+const API_URL_PATH =
+  "/asr-client/auth?service=<service>&model=<model>&language=<language>";
 
 const RESERVATION_URL = "<service_host>/asr/v1/registry/stream/reserve";
 
@@ -21,6 +22,7 @@ const MICROPHONE_BIT_RATE_SAMPLES = 8000;
 const MICROPHONE_TIMESLICE = 250;
 
 const projectConstants = {
+  API_URL_PATH,
   API_URL,
   RESERVATION_URL,
 
