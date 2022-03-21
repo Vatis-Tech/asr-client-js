@@ -28,8 +28,6 @@ var SOCKET_IO_CLIENT_NAMESPACE = _index["default"].SOCKET_IO_CLIENT_NAMESPACE,
     SOCKET_IO_CLIENT_BUFFER_OFFSET = _index["default"].SOCKET_IO_CLIENT_BUFFER_OFFSET,
     SOCKET_IO_CLIENT_AUDIO_FORMAT = _index["default"].SOCKET_IO_CLIENT_AUDIO_FORMAT,
     SOCKET_IO_CLIENT_SENDING_HEADERS = _index["default"].SOCKET_IO_CLIENT_SENDING_HEADERS,
-    SOCKET_IO_CLIENT_ACCESS_CONTROL_ALLOW_ORIGIN = _index["default"].SOCKET_IO_CLIENT_ACCESS_CONTROL_ALLOW_ORIGIN,
-    SOCKET_IO_CLIENT_ACCESS_CONTROL_ALLOW_METHODS = _index["default"].SOCKET_IO_CLIENT_ACCESS_CONTROL_ALLOW_METHODS,
     MICROPHONE_TIMESLICE = _index["default"].MICROPHONE_TIMESLICE;
 
 var SocketIOClientGenerator = /*#__PURE__*/function () {
@@ -92,9 +90,7 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
           FrameOverlap: SOCKET_IO_CLIENT_FRAME_OVERLAP,
           BufferOffset: SOCKET_IO_CLIENT_BUFFER_OFFSET,
           AudioFormat: SOCKET_IO_CLIENT_AUDIO_FORMAT,
-          SendingHeaders: SOCKET_IO_CLIENT_SENDING_HEADERS,
-          "Access-Control-Allow-Origin": SOCKET_IO_CLIENT_ACCESS_CONTROL_ALLOW_ORIGIN,
-          "Access-Control-Allow-Methods": SOCKET_IO_CLIENT_ACCESS_CONTROL_ALLOW_METHODS
+          SendingHeaders: SOCKET_IO_CLIENT_SENDING_HEADERS
         }
       });
       this.socketRef.on("connect", function () {
