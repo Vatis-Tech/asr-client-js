@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-var API_URL = "http://localhost:8080/api/v1/asr-client/auth?service=<service>&model=<model>&language=<language>";
+var API_URL = "https://vatis.tech/api/v1/asr-client/auth?service=<service>&model=<model>&language=<language>";
 var RESERVATION_URL = "<service_host>/asr/v1/registry/stream/reserve";
 var SOCKET_IO_CLIENT_NAMESPACE = "/asr_stream";
 var SOCKET_IO_CLIENT_TRANSPORTS = ["websocket"];
