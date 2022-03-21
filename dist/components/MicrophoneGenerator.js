@@ -153,7 +153,7 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
 
                   _this.logger({
                     currentState: "@vatis-tech/asr-client-js: Initialized the \"MicrophoneGenerator\" plugin.",
-                    description: "@vatis-tech/asr-client-js: The MicrophoneGenerator was successful into getting user's microphone, and will start sending data each 1 second."
+                    description: "@vatis-tech/asr-client-js: The MicrophoneGenerator was successful into getting user's microphone, and will start sending data each ".concat(MICROPHONE_TIMESLICE, " miliseconds.")
                   });
                 })["catch"](function (err) {
                   var errorMessage = "Could not initilize the microphone stream with error: " + err;
