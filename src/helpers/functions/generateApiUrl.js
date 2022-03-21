@@ -3,7 +3,7 @@ import constants from "../constants/index.js";
 const { API_URL, API_URL_PATH } = constants;
 
 function generateApiUrl({ service, model, language, host }) {
-  let apiUrl = (host ? host : API_URL) + path;
+  let apiUrl = (host ? host : API_URL) + API_URL_PATH;
 
   if (service) {
     apiUrl = apiUrl.replace("<service>", service);
