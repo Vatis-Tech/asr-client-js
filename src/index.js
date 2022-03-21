@@ -34,6 +34,7 @@ class VatisTechClient {
     log,
     logger,
     onDestroyCallback,
+    host,
   }) {
     this.log = log;
 
@@ -79,7 +80,7 @@ class VatisTechClient {
 
     // instantiante ApiKeyGenerator - this will return on the responseCallback the serviceHost and the authToken for the InstanceReservation to reserve a live asr instance based on the apiUrl and apiKey
     this.apiKeyGenerator = new ApiKeyGenerator({
-      apiUrl: generateApiUrl({ service, model, language }),
+      apiUrl: generateApiUrl({ service, model, language, host }),
       responseCallback: this.initInstanceReservation.bind(this),
       apiKey: apiKey,
       logger: this.logger.bind(this),
