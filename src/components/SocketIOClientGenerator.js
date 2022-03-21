@@ -80,7 +80,7 @@ class SocketIOClientGenerator {
         description: `@vatis-tech/asr-client-js: The connection between @vatis-tech/asr-client-js and Vatis Tech LIVE ASR service has been closed by the Vatis Tech LIVE ASR service.`,
       });
 
-      this.destroyVTC();
+      this.destroyVTC({ hard: true });
     });
     this.socketRef.on("connect_error", (error) => {
       const errorMessage =
