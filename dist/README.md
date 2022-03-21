@@ -180,6 +180,10 @@ If `log` prop is set to `true` and the `logger` prop is not set, or is not a fun
 
 This is a **Function** that will be called upon successful destruction;
 
+### `host`
+
+This is the host for generating a key. It defaults to "https://vatis.tech/".
+
 ## Methods
 
 ### `destroy`
