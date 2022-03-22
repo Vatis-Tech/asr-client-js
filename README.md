@@ -184,6 +184,22 @@ This is a **Function** that will be called upon successful destruction;
 
 This is the host for generating a key. It defaults to "https://vatis.tech/".
 
+### `microphoneTimeslice`
+
+How fast you want data to be captured from the microphone. Default is `250 milliseconds`.
+
+### `frameLength`
+
+The frame length of what the microphone catches. Default is `0.3 seconds`. (For a `microphoneTimeslice` of `250`, the `frameLength` is `0.3`).
+
+### `frameOverlap`
+
+Default is `0.3 seconds`.
+
+### `bufferOffset`
+
+Default is `0.3 seconds`.
+
 ## Methods
 
 ### `destroy`
