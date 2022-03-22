@@ -38,7 +38,15 @@ class SocketIOClientGenerator {
     this.onConnectCallback = onConnectCallback;
     this.onAsrResultCallback = onAsrResultCallback;
   }
-  init({ streamHost, authToken, streamUrl, reservationToken }) {
+  init({
+    streamHost,
+    authToken,
+    streamUrl,
+    reservationToken,
+    frameLength,
+    frameOverlap,
+    bufferOffset,
+  }) {
     this.logger({
       currentState: `@vatis-tech/asr-client-js: Initializing the "SocketIOClientGenerator" plugin.`,
       description: `@vatis-tech/asr-client-js: Here, the socket.io-client gets instantianted and initialized.`,
@@ -54,9 +62,13 @@ class SocketIOClientGenerator {
       query: {
         Authorization: authToken,
         ReservationKey: reservationToken,
-        FrameLength: MICROPHONE_FRAME_LENGTH,
-        FrameOverlap: SOCKET_IO_CLIENT_FRAME_OVERLAP,
-        BufferOffset: SOCKET_IO_CLIENT_BUFFER_OFFSET,
+        FrameLength: frameLength ? frameLength : MICROPHONE_FRAME_LENGTH,
+        FrameOverlap: frameOverlap
+          ? frameOverlap
+          : SOCKET_IO_CLIENT_FRAME_OVERLAP,
+        BufferOffset: bufferOffset
+          ? bufferOffset
+          : SOCKET_IO_CLIENT_BUFFER_OFFSET,
         AudioFormat: SOCKET_IO_CLIENT_AUDIO_FORMAT,
         SendingHeaders: SOCKET_IO_CLIENT_SENDING_HEADERS,
       },
