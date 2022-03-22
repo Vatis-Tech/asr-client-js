@@ -13,6 +13,7 @@ const {
   SOCKET_IO_CLIENT_AUDIO_FORMAT,
   SOCKET_IO_CLIENT_SENDING_HEADERS,
 
+  MICROPHONE_FRAME_LENGTH,
   MICROPHONE_TIMESLICE,
 } = constants;
 
@@ -53,7 +54,7 @@ class SocketIOClientGenerator {
       query: {
         Authorization: authToken,
         ReservationKey: reservationToken,
-        FrameLength: MICROPHONE_TIMESLICE / 1000,
+        FrameLength: MICROPHONE_FRAME_LENGTH,
         FrameOverlap: SOCKET_IO_CLIENT_FRAME_OVERLAP,
         BufferOffset: SOCKET_IO_CLIENT_BUFFER_OFFSET,
         AudioFormat: SOCKET_IO_CLIENT_AUDIO_FORMAT,
