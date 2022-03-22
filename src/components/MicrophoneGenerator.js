@@ -10,7 +10,8 @@ class MicrophoneGenerator {
   logger;
   blobState;
   mediaRecorder;
-  constructor({ onDataCallback, logger }) {
+  microphoneTimeslice;
+  constructor({ onDataCallback, logger, microphoneTimeslice }) {
     this.logger = logger;
 
     this.logger({
@@ -19,6 +20,12 @@ class MicrophoneGenerator {
     });
 
     this.onDataCallback = onDataCallback;
+
+    if (microphoneTimeslice) {
+      this.microphoneTimeslice = microphoneTimeslice;
+    } else {
+      this.microphoneTimeslice = MICROPHONE_TIMESLICE;
+    }
   }
 
   // on destroy we want to stop the MediaRecorder from recording
@@ -111,11 +118,11 @@ class MicrophoneGenerator {
           }.bind(this)
         );
 
-        this.mediaRecorder.start(MICROPHONE_TIMESLICE);
+        this.mediaRecorder.start(this.microphoneTimeslice);
 
         this.logger({
           currentState: `@vatis-tech/asr-client-js: Initialized the "MicrophoneGenerator" plugin.`,
-          description: `@vatis-tech/asr-client-js: The MicrophoneGenerator was successful into getting user's microphone, and will start sending data each ${MICROPHONE_TIMESLICE} miliseconds.`,
+          description: `@vatis-tech/asr-client-js: The MicrophoneGenerator was successful into getting user's microphone, and will start sending data each ${this.microphoneTimeslice} miliseconds.`,
         });
       })
       .catch((err) => {
