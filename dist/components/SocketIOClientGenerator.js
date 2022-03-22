@@ -36,7 +36,10 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
     var onConnectCallback = _ref.onConnectCallback,
         onAsrResultCallback = _ref.onAsrResultCallback,
         logger = _ref.logger,
-        destroyVTC = _ref.destroyVTC;
+        destroyVTC = _ref.destroyVTC,
+        frameLength = _ref.frameLength,
+        frameOverlap = _ref.frameOverlap,
+        bufferOffset = _ref.bufferOffset;
 
     _classCallCheck(this, SocketIOClientGenerator);
 
@@ -54,6 +57,12 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
 
     _defineProperty(this, "destroyVTC", void 0);
 
+    _defineProperty(this, "frameLength", void 0);
+
+    _defineProperty(this, "frameOverlap", void 0);
+
+    _defineProperty(this, "bufferOffset", void 0);
+
     this.logger = logger;
     this.logger({
       currentState: "@vatis-tech/asr-client-js: Instantianting the \"SocketIOClientGenerator\" plugin.",
@@ -62,6 +71,9 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
     this.destroyVTC = destroyVTC;
     this.onConnectCallback = onConnectCallback;
     this.onAsrResultCallback = onAsrResultCallback;
+    this.frameLength = frameLength;
+    this.frameOverlap = frameOverlap;
+    this.bufferOffset = bufferOffset;
   }
 
   _createClass(SocketIOClientGenerator, [{
@@ -72,10 +84,7 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
       var streamHost = _ref2.streamHost,
           authToken = _ref2.authToken,
           streamUrl = _ref2.streamUrl,
-          reservationToken = _ref2.reservationToken,
-          frameLength = _ref2.frameLength,
-          frameOverlap = _ref2.frameOverlap,
-          bufferOffset = _ref2.bufferOffset;
+          reservationToken = _ref2.reservationToken;
       this.logger({
         currentState: "@vatis-tech/asr-client-js: Initializing the \"SocketIOClientGenerator\" plugin.",
         description: "@vatis-tech/asr-client-js: Here, the socket.io-client gets instantianted and initialized."
@@ -90,9 +99,9 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
         query: {
           Authorization: authToken,
           ReservationKey: reservationToken,
-          FrameLength: frameLength ? frameLength : MICROPHONE_FRAME_LENGTH,
-          FrameOverlap: frameOverlap ? frameOverlap : SOCKET_IO_CLIENT_FRAME_OVERLAP,
-          BufferOffset: bufferOffset ? bufferOffset : SOCKET_IO_CLIENT_BUFFER_OFFSET,
+          FrameLength: this.frameLength ? this.frameLength : MICROPHONE_FRAME_LENGTH,
+          FrameOverlap: this.frameOverlap ? this.frameOverlap : SOCKET_IO_CLIENT_FRAME_OVERLAP,
+          BufferOffset: this.bufferOffset ? this.bufferOffset : SOCKET_IO_CLIENT_BUFFER_OFFSET,
           AudioFormat: SOCKET_IO_CLIENT_AUDIO_FORMAT,
           SendingHeaders: SOCKET_IO_CLIENT_SENDING_HEADERS
         }
