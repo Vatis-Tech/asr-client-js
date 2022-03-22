@@ -28,6 +28,7 @@ var SOCKET_IO_CLIENT_NAMESPACE = _index["default"].SOCKET_IO_CLIENT_NAMESPACE,
     SOCKET_IO_CLIENT_BUFFER_OFFSET = _index["default"].SOCKET_IO_CLIENT_BUFFER_OFFSET,
     SOCKET_IO_CLIENT_AUDIO_FORMAT = _index["default"].SOCKET_IO_CLIENT_AUDIO_FORMAT,
     SOCKET_IO_CLIENT_SENDING_HEADERS = _index["default"].SOCKET_IO_CLIENT_SENDING_HEADERS,
+    MICROPHONE_FRAME_LENGTH = _index["default"].MICROPHONE_FRAME_LENGTH,
     MICROPHONE_TIMESLICE = _index["default"].MICROPHONE_TIMESLICE;
 
 var SocketIOClientGenerator = /*#__PURE__*/function () {
@@ -71,7 +72,10 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
       var streamHost = _ref2.streamHost,
           authToken = _ref2.authToken,
           streamUrl = _ref2.streamUrl,
-          reservationToken = _ref2.reservationToken;
+          reservationToken = _ref2.reservationToken,
+          frameLength = _ref2.frameLength,
+          frameOverlap = _ref2.frameOverlap,
+          bufferOffset = _ref2.bufferOffset;
       this.logger({
         currentState: "@vatis-tech/asr-client-js: Initializing the \"SocketIOClientGenerator\" plugin.",
         description: "@vatis-tech/asr-client-js: Here, the socket.io-client gets instantianted and initialized."
@@ -86,9 +90,9 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
         query: {
           Authorization: authToken,
           ReservationKey: reservationToken,
-          FrameLength: MICROPHONE_TIMESLICE / 1000,
-          FrameOverlap: SOCKET_IO_CLIENT_FRAME_OVERLAP,
-          BufferOffset: SOCKET_IO_CLIENT_BUFFER_OFFSET,
+          FrameLength: frameLength ? frameLength : MICROPHONE_FRAME_LENGTH,
+          FrameOverlap: frameOverlap ? frameOverlap : SOCKET_IO_CLIENT_FRAME_OVERLAP,
+          BufferOffset: bufferOffset ? bufferOffset : SOCKET_IO_CLIENT_BUFFER_OFFSET,
           AudioFormat: SOCKET_IO_CLIENT_AUDIO_FORMAT,
           SendingHeaders: SOCKET_IO_CLIENT_SENDING_HEADERS
         }

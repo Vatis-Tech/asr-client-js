@@ -43,7 +43,11 @@ var VatisTechClient = /*#__PURE__*/function () {
         log = _ref.log,
         logger = _ref.logger,
         onDestroyCallback = _ref.onDestroyCallback,
-        host = _ref.host;
+        host = _ref.host,
+        microphoneTimeslice = _ref.microphoneTimeslice,
+        frameLength = _ref.frameLength,
+        frameOverlap = _ref.frameOverlap,
+        bufferOffset = _ref.bufferOffset;
 
     _classCallCheck(this, VatisTechClient);
 
@@ -129,12 +133,16 @@ var VatisTechClient = /*#__PURE__*/function () {
       onConnectCallback: this.initMicrophone.bind(this),
       onAsrResultCallback: this.onSocketIOClientGeneratorOnAsrResultCallback.bind(this),
       logger: this.logger.bind(this),
-      destroyVTC: this.destroy.bind(this)
+      destroyVTC: this.destroy.bind(this),
+      frameLength: frameLength,
+      frameOverlap: frameOverlap,
+      bufferOffset: bufferOffset
     }); // instantiante MicrophoneGenerator - this will return on the this.onMicrophoneGeneratorDataCallback the data that it captures from the user's microphone
 
     this.microphoneGenerator = new _MicrophoneGenerator["default"]({
       onDataCallback: this.onMicrophoneGeneratorDataCallback.bind(this),
-      logger: this.logger.bind(this)
+      logger: this.logger.bind(this),
+      microphoneTimeslice: microphoneTimeslice
     }); // initilize ApiKeyGenerator (if successful it will initilize SocketIOClientGenerator (if successful it will initilize the MicrophoneGenerator))
 
     this.initApiKey();

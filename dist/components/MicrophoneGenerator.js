@@ -30,7 +30,8 @@ var base64ArrayBuffer = _index2["default"].base64ArrayBuffer;
 var MicrophoneGenerator = /*#__PURE__*/function () {
   function MicrophoneGenerator(_ref) {
     var onDataCallback = _ref.onDataCallback,
-        logger = _ref.logger;
+        logger = _ref.logger,
+        microphoneTimeslice = _ref.microphoneTimeslice;
 
     _classCallCheck(this, MicrophoneGenerator);
 
@@ -44,12 +45,20 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
 
     _defineProperty(this, "mediaRecorder", void 0);
 
+    _defineProperty(this, "microphoneTimeslice", void 0);
+
     this.logger = logger;
     this.logger({
       currentState: "@vatis-tech/asr-client-js: Instantianting the \"MicrophoneGenerator\" plugin.",
       description: "@vatis-tech/asr-client-js: This is the constructor of MicrophoneGenerator class. This class, when it will be initialized, will ask user's permission for microphone usage. If accepted, the data from the microphone will be sent to the LIVE ASR service, using the SocketIOClientGenerator instance."
     });
     this.onDataCallback = onDataCallback;
+
+    if (microphoneTimeslice) {
+      this.microphoneTimeslice = microphoneTimeslice;
+    } else {
+      this.microphoneTimeslice = MICROPHONE_TIMESLICE;
+    }
   } // on destroy we want to stop the MediaRecorder from recording
 
 
@@ -149,11 +158,11 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
                     // }
                   }.bind(_this));
 
-                  _this.mediaRecorder.start(MICROPHONE_TIMESLICE);
+                  _this.mediaRecorder.start(_this.microphoneTimeslice);
 
                   _this.logger({
                     currentState: "@vatis-tech/asr-client-js: Initialized the \"MicrophoneGenerator\" plugin.",
-                    description: "@vatis-tech/asr-client-js: The MicrophoneGenerator was successful into getting user's microphone, and will start sending data each ".concat(MICROPHONE_TIMESLICE, " miliseconds.")
+                    description: "@vatis-tech/asr-client-js: The MicrophoneGenerator was successful into getting user's microphone, and will start sending data each ".concat(_this.microphoneTimeslice, " miliseconds.")
                   });
                 })["catch"](function (err) {
                   var errorMessage = "Could not initilize the microphone stream with error: " + err;
