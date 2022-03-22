@@ -35,6 +35,10 @@ class VatisTechClient {
     logger,
     onDestroyCallback,
     host,
+    microphoneTimeslice,
+    frameLength,
+    frameOverlap,
+    bufferOffset,
   }) {
     this.log = log;
 
@@ -99,12 +103,16 @@ class VatisTechClient {
         this.onSocketIOClientGeneratorOnAsrResultCallback.bind(this),
       logger: this.logger.bind(this),
       destroyVTC: this.destroy.bind(this),
+      frameLength,
+      frameOverlap,
+      bufferOffset,
     });
 
     // instantiante MicrophoneGenerator - this will return on the this.onMicrophoneGeneratorDataCallback the data that it captures from the user's microphone
     this.microphoneGenerator = new MicrophoneGenerator({
       onDataCallback: this.onMicrophoneGeneratorDataCallback.bind(this),
       logger: this.logger.bind(this),
+      microphoneTimeslice,
     });
 
     // initilize ApiKeyGenerator (if successful it will initilize SocketIOClientGenerator (if successful it will initilize the MicrophoneGenerator))
