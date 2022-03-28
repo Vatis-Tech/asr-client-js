@@ -232,7 +232,7 @@ We officially support the latest versions of the following browsers:
 
 We love pull requests!
 
-Our community is safe for all. Before submitting a pull request, please review and agree our [Code of Conduct](https://github.com/Vatis-Tech/asr-client-js/CODE_OF_CONDUCT.md), after that, please check the [Contribution](https://github.com/Vatis-Tech/asr-client-js/CONTRIBUTING.md) guidelines.
+Our community is safe for all. Before submitting a pull request, please review and agree our [Code of Conduct](https://github.com/Vatis-Tech/asr-client-js/blob/main/CODE_OF_CONDUCT.md), after that, please check the [Contribution](https://github.com/Vatis-Tech/asr-client-js/blob/main/CONTRIBUTING.md) guidelines.
 
 ## Getting Help
 
@@ -246,7 +246,7 @@ There are three types of issues:
 
 ## Changelog
 
-To keep the README a bit lighter, you can read the [Changelog here](https://github.com/Vatis-Tech/asr-client-js/CHANGELOG.md).
+To keep the README a bit lighter, you can read the [Changelog here](https://github.com/Vatis-Tech/asr-client-js/blob/main/CHANGELOG.md).
 
 ## Further Reading
 
