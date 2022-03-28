@@ -1,0 +1,13 @@
+node_modules
+
+/build
+
+/lib
+
+/es
+
+.DS_Store
+
+package-lock.json
+
+commit.sh

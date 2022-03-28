@@ -1,0 +1,64 @@
+{
+  "name": "@vatis-tech/asr-client-js",
+  "version": "1.0.0-rc.5",
+  "description": "JavaScript client for Vatis Tech ASR services.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && rm -rf .next && npm install",
+    "build": "babel src -d dist",
+    "deploy": "npm run install:clean && npm run build && cp package.json ./dist && cp README.md ./dist && cp LICENSE.md ./dist && cp CHANGELOG.md ./dist && cp CODE_OF_CONDUCT.md ./dist && cp CONTRIBUTING.md ./dist && cd dist && npm publish --access=public && cd ../"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vatis-Tech/asr-client-js.git"
+  },
+  "keywords": [
+    "asr",
+    "client",
+    "js",
+    "asr-client",
+    "asr-js",
+    "asr-client-js",
+    "asr-js-client",
+    "javascript",
+    "react",
+    "angular",
+    "svelte",
+    "vue",
+    "speech-to-text",
+    "speech-recognition",
+    "speech recognition",
+    "vatis tech",
+    "vatis",
+    "tech",
+    "vatis-tech",
+    "vatis.tech"
+  ],
+  "author": {
+    "name": "Emanuel-Ioan Nazare",
+    "email": "emanuel@vatis.tech",
+    "url": "https://vatis.tech/"
+  },
+  "contributors": [
+    {
+      "name": "Emanuel-Ioan Nazare",
+      "email": "emanuel@vatis.tech",
+      "url": "https://vatis.tech/"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Vatis-Tech/asr-client-js/issues"
+  },
+  "homepage": "https://github.com/Vatis-Tech/asr-client-js#readme",
+  "devDependencies": {
+    "@babel/cli": "7.16.0",
+    "@babel/core": "7.16.5",
+    "@babel/preset-env": "7.16.5",
+    "socket.io-client": "4.4.0"
+  },
+  "peerDependencies": {
+    "socket.io-client": "4.4.0"
+  }
+}

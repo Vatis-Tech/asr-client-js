@@ -1,0 +1,103 @@
+name: Bug report 🐞
+description: Please use this if something isn't working as expected 🤔
+title: "[Bug]: "
+labels: ["bug"]
+assignees:
+  - einazare
+body:
+  - type: markdown
+    attributes:
+      value: |
+        In order to make this easy for everyone, please fill in the form bellow.
+  - type: dropdown
+    id: version
+    attributes:
+      label: Version
+      description: Please specify what version of `@vatis-tech/asr-client-js` you are using, and also, please check if the issue is reproducible with the latest stable version of the plugin.
+      multiple: true
+      options:
+        - 1.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browsers are you seeing the problem on?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge
+    validations:
+      required: true
+  - type: input
+    id: operating-system
+    attributes:
+      label: Operating System
+      description: Please specify what operating system are you using. Some bugs might occur only on specific operating systems.
+      placeholder: ex. macOS Big Sur 11.6
+    validations:
+      required: true
+  - type: input
+    id: link-to-minimal-reproduction
+    attributes:
+      label: Link to minimal reproduction
+      description: |
+        Please provide a link to a minimal reproduction of the issue. You could use JSFiddle, JSBin or CodePen (these are usually used for reproductions that do not require a build setup), or CodeSandbox, GitHub, GitLab (these are usually used for reproductions that require a build setup).
+        Please do not just fill in a random link. We will close your issue if you do that.
+      placeholder: ex. https://codepen.io/GerHdV/pen/mdyPwqO
+    validations:
+      required: true
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: |
+        Please specify the steps necessary for reproducing the bug you are experiencing.
+
+        What do we need to do after opening your repro in order to make the bug happen? Clear and concise reproduction instructions are important for us to be able to triage your issue in a timely manner. Note that you can use Markdown to format lists and code.
+
+        1. First, you need to do X.
+        2. Then, you need to do Y.
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: what-is-expected
+    attributes:
+      label: What is expected?
+      description: Please tell us what should be happening.
+    validations:
+      required: true
+  - type: textarea
+    id: what-is-actually-happening
+    attributes:
+      label: What is actually happening?
+      description: Please tell us what is actually happening.
+    validations:
+      required: true
+  - type: textarea
+    id: any-additional-comments
+    attributes:
+      label: Any additional comments? (optional)
+      description: e.g. some background/context of how you ran into this bug.
+  - type: textarea
+    id: what-is-your-solution
+    attributes:
+      label: What is your solution? (optional)
+      description: Do you already have a solution and want to share it with us?
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output (optional)
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/Vatis-Tech/asr-client-js/blob/main/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
