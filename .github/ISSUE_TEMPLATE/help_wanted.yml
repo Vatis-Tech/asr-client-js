@@ -1,0 +1,111 @@
+name: Help wanted 🖖
+description: Please use this if you are stuck on something and can't figure it out 😩
+title: "[Help wanted]: "
+labels: ["help wanted"]
+assignees:
+  - einazare
+body:
+  - type: markdown
+    attributes:
+      value: |
+        In order to make this easy for everyone, please fill in the form bellow.
+  - type: dropdown
+    id: version
+    attributes:
+      label: Version
+      description: Please specify what version of `@vatis-tech/asr-client-js` do you want to use.
+      multiple: true
+      options:
+        - 1.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browsers are you seeing the problem on?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge
+    validations:
+      required: true
+  - type: input
+    id: operating-system
+    attributes:
+      label: Operating System
+      description: Please specify what operating system are you using. Some bugs might occur only on specific operating systems.
+      placeholder: ex. macOS Big Sur 11.6
+    validations:
+      required: true
+  - type: input
+    id: link-to-your-project
+    attributes:
+      label: Link to your project
+      description: |
+        Did you already start to work on your project? Can you share it with us?
+      placeholder: ex. https://github.com/Vatis-Tech/asr-client-js
+  - type: textarea
+    id: steps-you-took
+    attributes:
+      label: Steps you took
+      description: |
+        If you did not start a project, please tell us some steps that you took, and it did not work.
+
+        What do we need to do after opening your repro in order to make the bug happen? Clear and concise reproduction instructions are important for us to be able to triage your issue in a timely manner. Note that you can use Markdown to format lists and code.
+
+        1. First, you need to do X.
+        2. Then, you need to do Y.
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: steps-to-start-project
+    attributes:
+      label: Steps to start your project (optional)
+      description: |
+        If you did start a project and you gave us a link, please specify what do we need to do after opening your repro in order to make the bug happen? Note that you can use Markdown to format lists and code.
+
+        1. First, you need to do X.
+        2. Then, you need to do Y.
+        3. ...
+           ...
+  - type: textarea
+    id: what-is-expected
+    attributes:
+      label: What is expected?
+      description: Please tell us your end goal, what are you trying to achieve.
+    validations:
+      required: true
+  - type: textarea
+    id: what-is-actually-happening
+    attributes:
+      label: What is actually happening?
+      description: Please tell us what is actually happening, what is not working, and how we can be of help.
+    validations:
+      required: true
+  - type: textarea
+    id: any-additional-comments
+    attributes:
+      label: Any additional comments? (optional)
+      description: e.g. some background/context of how you ran into this.
+  - type: textarea
+    id: what-is-your-solution
+    attributes:
+      label: What is your solution? (optional)
+      description: Do you already have a solution and want to share it with us?
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output (optional)
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/Vatis-Tech/asr-client-js/blob/main/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
