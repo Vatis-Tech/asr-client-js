@@ -25,7 +25,18 @@ class SocketIOClientGenerator {
   onAsrResultCallback;
   logger;
   destroyVTC;
-  constructor({ onConnectCallback, onAsrResultCallback, logger, destroyVTC }) {
+  frameLength;
+  frameOverlap;
+  bufferOffset;
+  constructor({
+    onConnectCallback,
+    onAsrResultCallback,
+    logger,
+    destroyVTC,
+    frameLength,
+    frameOverlap,
+    bufferOffset,
+  }) {
     this.logger = logger;
 
     this.logger({
@@ -37,16 +48,12 @@ class SocketIOClientGenerator {
 
     this.onConnectCallback = onConnectCallback;
     this.onAsrResultCallback = onAsrResultCallback;
+
+    this.frameLength = frameLength;
+    this.frameOverlap = frameOverlap;
+    this.bufferOffset = bufferOffset;
   }
-  init({
-    streamHost,
-    authToken,
-    streamUrl,
-    reservationToken,
-    frameLength,
-    frameOverlap,
-    bufferOffset,
-  }) {
+  init({ streamHost, authToken, streamUrl, reservationToken }) {
     this.logger({
       currentState: `@vatis-tech/asr-client-js: Initializing the "SocketIOClientGenerator" plugin.`,
       description: `@vatis-tech/asr-client-js: Here, the socket.io-client gets instantianted and initialized.`,
@@ -62,12 +69,14 @@ class SocketIOClientGenerator {
       query: {
         Authorization: authToken,
         ReservationKey: reservationToken,
-        FrameLength: frameLength ? frameLength : MICROPHONE_FRAME_LENGTH,
-        FrameOverlap: frameOverlap
-          ? frameOverlap
+        FrameLength: this.frameLength
+          ? this.frameLength
+          : MICROPHONE_FRAME_LENGTH,
+        FrameOverlap: this.frameOverlap
+          ? this.frameOverlap
           : SOCKET_IO_CLIENT_FRAME_OVERLAP,
-        BufferOffset: bufferOffset
-          ? bufferOffset
+        BufferOffset: this.bufferOffset
+          ? this.bufferOffset
           : SOCKET_IO_CLIENT_BUFFER_OFFSET,
         AudioFormat: SOCKET_IO_CLIENT_AUDIO_FORMAT,
         SendingHeaders: SOCKET_IO_CLIENT_SENDING_HEADERS,
