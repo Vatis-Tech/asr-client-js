@@ -51,7 +51,7 @@ No fixes were made.
 
 Each time you add new changes to this file, please add them bellow this line - i.e. between the [insertion](#insterion) section and the last version added.
 
-## [1.0.0] - 2022-02-07
+## [1.0.0] - 2022-03-28
 
 ### Added
 

@@ -5,7 +5,7 @@
 ![GitHub issues open](https://img.shields.io/github/issues/Vatis-Tech/asr-client-js.svg)
 ![GitHub issues closed](https://img.shields.io/github/issues-closed-raw/Vatis-Tech/asr-client-js.svg)
 
-<div align="center"><img src="https://github.com/Vatis-Tech/asr-client-js/blob/feature/VAT-243/github-assets/logos/logo.png?raw=true" alt="@vatis-tech/asr-client-js"/></div>
+<div align="center"><img src="https://github.com/Vatis-Tech/asr-client-js/blob/main/github-assets/logos/logo.png?raw=true" alt="@vatis-tech/asr-client-js"/></div>
 
 #### Client JavaScript implementation for Vatis Tech's live ASR service.
 
@@ -226,13 +226,13 @@ We officially support the latest versions of the following browsers:
 
 |                                                                   Chrome                                                                    |                                                                   Firefox                                                                    |                                                                   Safari                                                                    |                                                                             Safari                                                                             |                                                                   Edge                                                                    |
 | :-----------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------: |
-| <img src="https://github.com/Vatis-Tech/asr-client-js/blob/feature/VAT-243/github-assets/logos/chrome.png?raw=true" width="48" height="48"> | <img src="https://github.com/Vatis-Tech/asr-client-js/blob/feature/VAT-243/github-assets/logos/firefox.png?raw=true" width="48" height="48"> | <img src="https://github.com/Vatis-Tech/asr-client-js/blob/feature/VAT-243/github-assets/logos/safari.png?raw=true" width="48" height="48"> | <img src="https://github.com/Vatis-Tech/asr-client-js/blob/feature/VAT-243/github-assets/logos/safari-technology-preview.png?raw=true" width="48" height="48"> | <img src="https://github.com/Vatis-Tech/asr-client-js/blob/feature/VAT-243/github-assets/logos/edge.png?raw=true" width="48" height="48"> |
+| <img src="https://github.com/Vatis-Tech/asr-client-js/blob/main/github-assets/logos/chrome.png?raw=true" width="48" height="48"> | <img src="https://github.com/Vatis-Tech/asr-client-js/blob/main/github-assets/logos/firefox.png?raw=true" width="48" height="48"> | <img src="https://github.com/Vatis-Tech/asr-client-js/blob/main/github-assets/logos/safari.png?raw=true" width="48" height="48"> | <img src="https://github.com/Vatis-Tech/asr-client-js/blob/main/github-assets/logos/safari-technology-preview.png?raw=true" width="48" height="48"> | <img src="https://github.com/Vatis-Tech/asr-client-js/blob/main/github-assets/logos/edge.png?raw=true" width="48" height="48"> |
 
 ## Contributing
 
 We love pull requests!
 
-Our community is safe for all. Before submitting a pull request, please review and agree our [Code of Conduct](https://github.com/Vatis-Tech/asr-client-js/CODE_OF_CONDUCT.md), after that, please check the [Contribution](https://github.com/Vatis-Tech/asr-client-js/CONTRIBUTING.md) guidelines.
+Our community is safe for all. Before submitting a pull request, please review and agree our [Code of Conduct](https://github.com/Vatis-Tech/asr-client-js/blob/main/CODE_OF_CONDUCT.md), after that, please check the [Contribution](https://github.com/Vatis-Tech/asr-client-js/blob/main/CONTRIBUTING.md) guidelines.
 
 ## Getting Help
 
@@ -246,7 +246,7 @@ There are three types of issues:
 
 ## Changelog
 
-To keep the README a bit lighter, you can read the [Changelog here](https://github.com/Vatis-Tech/asr-client-js/CHANGELOG.md).
+To keep the README a bit lighter, you can read the [Changelog here](https://github.com/Vatis-Tech/asr-client-js/blob/main/CHANGELOG.md).
 
 ## Further Reading
 
