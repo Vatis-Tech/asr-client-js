@@ -22,7 +22,8 @@ var generateReservationUrl = _index["default"].generateReservationUrl;
 var InstanceReservation = /*#__PURE__*/function () {
   function InstanceReservation(_ref) {
     var responseCallback = _ref.responseCallback,
-        logger = _ref.logger;
+        logger = _ref.logger,
+        errorHandler = _ref.errorHandler;
 
     _classCallCheck(this, InstanceReservation);
 
@@ -40,6 +41,9 @@ var InstanceReservation = /*#__PURE__*/function () {
 
     _defineProperty(this, "logger", void 0);
 
+    _defineProperty(this, "errorHandler", void 0);
+
+    this.errorHandler = errorHandler;
     this.logger = logger;
     this.logger({
       currentState: "@vatis-tech/asr-client-js: Instantianting the \"InstanceReservation\" plugin.",
@@ -71,13 +75,20 @@ var InstanceReservation = /*#__PURE__*/function () {
   }, {
     key: "onError",
     value: function onError(e) {
-      var errorMessage = "Could not reserve a live asr instance.";
-      console.error(errorMessage);
-      throw errorMessage;
+      this.logger({
+        currentState: "@vatis-tech/asr-client-js: Could not initilize the \"InstanceReservation\" plugin.",
+        description: "@vatis-tech/asr-client-js: " + e
+      });
+      this.errorHandler(e);
     }
   }, {
     key: "onLoad",
     value: function onLoad() {
+      if (this.xmlHttp.status !== 200) {
+        this.onError(JSON.parse(this.xmlHttp.responseText));
+        return;
+      }
+
       this.logger({
         currentState: "@vatis-tech/asr-client-js: Initialized the \"InstanceReservation\" plugin.",
         description: "@vatis-tech/asr-client-js: A live asr instance has been reserved."
