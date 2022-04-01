@@ -1,6 +1,6 @@
 # @vatis-tech/asr-client-js
 
-![version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![version](https://img.shields.io/badge/version-1.1.0-blue.svg)
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 ![GitHub issues open](https://img.shields.io/github/issues/Vatis-Tech/asr-client-js.svg)
 ![GitHub issues closed](https://img.shields.io/github/issues-closed-raw/Vatis-Tech/asr-client-js.svg)
@@ -180,6 +180,10 @@ If `log` prop is set to `true` and the `logger` prop is not set, or is not a fun
 
 This is a **Function** that will be called upon successful destruction;
 
+### `errorHandler`
+
+This is a **Function** that will be called upon errors;
+
 ### `host`
 
 This is the host for generating a key. It defaults to "https://vatis.tech/".
@@ -224,8 +228,8 @@ After calling the `pause` method, you can call this one to resume recording.
 
 We officially support the latest versions of the following browsers:
 
-|                                                                   Chrome                                                                    |                                                                   Firefox                                                                    |                                                                   Safari                                                                    |                                                                             Safari                                                                             |                                                                   Edge                                                                    |
-| :-----------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------: |
+|                                                              Chrome                                                              |                                                              Firefox                                                              |                                                              Safari                                                              |                                                                       Safari                                                                        |                                                              Edge                                                              |
+| :------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------: |
 | <img src="https://github.com/Vatis-Tech/asr-client-js/blob/main/github-assets/logos/chrome.png?raw=true" width="48" height="48"> | <img src="https://github.com/Vatis-Tech/asr-client-js/blob/main/github-assets/logos/firefox.png?raw=true" width="48" height="48"> | <img src="https://github.com/Vatis-Tech/asr-client-js/blob/main/github-assets/logos/safari.png?raw=true" width="48" height="48"> | <img src="https://github.com/Vatis-Tech/asr-client-js/blob/main/github-assets/logos/safari-technology-preview.png?raw=true" width="48" height="48"> | <img src="https://github.com/Vatis-Tech/asr-client-js/blob/main/github-assets/logos/edge.png?raw=true" width="48" height="48"> |
 
 ## Contributing
