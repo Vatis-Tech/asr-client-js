@@ -51,6 +51,26 @@ No fixes were made.
 
 Each time you add new changes to this file, please add them bellow this line - i.e. between the [insertion](#insterion) section and the last version added.
 
+## [1.1.0] - 2022-04-01
+
+### Added
+
+- Added `errorHandler` prop for the client: this will be called now, instead of `console.error` and `throw` of the errors
+
+### Changed
+
+- Changed the way errors are handled: no error is consoled or thrown anymore, they are sent through the `errorHandler` prop so that the user/client can catch them and action accordingly
+
+### Removed
+
+- `const errorMessage = ...`
+- `console.error(errorMessage);`
+- `throw errorMessage;`
+
+### Fixed
+
+No fixes were made.
+
 ## [1.0.0] - 2022-03-28
 
 ### Added
