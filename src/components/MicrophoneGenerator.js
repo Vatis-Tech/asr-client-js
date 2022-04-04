@@ -11,7 +11,10 @@ class MicrophoneGenerator {
   blobState;
   mediaRecorder;
   microphoneTimeslice;
-  constructor({ onDataCallback, logger, microphoneTimeslice }) {
+  errorHandler;
+  constructor({ onDataCallback, logger, microphoneTimeslice, errorHandler }) {
+    this.errorHandler = errorHandler;
+
     this.logger = logger;
 
     this.logger({
@@ -126,10 +129,11 @@ class MicrophoneGenerator {
         });
       })
       .catch((err) => {
-        const errorMessage =
-          "Could not initilize the microphone stream with error: " + err;
-        console.error(errorMessage);
-        throw errorMessage;
+        this.logger({
+          currentState: `@vatis-tech/asr-client-js: Could not initilize the "MicrophoneGenerator" plugin.`,
+          description: `@vatis-tech/asr-client-js: ` + err,
+        });
+        this.errorHandler(err);
       });
   }
 

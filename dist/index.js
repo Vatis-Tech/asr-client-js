@@ -47,7 +47,8 @@ var VatisTechClient = /*#__PURE__*/function () {
         microphoneTimeslice = _ref.microphoneTimeslice,
         frameLength = _ref.frameLength,
         frameOverlap = _ref.frameOverlap,
-        bufferOffset = _ref.bufferOffset;
+        bufferOffset = _ref.bufferOffset,
+        errorHandler = _ref.errorHandler;
 
     _classCallCheck(this, VatisTechClient);
 
@@ -72,6 +73,14 @@ var VatisTechClient = /*#__PURE__*/function () {
     _defineProperty(this, "shouldDestroy", void 0);
 
     _defineProperty(this, "onDestroyCallback", void 0);
+
+    _defineProperty(this, "errorHandler", void 0);
+
+    if (errorHandler) {
+      this.errorHandler = errorHandler;
+    } else {
+      this.errorHandler = function (e) {};
+    }
 
     this.log = log;
 
@@ -109,7 +118,8 @@ var VatisTechClient = /*#__PURE__*/function () {
 
 
     this.microphoneQueue = new _MicrophoneQueue["default"]({
-      logger: this.logger.bind(this)
+      logger: this.logger.bind(this),
+      errorHandler: this.errorHandler
     }); // instantiante ApiKeyGenerator - this will return on the responseCallback the serviceHost and the authToken for the InstanceReservation to reserve a live asr instance based on the apiUrl and apiKey
 
     this.apiKeyGenerator = new _ApiKeyGenerator["default"]({
@@ -121,12 +131,14 @@ var VatisTechClient = /*#__PURE__*/function () {
       }),
       responseCallback: this.initInstanceReservation.bind(this),
       apiKey: apiKey,
-      logger: this.logger.bind(this)
+      logger: this.logger.bind(this),
+      errorHandler: this.errorHandler
     }); // instantiante InstanceReservation - this will return on the responseCallback the streamUrl, reservationToken, and podName for the SocketIOClientGenerator to connect based on the serviceHost and authToken
 
     this.instanceReservation = new _InstanceReservation["default"]({
       responseCallback: this.initSocketIOClient.bind(this),
-      logger: this.logger.bind(this)
+      logger: this.logger.bind(this),
+      errorHandler: this.errorHandler
     }); // instantiante SocketIOClientGenerator - this will return on the onAsrResultCallback the results that it gets back from the ASR SERVICE and when it connects to the ASR SERVICE it will initilize the MicrophoneGenerator through the onConnectCallback
 
     this.socketIOClientGenerator = new _SocketIOClientGenerator["default"]({
@@ -134,6 +146,7 @@ var VatisTechClient = /*#__PURE__*/function () {
       onAsrResultCallback: this.onSocketIOClientGeneratorOnAsrResultCallback.bind(this),
       logger: this.logger.bind(this),
       destroyVTC: this.destroy.bind(this),
+      errorHandler: this.errorHandler,
       frameLength: frameLength,
       frameOverlap: frameOverlap,
       bufferOffset: bufferOffset
@@ -142,6 +155,7 @@ var VatisTechClient = /*#__PURE__*/function () {
     this.microphoneGenerator = new _MicrophoneGenerator["default"]({
       onDataCallback: this.onMicrophoneGeneratorDataCallback.bind(this),
       logger: this.logger.bind(this),
+      errorHandler: this.errorHandler,
       microphoneTimeslice: microphoneTimeslice
     }); // initilize ApiKeyGenerator (if successful it will initilize SocketIOClientGenerator (if successful it will initilize the MicrophoneGenerator))
 
@@ -244,10 +258,15 @@ var VatisTechClient = /*#__PURE__*/function () {
   }, {
     key: "initMicrophone",
     value: function initMicrophone() {
+      var _this = this;
+
       this.microphoneGenerator.init().then(function () {})["catch"](function (err) {
-        var errorMessage = "Could not initilize the microphone stream with error: " + err;
-        console.error(errorMessage);
-        throw errorMessage;
+        _this.logger({
+          currentState: "@vatis-tech/asr-client-js: Could not initilize the \"MicrophoneGenerator\" plugin.",
+          description: "@vatis-tech/asr-client-js: " + err
+        });
+
+        _this.errorHandler(err);
       });
     } // get data from MicrophoneGenerator and add it to the queue
     // if the SocketIOClientGenerator is not waiting for a packet response then it should emit a new pachet with the data that is waiting in the queue

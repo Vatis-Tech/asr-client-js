@@ -28,6 +28,7 @@ class SocketIOClientGenerator {
   frameLength;
   frameOverlap;
   bufferOffset;
+  errorHandler;
   constructor({
     onConnectCallback,
     onAsrResultCallback,
@@ -36,7 +37,10 @@ class SocketIOClientGenerator {
     frameLength,
     frameOverlap,
     bufferOffset,
+    errorHandler,
   }) {
+    this.errorHandler = errorHandler;
+
     this.logger = logger;
 
     this.logger({
@@ -99,10 +103,11 @@ class SocketIOClientGenerator {
       this.destroyVTC({ hard: true });
     });
     this.socketRef.on("connect_error", (error) => {
-      const errorMessage =
-        'Could not initilize the "socket.io-client" with error: ' + error;
-      console.error(errorMessage);
-      throw errorMessage;
+      this.logger({
+        currentState: `@vatis-tech/asr-client-js: Could not initilize the "SocketIOClientGenerator" plugin.`,
+        description: `@vatis-tech/asr-client-js: ` + error,
+      });
+      this.errorHandler(error);
     });
     this.socketRef.on(SOCKET_IO_CLIENT_RESULT_PATH, (args) => {
       this.onAsrResultCallback(args);

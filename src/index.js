@@ -25,6 +25,7 @@ class VatisTechClient {
   log;
   shouldDestroy;
   onDestroyCallback;
+  errorHandler;
   constructor({
     service,
     model,
@@ -39,7 +40,14 @@ class VatisTechClient {
     frameLength,
     frameOverlap,
     bufferOffset,
+    errorHandler,
   }) {
+    if (errorHandler) {
+      this.errorHandler = errorHandler;
+    } else {
+      this.errorHandler = (e) => {};
+    }
+
     this.log = log;
 
     if (this.log === true && typeof logger === "function") {
@@ -80,6 +88,7 @@ class VatisTechClient {
     // instantiante MicrophoneQueue - this will keep all the microphone buffers until they can be sent to the ASR SERVICE through the SocketIOClientGenerator
     this.microphoneQueue = new MicrophoneQueue({
       logger: this.logger.bind(this),
+      errorHandler: this.errorHandler,
     });
 
     // instantiante ApiKeyGenerator - this will return on the responseCallback the serviceHost and the authToken for the InstanceReservation to reserve a live asr instance based on the apiUrl and apiKey
@@ -88,12 +97,14 @@ class VatisTechClient {
       responseCallback: this.initInstanceReservation.bind(this),
       apiKey: apiKey,
       logger: this.logger.bind(this),
+      errorHandler: this.errorHandler,
     });
 
     // instantiante InstanceReservation - this will return on the responseCallback the streamUrl, reservationToken, and podName for the SocketIOClientGenerator to connect based on the serviceHost and authToken
     this.instanceReservation = new InstanceReservation({
       responseCallback: this.initSocketIOClient.bind(this),
       logger: this.logger.bind(this),
+      errorHandler: this.errorHandler,
     });
 
     // instantiante SocketIOClientGenerator - this will return on the onAsrResultCallback the results that it gets back from the ASR SERVICE and when it connects to the ASR SERVICE it will initilize the MicrophoneGenerator through the onConnectCallback
@@ -103,6 +114,7 @@ class VatisTechClient {
         this.onSocketIOClientGeneratorOnAsrResultCallback.bind(this),
       logger: this.logger.bind(this),
       destroyVTC: this.destroy.bind(this),
+      errorHandler: this.errorHandler,
       frameLength,
       frameOverlap,
       bufferOffset,
@@ -112,6 +124,7 @@ class VatisTechClient {
     this.microphoneGenerator = new MicrophoneGenerator({
       onDataCallback: this.onMicrophoneGeneratorDataCallback.bind(this),
       logger: this.logger.bind(this),
+      errorHandler: this.errorHandler,
       microphoneTimeslice,
     });
 
@@ -204,10 +217,11 @@ class VatisTechClient {
       .init()
       .then(() => {})
       .catch((err) => {
-        const errorMessage =
-          "Could not initilize the microphone stream with error: " + err;
-        console.error(errorMessage);
-        throw errorMessage;
+        this.logger({
+          currentState: `@vatis-tech/asr-client-js: Could not initilize the "MicrophoneGenerator" plugin.`,
+          description: `@vatis-tech/asr-client-js: ` + err,
+        });
+        this.errorHandler(err);
       });
   }
 

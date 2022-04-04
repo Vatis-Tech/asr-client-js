@@ -6,7 +6,10 @@ class ApiKeyGenerator {
   authToken;
   xmlHttp;
   logger;
-  constructor({ apiUrl, responseCallback, apiKey, logger }) {
+  errorHandler;
+  constructor({ apiUrl, responseCallback, apiKey, logger, errorHandler }) {
+    this.errorHandler = errorHandler;
+
     this.logger = logger;
 
     this.logger({
@@ -32,11 +35,18 @@ class ApiKeyGenerator {
     this.xmlHttp.send();
   }
   onError(e) {
-    const errorMessage = `Could not initilize the API KEY.`;
-    console.error(errorMessage);
-    throw errorMessage;
+    this.logger({
+      currentState: `@vatis-tech/asr-client-js: Could not initilize the "ApiKeyGenerator" plugin.`,
+      description: `@vatis-tech/asr-client-js: ` + e,
+    });
+    this.errorHandler(e);
   }
   onLoad() {
+    if (this.xmlHttp.status !== 200) {
+      this.onError(JSON.parse(this.xmlHttp.responseText));
+      return;
+    }
+
     this.logger({
       currentState: `@vatis-tech/asr-client-js: Initialized the "ApiKeyGenerator" plugin.`,
       description: `@vatis-tech/asr-client-js: A valid key was received from the Vatis Tech API, in order to use the LIVE ASR service.`,
