@@ -18,7 +18,8 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
     var apiUrl = _ref.apiUrl,
         responseCallback = _ref.responseCallback,
         apiKey = _ref.apiKey,
-        logger = _ref.logger;
+        logger = _ref.logger,
+        errorHandler = _ref.errorHandler;
 
     _classCallCheck(this, ApiKeyGenerator);
 
@@ -36,6 +37,9 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
 
     _defineProperty(this, "logger", void 0);
 
+    _defineProperty(this, "errorHandler", void 0);
+
+    this.errorHandler = errorHandler;
     this.logger = logger;
     this.logger({
       currentState: "@vatis-tech/asr-client-js: Instantianting the \"ApiKeyGenerator\" plugin.",
@@ -63,13 +67,20 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
   }, {
     key: "onError",
     value: function onError(e) {
-      var errorMessage = "Could not initilize the API KEY.";
-      console.error(errorMessage);
-      throw errorMessage;
+      this.logger({
+        currentState: "@vatis-tech/asr-client-js: Could not initilize the \"ApiKeyGenerator\" plugin.",
+        description: "@vatis-tech/asr-client-js: " + e
+      });
+      this.errorHandler(e);
     }
   }, {
     key: "onLoad",
     value: function onLoad() {
+      if (this.xmlHttp.status !== 200) {
+        this.onError(JSON.parse(this.xmlHttp.responseText));
+        return;
+      }
+
       this.logger({
         currentState: "@vatis-tech/asr-client-js: Initialized the \"ApiKeyGenerator\" plugin.",
         description: "@vatis-tech/asr-client-js: A valid key was received from the Vatis Tech API, in order to use the LIVE ASR service."

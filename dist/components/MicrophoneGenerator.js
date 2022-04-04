@@ -31,7 +31,8 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
   function MicrophoneGenerator(_ref) {
     var onDataCallback = _ref.onDataCallback,
         logger = _ref.logger,
-        microphoneTimeslice = _ref.microphoneTimeslice;
+        microphoneTimeslice = _ref.microphoneTimeslice,
+        errorHandler = _ref.errorHandler;
 
     _classCallCheck(this, MicrophoneGenerator);
 
@@ -47,6 +48,9 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
 
     _defineProperty(this, "microphoneTimeslice", void 0);
 
+    _defineProperty(this, "errorHandler", void 0);
+
+    this.errorHandler = errorHandler;
     this.logger = logger;
     this.logger({
       currentState: "@vatis-tech/asr-client-js: Instantianting the \"MicrophoneGenerator\" plugin.",
@@ -165,9 +169,12 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
                     description: "@vatis-tech/asr-client-js: The MicrophoneGenerator was successful into getting user's microphone, and will start sending data each ".concat(_this.microphoneTimeslice, " miliseconds.")
                   });
                 })["catch"](function (err) {
-                  var errorMessage = "Could not initilize the microphone stream with error: " + err;
-                  console.error(errorMessage);
-                  throw errorMessage;
+                  _this.logger({
+                    currentState: "@vatis-tech/asr-client-js: Could not initilize the \"MicrophoneGenerator\" plugin.",
+                    description: "@vatis-tech/asr-client-js: " + err
+                  });
+
+                  _this.errorHandler(err);
                 });
 
               case 3:

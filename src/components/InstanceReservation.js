@@ -10,7 +10,10 @@ class InstanceReservation {
   reservationToken;
   xmlHttp;
   logger;
-  constructor({ responseCallback, logger }) {
+  errorHandler;
+  constructor({ responseCallback, logger, errorHandler }) {
+    this.errorHandler = errorHandler;
+
     this.logger = logger;
 
     this.logger({
@@ -39,11 +42,18 @@ class InstanceReservation {
     this.xmlHttp.send();
   }
   onError(e) {
-    const errorMessage = `Could not reserve a live asr instance.`;
-    console.error(errorMessage);
-    throw errorMessage;
+    this.logger({
+      currentState: `@vatis-tech/asr-client-js: Could not initilize the "InstanceReservation" plugin.`,
+      description: `@vatis-tech/asr-client-js: ` + e,
+    });
+    this.errorHandler(e);
   }
   onLoad() {
+    if (this.xmlHttp.status !== 200) {
+      this.onError(JSON.parse(this.xmlHttp.responseText));
+      return;
+    }
+
     this.logger({
       currentState: `@vatis-tech/asr-client-js: Initialized the "InstanceReservation" plugin.`,
       description: `@vatis-tech/asr-client-js: A live asr instance has been reserved.`,

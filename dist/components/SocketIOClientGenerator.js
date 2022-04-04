@@ -39,7 +39,8 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
         destroyVTC = _ref.destroyVTC,
         frameLength = _ref.frameLength,
         frameOverlap = _ref.frameOverlap,
-        bufferOffset = _ref.bufferOffset;
+        bufferOffset = _ref.bufferOffset,
+        errorHandler = _ref.errorHandler;
 
     _classCallCheck(this, SocketIOClientGenerator);
 
@@ -63,6 +64,9 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
 
     _defineProperty(this, "bufferOffset", void 0);
 
+    _defineProperty(this, "errorHandler", void 0);
+
+    this.errorHandler = errorHandler;
     this.logger = logger;
     this.logger({
       currentState: "@vatis-tech/asr-client-js: Instantianting the \"SocketIOClientGenerator\" plugin.",
@@ -125,9 +129,12 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
         });
       });
       this.socketRef.on("connect_error", function (error) {
-        var errorMessage = 'Could not initilize the "socket.io-client" with error: ' + error;
-        console.error(errorMessage);
-        throw errorMessage;
+        _this.logger({
+          currentState: "@vatis-tech/asr-client-js: Could not initilize the \"SocketIOClientGenerator\" plugin.",
+          description: "@vatis-tech/asr-client-js: " + error
+        });
+
+        _this.errorHandler(error);
       });
       this.socketRef.on(SOCKET_IO_CLIENT_RESULT_PATH, function (args) {
         _this.onAsrResultCallback(args);
