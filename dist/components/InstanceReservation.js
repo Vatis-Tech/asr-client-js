@@ -52,7 +52,7 @@ var InstanceReservation = /*#__PURE__*/function () {
     this.responseCallback = responseCallback;
     this.xmlHttp = new XMLHttpRequest();
     this.xmlHttp.onload = this.onLoad.bind(this);
-    this.xmlHttp.onerror = this.onError;
+    this.xmlHttp.onerror = this.onError.bind(this);
   }
 
   _createClass(InstanceReservation, [{

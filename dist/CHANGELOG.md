@@ -51,6 +51,24 @@ No fixes were made.
 
 Each time you add new changes to this file, please add them bellow this line - i.e. between the [insertion](#insterion) section and the last version added.
 
+## [1.1.1] - 2022-04-06
+
+### Added
+
+No new features were added.
+
+### Changed
+
+No changes were made.
+
+### Removed
+
+Nothing was removed.
+
+### Fixed
+
+- Fix error for `this.logger` when calling the `onError` function inside `ApiKeyGenerator` and `InstanceReservation`
+
 ## [1.1.0] - 2022-04-04
 
 ### Added
