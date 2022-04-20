@@ -4,12 +4,10 @@ import SocketIOClientGenerator from "./components/SocketIOClientGenerator.js";
 import MicrophoneGenerator from "./components/MicrophoneGenerator.js";
 import MicrophoneQueue from "./components/MicrophoneQueue.js";
 
-// import constants from "../helpers/constants/index.js";
+import constants from "./helpers/constants/index.js";
 import functions from "./helpers/functions/index.js";
 
-// const {
-//
-// } = constants;
+const { WAIT_AFTER_MESSAGES } = constants;
 
 const { generateApiUrl, checkIfFinalPacket } = functions;
 
@@ -21,6 +19,7 @@ class VatisTechClient {
   microphoneQueue;
   onData;
   waitingForFinalPacket;
+  waitingAfterMessages;
   logger;
   log;
   shouldDestroy;
@@ -41,6 +40,7 @@ class VatisTechClient {
     frameOverlap,
     bufferOffset,
     errorHandler,
+    waitingAfterMessages,
   }) {
     if (errorHandler) {
       this.errorHandler = errorHandler;
@@ -63,8 +63,14 @@ class VatisTechClient {
       description: `@vatis-tech/asr-client-js: This is the base constructor which initilizez everything for the LIVE ASR service of Vatis Tech.`,
     });
 
+    if (waitingAfterMessages && waitingAfterMessages > 0) {
+      this.waitingAfterMessages = waitingAfterMessages;
+    } else {
+      this.waitingAfterMessages = WAIT_AFTER_MESSAGES;
+    }
+
     // this is a flag that says if the whole response for the previous packet was received or not
-    this.waitingForFinalPacket = false;
+    this.waitingForFinalPacket = 0;
 
     // this is a flag that says if the user wants to destroy the VTC client
     // but since there might be data to be received by the socket, or to be sent by the socket
@@ -136,7 +142,8 @@ class VatisTechClient {
   destroy({ hard } = { hard: false }) {
     // check if there is still data to be received or to be sent
     if (
-      (this.waitingForFinalPacket || !this.microphoneQueue.isEmpty) &&
+      (this.waitingForFinalPacket > this.waitingAfterMessages ||
+        !this.microphoneQueue.isEmpty) &&
       hard !== true
     ) {
       // let the messaging know that we want the client to be destroyed
@@ -232,8 +239,11 @@ class VatisTechClient {
 
     this.microphoneQueue.enqueue(data);
 
-    if (this.waitingForFinalPacket === false && this.microphoneQueue.peek()) {
-      this.waitingForFinalPacket = true;
+    if (
+      this.waitingForFinalPacket < this.waitingAfterMessages &&
+      this.microphoneQueue.peek()
+    ) {
+      this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
       this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
     }
   }
@@ -245,17 +255,19 @@ class VatisTechClient {
     this.onData(JSON.parse(data));
 
     if (checkIfFinalPacket(JSON.parse(data))) {
-      if (this.microphoneQueue.peek()) {
-        this.waitingForFinalPacket = true;
+      this.waitingForFinalPacket = this.waitingForFinalPacket - 1;
+      if (
+        this.microphoneQueue.peek() &&
+        this.waitingForFinalPacket < this.waitingAfterMessages
+      ) {
+        this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
         this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
-      } else {
-        this.waitingForFinalPacket = false;
       }
     }
 
     // check if the user tried to destroy the VTC client
     if (
-      !this.waitingForFinalPacket &&
+      this.waitingForFinalPacket === 0 &&
       this.microphoneQueue.isEmpty &&
       this.shouldDestroy
     ) {
