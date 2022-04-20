@@ -204,6 +204,10 @@ Default is `0.3 seconds`.
 
 Default is `0.3 seconds`.
 
+### `waitingAfterMessages`
+
+This is a **number** that needs to be _> 0_. It represents the number of message to be sent to the ASR Service, before waiting for a response. Default is `5`.
+
 ## Methods
 
 ### `destroy`
