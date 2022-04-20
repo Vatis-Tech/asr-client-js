@@ -15,7 +15,9 @@ var _MicrophoneGenerator = _interopRequireDefault(require("./components/Micropho
 
 var _MicrophoneQueue = _interopRequireDefault(require("./components/MicrophoneQueue.js"));
 
-var _index = _interopRequireDefault(require("./helpers/functions/index.js"));
+var _index = _interopRequireDefault(require("./helpers/constants/index.js"));
+
+var _index2 = _interopRequireDefault(require("./helpers/functions/index.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -27,11 +29,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-// const {
-//
-// } = constants;
-var generateApiUrl = _index["default"].generateApiUrl,
-    checkIfFinalPacket = _index["default"].checkIfFinalPacket;
+var WAIT_AFTER_MESSAGES = _index["default"].WAIT_AFTER_MESSAGES;
+var generateApiUrl = _index2["default"].generateApiUrl,
+    checkIfFinalPacket = _index2["default"].checkIfFinalPacket;
 
 var VatisTechClient = /*#__PURE__*/function () {
   function VatisTechClient(_ref) {
@@ -48,7 +48,8 @@ var VatisTechClient = /*#__PURE__*/function () {
         frameLength = _ref.frameLength,
         frameOverlap = _ref.frameOverlap,
         bufferOffset = _ref.bufferOffset,
-        errorHandler = _ref.errorHandler;
+        errorHandler = _ref.errorHandler,
+        waitingAfterMessages = _ref.waitingAfterMessages;
 
     _classCallCheck(this, VatisTechClient);
 
@@ -65,6 +66,8 @@ var VatisTechClient = /*#__PURE__*/function () {
     _defineProperty(this, "onData", void 0);
 
     _defineProperty(this, "waitingForFinalPacket", void 0);
+
+    _defineProperty(this, "waitingAfterMessages", void 0);
 
     _defineProperty(this, "logger", void 0);
 
@@ -95,9 +98,16 @@ var VatisTechClient = /*#__PURE__*/function () {
     this.logger({
       currentState: "@vatis-tech/asr-client-js: Initilizing plugin.",
       description: "@vatis-tech/asr-client-js: This is the base constructor which initilizez everything for the LIVE ASR service of Vatis Tech."
-    }); // this is a flag that says if the whole response for the previous packet was received or not
+    });
 
-    this.waitingForFinalPacket = false; // this is a flag that says if the user wants to destroy the VTC client
+    if (waitingAfterMessages && waitingAfterMessages > 0) {
+      this.waitingAfterMessages = waitingAfterMessages;
+    } else {
+      this.waitingAfterMessages = WAIT_AFTER_MESSAGES;
+    } // this is a flag that says if the whole response for the previous packet was received or not
+
+
+    this.waitingForFinalPacket = 0; // this is a flag that says if the user wants to destroy the VTC client
     // but since there might be data to be received by the socket, or to be sent by the socket
     // the VTC client will wait for that to finis
 
@@ -172,7 +182,7 @@ var VatisTechClient = /*#__PURE__*/function () {
           hard = _ref2.hard;
 
       // check if there is still data to be received or to be sent
-      if ((this.waitingForFinalPacket || !this.microphoneQueue.isEmpty) && hard !== true) {
+      if ((this.waitingForFinalPacket > this.waitingAfterMessages || !this.microphoneQueue.isEmpty) && hard !== true) {
         // let the messaging know that we want the client to be destroyed
         this.shouldDestroy = true; // pause the microphone so it won't record anymore
 
@@ -277,8 +287,8 @@ var VatisTechClient = /*#__PURE__*/function () {
       if (this.microphoneQueue === undefined) return;
       this.microphoneQueue.enqueue(data);
 
-      if (this.waitingForFinalPacket === false && this.microphoneQueue.peek()) {
-        this.waitingForFinalPacket = true;
+      if (this.waitingForFinalPacket < this.waitingAfterMessages && this.microphoneQueue.peek()) {
+        this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
         this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
       }
     } // get data from SocketIOClientGenerator from the SOCKET_IO_CLIENT_RESULT_PATH and send it to user's callback function
@@ -291,16 +301,16 @@ var VatisTechClient = /*#__PURE__*/function () {
       this.onData(JSON.parse(data));
 
       if (checkIfFinalPacket(JSON.parse(data))) {
-        if (this.microphoneQueue.peek()) {
-          this.waitingForFinalPacket = true;
+        this.waitingForFinalPacket = this.waitingForFinalPacket - 1;
+
+        if (this.microphoneQueue.peek() && this.waitingForFinalPacket < this.waitingAfterMessages) {
+          this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
           this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
-        } else {
-          this.waitingForFinalPacket = false;
         }
       } // check if the user tried to destroy the VTC client
 
 
-      if (!this.waitingForFinalPacket && this.microphoneQueue.isEmpty && this.shouldDestroy) {
+      if (this.waitingForFinalPacket === 0 && this.microphoneQueue.isEmpty && this.shouldDestroy) {
         this.destroy();
       }
     }

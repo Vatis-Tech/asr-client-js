@@ -7,6 +7,7 @@ exports["default"] = void 0;
 var API_URL = "https://vatis.tech/api/v1";
 var API_URL_PATH = "/asr-client/auth?service=<service>&model=<model>&language=<language>";
 var RESERVATION_URL = "<service_host>/asr/v1/registry/stream/reserve";
+var WAIT_AFTER_MESSAGES = 5;
 var SOCKET_IO_CLIENT_NAMESPACE = "/asr_stream";
 var SOCKET_IO_CLIENT_TRANSPORTS = ["websocket"];
 var SOCKET_IO_CLIENT_PATH = "/live/transcribe/socket.io";
@@ -25,6 +26,7 @@ var projectConstants = {
   API_URL_PATH: API_URL_PATH,
   API_URL: API_URL,
   RESERVATION_URL: RESERVATION_URL,
+  WAIT_AFTER_MESSAGES: WAIT_AFTER_MESSAGES,
   SOCKET_IO_CLIENT_NAMESPACE: SOCKET_IO_CLIENT_NAMESPACE,
   SOCKET_IO_CLIENT_TRANSPORTS: SOCKET_IO_CLIENT_TRANSPORTS,
   SOCKET_IO_CLIENT_PATH: SOCKET_IO_CLIENT_PATH,
