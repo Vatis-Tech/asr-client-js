@@ -4,6 +4,8 @@ const API_URL_PATH =
 
 const RESERVATION_URL = "<service_host>/asr/v1/registry/stream/reserve";
 
+const WAIT_AFTER_MESSAGES = 5;
+
 const SOCKET_IO_CLIENT_NAMESPACE = "/asr_stream";
 const SOCKET_IO_CLIENT_TRANSPORTS = ["websocket"];
 const SOCKET_IO_CLIENT_PATH = "/live/transcribe/socket.io";
@@ -15,7 +17,6 @@ const SOCKET_IO_CLIENT_FRAME_OVERLAP = 0.3;
 const SOCKET_IO_CLIENT_BUFFER_OFFSET = 0.3;
 const SOCKET_IO_CLIENT_AUDIO_FORMAT = "webm";
 const SOCKET_IO_CLIENT_SENDING_HEADERS = "True";
-const SOCKET_IO_CLIENT_WAIT_AFTER_MESSAGES = 5;
 
 const MICROPHONE_FRAME_LENGTH = 0.3;
 const MICROPHONE_BIT_RATE_SAMPLES = 8000;
@@ -25,6 +26,7 @@ const projectConstants = {
   API_URL_PATH,
   API_URL,
   RESERVATION_URL,
+  WAIT_AFTER_MESSAGES,
 
   SOCKET_IO_CLIENT_NAMESPACE,
   SOCKET_IO_CLIENT_TRANSPORTS,
