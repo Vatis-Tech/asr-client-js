@@ -182,7 +182,7 @@ var VatisTechClient = /*#__PURE__*/function () {
           hard = _ref2.hard;
 
       // check if there is still data to be received or to be sent
-      if ((this.waitingForFinalPacket > this.waitingAfterMessages || !this.microphoneQueue.isEmpty) && hard !== true) {
+      if ((this.waitingForFinalPacket > 0 || !this.microphoneQueue.isEmpty) && hard !== true) {
         // let the messaging know that we want the client to be destroyed
         this.shouldDestroy = true; // pause the microphone so it won't record anymore
 
