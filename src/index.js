@@ -142,8 +142,7 @@ class VatisTechClient {
   destroy({ hard } = { hard: false }) {
     // check if there is still data to be received or to be sent
     if (
-      (this.waitingForFinalPacket > this.waitingAfterMessages ||
-        !this.microphoneQueue.isEmpty) &&
+      (this.waitingForFinalPacket > 0 || !this.microphoneQueue.isEmpty) &&
       hard !== true
     ) {
       // let the messaging know that we want the client to be destroyed
