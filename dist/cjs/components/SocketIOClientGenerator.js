@@ -1,23 +1,21 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
 
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
 var _socket = _interopRequireDefault(require("socket.io-client"));
 
 var _index = _interopRequireDefault(require("../helpers/constants/index.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var SOCKET_IO_CLIENT_NAMESPACE = _index["default"].SOCKET_IO_CLIENT_NAMESPACE,
     SOCKET_IO_CLIENT_PATH = _index["default"].SOCKET_IO_CLIENT_PATH,
@@ -41,31 +39,18 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
         frameOverlap = _ref.frameOverlap,
         bufferOffset = _ref.bufferOffset,
         errorHandler = _ref.errorHandler;
-
-    _classCallCheck(this, SocketIOClientGenerator);
-
-    _defineProperty(this, "socketRef", void 0);
-
-    _defineProperty(this, "streamHost", void 0);
-
-    _defineProperty(this, "authToken", void 0);
-
-    _defineProperty(this, "onConnectCallback", void 0);
-
-    _defineProperty(this, "onAsrResultCallback", void 0);
-
-    _defineProperty(this, "logger", void 0);
-
-    _defineProperty(this, "destroyVTC", void 0);
-
-    _defineProperty(this, "frameLength", void 0);
-
-    _defineProperty(this, "frameOverlap", void 0);
-
-    _defineProperty(this, "bufferOffset", void 0);
-
-    _defineProperty(this, "errorHandler", void 0);
-
+    (0, _classCallCheck2["default"])(this, SocketIOClientGenerator);
+    (0, _defineProperty2["default"])(this, "socketRef", void 0);
+    (0, _defineProperty2["default"])(this, "streamHost", void 0);
+    (0, _defineProperty2["default"])(this, "authToken", void 0);
+    (0, _defineProperty2["default"])(this, "onConnectCallback", void 0);
+    (0, _defineProperty2["default"])(this, "onAsrResultCallback", void 0);
+    (0, _defineProperty2["default"])(this, "logger", void 0);
+    (0, _defineProperty2["default"])(this, "destroyVTC", void 0);
+    (0, _defineProperty2["default"])(this, "frameLength", void 0);
+    (0, _defineProperty2["default"])(this, "frameOverlap", void 0);
+    (0, _defineProperty2["default"])(this, "bufferOffset", void 0);
+    (0, _defineProperty2["default"])(this, "errorHandler", void 0);
     this.errorHandler = errorHandler;
     this.logger = logger;
     this.logger({
@@ -80,7 +65,7 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
     this.bufferOffset = bufferOffset;
   }
 
-  _createClass(SocketIOClientGenerator, [{
+  (0, _createClass2["default"])(SocketIOClientGenerator, [{
     key: "init",
     value: function init(_ref2) {
       var _this = this;
@@ -164,7 +149,6 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
       this.socketRef.disconnect();
     }
   }]);
-
   return SocketIOClientGenerator;
 }();
 

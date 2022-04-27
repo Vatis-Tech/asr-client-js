@@ -1,21 +1,19 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
 
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
 var _index = _interopRequireDefault(require("../helpers/functions/index.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var generateReservationUrl = _index["default"].generateReservationUrl;
 
@@ -24,25 +22,15 @@ var InstanceReservation = /*#__PURE__*/function () {
     var responseCallback = _ref.responseCallback,
         logger = _ref.logger,
         errorHandler = _ref.errorHandler;
-
-    _classCallCheck(this, InstanceReservation);
-
-    _defineProperty(this, "serviceHost", void 0);
-
-    _defineProperty(this, "responseCallback", void 0);
-
-    _defineProperty(this, "authToken", void 0);
-
-    _defineProperty(this, "streamUrl", void 0);
-
-    _defineProperty(this, "reservationToken", void 0);
-
-    _defineProperty(this, "xmlHttp", void 0);
-
-    _defineProperty(this, "logger", void 0);
-
-    _defineProperty(this, "errorHandler", void 0);
-
+    (0, _classCallCheck2["default"])(this, InstanceReservation);
+    (0, _defineProperty2["default"])(this, "serviceHost", void 0);
+    (0, _defineProperty2["default"])(this, "responseCallback", void 0);
+    (0, _defineProperty2["default"])(this, "authToken", void 0);
+    (0, _defineProperty2["default"])(this, "streamUrl", void 0);
+    (0, _defineProperty2["default"])(this, "reservationToken", void 0);
+    (0, _defineProperty2["default"])(this, "xmlHttp", void 0);
+    (0, _defineProperty2["default"])(this, "logger", void 0);
+    (0, _defineProperty2["default"])(this, "errorHandler", void 0);
     this.errorHandler = errorHandler;
     this.logger = logger;
     this.logger({
@@ -55,7 +43,7 @@ var InstanceReservation = /*#__PURE__*/function () {
     this.xmlHttp.onerror = this.onError.bind(this);
   }
 
-  _createClass(InstanceReservation, [{
+  (0, _createClass2["default"])(InstanceReservation, [{
     key: "init",
     value: function init(_ref2) {
       var serviceHost = _ref2.serviceHost,
@@ -105,7 +93,6 @@ var InstanceReservation = /*#__PURE__*/function () {
       });
     }
   }]);
-
   return InstanceReservation;
 }();
 
