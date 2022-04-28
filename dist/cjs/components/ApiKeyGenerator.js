@@ -1,17 +1,17 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var ApiKeyGenerator = /*#__PURE__*/function () {
   function ApiKeyGenerator(_ref) {
@@ -20,25 +20,15 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
         apiKey = _ref.apiKey,
         logger = _ref.logger,
         errorHandler = _ref.errorHandler;
-
-    _classCallCheck(this, ApiKeyGenerator);
-
-    _defineProperty(this, "apiUrl", void 0);
-
-    _defineProperty(this, "responseCallback", void 0);
-
-    _defineProperty(this, "apiKey", void 0);
-
-    _defineProperty(this, "serviceHost", void 0);
-
-    _defineProperty(this, "authToken", void 0);
-
-    _defineProperty(this, "xmlHttp", void 0);
-
-    _defineProperty(this, "logger", void 0);
-
-    _defineProperty(this, "errorHandler", void 0);
-
+    (0, _classCallCheck2["default"])(this, ApiKeyGenerator);
+    (0, _defineProperty2["default"])(this, "apiUrl", void 0);
+    (0, _defineProperty2["default"])(this, "responseCallback", void 0);
+    (0, _defineProperty2["default"])(this, "apiKey", void 0);
+    (0, _defineProperty2["default"])(this, "serviceHost", void 0);
+    (0, _defineProperty2["default"])(this, "authToken", void 0);
+    (0, _defineProperty2["default"])(this, "xmlHttp", void 0);
+    (0, _defineProperty2["default"])(this, "logger", void 0);
+    (0, _defineProperty2["default"])(this, "errorHandler", void 0);
     this.errorHandler = errorHandler;
     this.logger = logger;
     this.logger({
@@ -53,7 +43,7 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
     this.xmlHttp.onerror = this.onError.bind(this);
   }
 
-  _createClass(ApiKeyGenerator, [{
+  (0, _createClass2["default"])(ApiKeyGenerator, [{
     key: "init",
     value: function init() {
       this.logger({
@@ -94,7 +84,6 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
       });
     }
   }]);
-
   return ApiKeyGenerator;
 }();
 

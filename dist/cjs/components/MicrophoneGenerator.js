@@ -1,27 +1,25 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
 
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
 var _index = _interopRequireDefault(require("../helpers/constants/index.js"));
 
 var _index2 = _interopRequireDefault(require("../helpers/functions/index.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var MICROPHONE_BIT_RATE_SAMPLES = _index["default"].MICROPHONE_BIT_RATE_SAMPLES,
     MICROPHONE_TIMESLICE = _index["default"].MICROPHONE_TIMESLICE;
@@ -33,23 +31,14 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
         logger = _ref.logger,
         microphoneTimeslice = _ref.microphoneTimeslice,
         errorHandler = _ref.errorHandler;
-
-    _classCallCheck(this, MicrophoneGenerator);
-
-    _defineProperty(this, "stream", void 0);
-
-    _defineProperty(this, "onDataCallback", void 0);
-
-    _defineProperty(this, "logger", void 0);
-
-    _defineProperty(this, "blobState", void 0);
-
-    _defineProperty(this, "mediaRecorder", void 0);
-
-    _defineProperty(this, "microphoneTimeslice", void 0);
-
-    _defineProperty(this, "errorHandler", void 0);
-
+    (0, _classCallCheck2["default"])(this, MicrophoneGenerator);
+    (0, _defineProperty2["default"])(this, "stream", void 0);
+    (0, _defineProperty2["default"])(this, "onDataCallback", void 0);
+    (0, _defineProperty2["default"])(this, "logger", void 0);
+    (0, _defineProperty2["default"])(this, "blobState", void 0);
+    (0, _defineProperty2["default"])(this, "mediaRecorder", void 0);
+    (0, _defineProperty2["default"])(this, "microphoneTimeslice", void 0);
+    (0, _defineProperty2["default"])(this, "errorHandler", void 0);
     this.errorHandler = errorHandler;
     this.logger = logger;
     this.logger({
@@ -66,7 +55,7 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
   } // on destroy we want to stop the MediaRecorder from recording
 
 
-  _createClass(MicrophoneGenerator, [{
+  (0, _createClass2["default"])(MicrophoneGenerator, [{
     key: "destroy",
     value: function destroy() {
       if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
@@ -94,10 +83,10 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
   }, {
     key: "init",
     value: function () {
-      var _init = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      var _init = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
         var _this = this;
 
-        return regeneratorRuntime.wrap(function _callee$(_context) {
+        return _regenerator["default"].wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
@@ -197,7 +186,6 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
       return this.stream;
     }
   }]);
-
   return MicrophoneGenerator;
 }();
 

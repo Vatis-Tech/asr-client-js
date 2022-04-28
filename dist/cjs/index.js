@@ -1,9 +1,17 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _ApiKeyGenerator = _interopRequireDefault(require("./components/ApiKeyGenerator.js"));
 
@@ -17,16 +25,7 @@ var _MicrophoneQueue = _interopRequireDefault(require("./components/MicrophoneQu
 
 var _index = _interopRequireDefault(require("./helpers/functions/index.js"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+// import constants from "../helpers/constants/index.js";
 // const {
 //
 // } = constants;
@@ -49,32 +48,19 @@ var VatisTechClient = /*#__PURE__*/function () {
         frameOverlap = _ref.frameOverlap,
         bufferOffset = _ref.bufferOffset,
         errorHandler = _ref.errorHandler;
-
-    _classCallCheck(this, VatisTechClient);
-
-    _defineProperty(this, "microphoneGenerator", void 0);
-
-    _defineProperty(this, "instanceReservation", void 0);
-
-    _defineProperty(this, "apiKeyGenerator", void 0);
-
-    _defineProperty(this, "socketIOClientGenerator", void 0);
-
-    _defineProperty(this, "microphoneQueue", void 0);
-
-    _defineProperty(this, "onData", void 0);
-
-    _defineProperty(this, "waitingForFinalPacket", void 0);
-
-    _defineProperty(this, "logger", void 0);
-
-    _defineProperty(this, "log", void 0);
-
-    _defineProperty(this, "shouldDestroy", void 0);
-
-    _defineProperty(this, "onDestroyCallback", void 0);
-
-    _defineProperty(this, "errorHandler", void 0);
+    (0, _classCallCheck2["default"])(this, VatisTechClient);
+    (0, _defineProperty2["default"])(this, "microphoneGenerator", void 0);
+    (0, _defineProperty2["default"])(this, "instanceReservation", void 0);
+    (0, _defineProperty2["default"])(this, "apiKeyGenerator", void 0);
+    (0, _defineProperty2["default"])(this, "socketIOClientGenerator", void 0);
+    (0, _defineProperty2["default"])(this, "microphoneQueue", void 0);
+    (0, _defineProperty2["default"])(this, "onData", void 0);
+    (0, _defineProperty2["default"])(this, "waitingForFinalPacket", void 0);
+    (0, _defineProperty2["default"])(this, "logger", void 0);
+    (0, _defineProperty2["default"])(this, "log", void 0);
+    (0, _defineProperty2["default"])(this, "shouldDestroy", void 0);
+    (0, _defineProperty2["default"])(this, "onDestroyCallback", void 0);
+    (0, _defineProperty2["default"])(this, "errorHandler", void 0);
 
     if (errorHandler) {
       this.errorHandler = errorHandler;
@@ -163,7 +149,7 @@ var VatisTechClient = /*#__PURE__*/function () {
   } // this will make everything undefined on the this instance - i.e. this instance will not be of any use anymore
 
 
-  _createClass(VatisTechClient, [{
+  (0, _createClass2["default"])(VatisTechClient, [{
     key: "destroy",
     value: function destroy() {
       var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
@@ -305,7 +291,6 @@ var VatisTechClient = /*#__PURE__*/function () {
       }
     }
   }]);
-
   return VatisTechClient;
 }();
 
