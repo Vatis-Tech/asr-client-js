@@ -1,28 +1,24 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var MicrophoneQueue = /*#__PURE__*/function () {
   function MicrophoneQueue(_ref) {
     var logger = _ref.logger;
-
-    _classCallCheck(this, MicrophoneQueue);
-
-    _defineProperty(this, "queue", void 0);
-
-    _defineProperty(this, "logger", void 0);
-
+    (0, _classCallCheck2["default"])(this, MicrophoneQueue);
+    (0, _defineProperty2["default"])(this, "queue", void 0);
+    (0, _defineProperty2["default"])(this, "logger", void 0);
     this.logger = logger;
     this.logger({
       currentState: "@vatis-tech/asr-client-js: Instantianting and initializing the \"MicrophoneQueue\" plugin.",
@@ -31,7 +27,7 @@ var MicrophoneQueue = /*#__PURE__*/function () {
     this.queue = [];
   }
 
-  _createClass(MicrophoneQueue, [{
+  (0, _createClass2["default"])(MicrophoneQueue, [{
     key: "dequeue",
     value: function dequeue() {
       return this.queue.shift(0, 1);
@@ -52,7 +48,6 @@ var MicrophoneQueue = /*#__PURE__*/function () {
       return this.queue.length > 0 ? false : true;
     }
   }]);
-
   return MicrophoneQueue;
 }();
 

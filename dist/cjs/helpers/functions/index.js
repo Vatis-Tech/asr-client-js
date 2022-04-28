@@ -1,5 +1,7 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -12,8 +14,6 @@ var _generateApiUrl = _interopRequireDefault(require("./generateApiUrl.js"));
 var _base64ArrayBuffer = _interopRequireDefault(require("./base64ArrayBuffer.js"));
 
 var _generateReservationUrl = _interopRequireDefault(require("./generateReservationUrl.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var functions = {
   checkIfFinalPacket: _checkIfFinalPacket["default"],

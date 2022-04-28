@@ -1,6 +1,6 @@
 # @vatis-tech/asr-client-js
 
-![version](https://img.shields.io/badge/version-1.2.0-blue.svg)
+![version](https://img.shields.io/badge/version-1.2.1-blue.svg)
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 ![GitHub issues open](https://img.shields.io/github/issues/Vatis-Tech/asr-client-js.svg)
 ![GitHub issues closed](https://img.shields.io/github/issues-closed-raw/Vatis-Tech/asr-client-js.svg)
@@ -22,6 +22,8 @@
 - **[Further Reading 📚](#further-reading)**
 
 ## Installation
+
+### Via NPM
 
 **Install the latest version**
 
@@ -47,7 +49,31 @@ This means that on each new install, you will still have the initial installed v
 
 You can read more about this here: [npm install --save-exact](https://docs.npmjs.com/cli/v8/commands/npm-install#save-exact).
 
+### Via CDN
+
+You can also use this plugin via CDN, and use it inside an HTML & JavaScript project, that will run in browsers.
+Just copy and paste the following script into your project:
+
+```
+<script src="unpkg.com/@vatis-tech/asr-client-js@1.2.1/umd/vatis-tech-asr-client.umd.js" charset="utf-8"></script>
+```
+
+### Via Download
+
+You can also choose to download it, and use it locally, instead of a CDN.
+You can download it by pressing the following link: [download here](https://github.com/Vatis-Tech/asr-client-js/archive/refs/heads/main.zip).
+Or, download it from Github [here](https://github.com/Vatis-Tech/asr-client-js).
+After that copy and paste the following script into your app:
+
+```
+<script src="%path%/asr-client-js/dist/umd/vatis-tech-asr-client.umd.js" charset="utf-8"></script>
+```
+
+And replace `%path%` with the path where you've downloaded and unzipped the plugin.
+
 ## Constructor
+
+### Via NPM
 
 First you need to import the plugin:
 
@@ -59,6 +85,20 @@ After that, you can initialize it like so:
 
 ```
 const vtc = new VTC({
+  service: "LIVE_ASR",
+  language: "ro_RO",
+  apiKey: "YOUR_API_KEY",
+  onData: (data) => { console.log(data); },
+  log: true,
+});
+```
+
+### Via CDN or Download
+
+If you opted out to use it as a downloadable or CDN (i.e. via a `script` tag inside a **static** HTML & JavaScript project), you will be able to use the constructor as follows:
+
+```
+const vtc = new VatisTechClient.default({
   service: "LIVE_ASR",
   language: "ro_RO",
   apiKey: "YOUR_API_KEY",
