@@ -51,6 +51,24 @@ No fixes were made.
 
 Each time you add new changes to this file, please add them bellow this line - i.e. between the [insertion](#insterion) section and the last version added.
 
+## [1.3.0] - 2022-05-03
+
+### Added
+
+No new features were added.
+
+### Changed
+
+- Right now, instead of sending one message and waiting for its full response, you can send up to `waitingAfterMessages` before waiting for full responses
+
+### Removed
+
+Nothing was removed.
+
+### Fixed
+
+No fixes were made.
+
 ## [1.2.0] - 2022-04-11
 
 ### Added
