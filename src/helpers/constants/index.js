@@ -4,6 +4,8 @@ const API_URL_PATH =
 
 const RESERVATION_URL = "<service_host>/asr/v1/registry/stream/reserve";
 
+const WAIT_AFTER_MESSAGES = 5;
+
 const SOCKET_IO_CLIENT_NAMESPACE = "/asr_stream";
 const SOCKET_IO_CLIENT_TRANSPORTS = ["websocket"];
 const SOCKET_IO_CLIENT_PATH = "/live/transcribe/socket.io";
@@ -24,6 +26,7 @@ const projectConstants = {
   API_URL_PATH,
   API_URL,
   RESERVATION_URL,
+  WAIT_AFTER_MESSAGES,
 
   SOCKET_IO_CLIENT_NAMESPACE,
   SOCKET_IO_CLIENT_TRANSPORTS,

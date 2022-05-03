@@ -1,6 +1,6 @@
 # @vatis-tech/asr-client-js
 
-![version](https://img.shields.io/badge/version-1.2.1-blue.svg)
+![version](https://img.shields.io/badge/version-1.3.0-blue.svg)
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 ![GitHub issues open](https://img.shields.io/github/issues/Vatis-Tech/asr-client-js.svg)
 ![GitHub issues closed](https://img.shields.io/github/issues-closed-raw/Vatis-Tech/asr-client-js.svg)
@@ -243,6 +243,10 @@ Default is `0.3 seconds`.
 ### `bufferOffset`
 
 Default is `0.3 seconds`.
+
+### `waitingAfterMessages`
+
+This is a **number** that needs to be _> 0_. It represents the number of message to be sent to the ASR Service, before waiting for a response. Default is `5`.
 
 ## Methods
 

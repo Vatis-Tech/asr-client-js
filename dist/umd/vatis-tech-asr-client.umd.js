@@ -608,6 +608,7 @@ exports["default"] = void 0;
 var API_URL = "https://vatis.tech/api/v1";
 var API_URL_PATH = "/asr-client/auth?service=<service>&model=<model>&language=<language>";
 var RESERVATION_URL = "<service_host>/asr/v1/registry/stream/reserve";
+var WAIT_AFTER_MESSAGES = 5;
 var SOCKET_IO_CLIENT_NAMESPACE = "/asr_stream";
 var SOCKET_IO_CLIENT_TRANSPORTS = ["websocket"];
 var SOCKET_IO_CLIENT_PATH = "/live/transcribe/socket.io";
@@ -626,6 +627,7 @@ var projectConstants = {
   API_URL_PATH: API_URL_PATH,
   API_URL: API_URL,
   RESERVATION_URL: RESERVATION_URL,
+  WAIT_AFTER_MESSAGES: WAIT_AFTER_MESSAGES,
   SOCKET_IO_CLIENT_NAMESPACE: SOCKET_IO_CLIENT_NAMESPACE,
   SOCKET_IO_CLIENT_TRANSPORTS: SOCKET_IO_CLIENT_TRANSPORTS,
   SOCKET_IO_CLIENT_PATH: SOCKET_IO_CLIENT_PATH,
@@ -852,14 +854,13 @@ var _MicrophoneGenerator = _interopRequireDefault(require("./components/Micropho
 
 var _MicrophoneQueue = _interopRequireDefault(require("./components/MicrophoneQueue.js"));
 
-var _index = _interopRequireDefault(require("./helpers/functions/index.js"));
+var _index = _interopRequireDefault(require("./helpers/constants/index.js"));
 
-// import constants from "../helpers/constants/index.js";
-// const {
-//
-// } = constants;
-var generateApiUrl = _index["default"].generateApiUrl,
-    checkIfFinalPacket = _index["default"].checkIfFinalPacket;
+var _index2 = _interopRequireDefault(require("./helpers/functions/index.js"));
+
+var WAIT_AFTER_MESSAGES = _index["default"].WAIT_AFTER_MESSAGES;
+var generateApiUrl = _index2["default"].generateApiUrl,
+    checkIfFinalPacket = _index2["default"].checkIfFinalPacket;
 
 var VatisTechClient = /*#__PURE__*/function () {
   function VatisTechClient(_ref) {
@@ -876,7 +877,8 @@ var VatisTechClient = /*#__PURE__*/function () {
         frameLength = _ref.frameLength,
         frameOverlap = _ref.frameOverlap,
         bufferOffset = _ref.bufferOffset,
-        errorHandler = _ref.errorHandler;
+        errorHandler = _ref.errorHandler,
+        waitingAfterMessages = _ref.waitingAfterMessages;
     (0, _classCallCheck2["default"])(this, VatisTechClient);
     (0, _defineProperty2["default"])(this, "microphoneGenerator", void 0);
     (0, _defineProperty2["default"])(this, "instanceReservation", void 0);
@@ -885,6 +887,7 @@ var VatisTechClient = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "microphoneQueue", void 0);
     (0, _defineProperty2["default"])(this, "onData", void 0);
     (0, _defineProperty2["default"])(this, "waitingForFinalPacket", void 0);
+    (0, _defineProperty2["default"])(this, "waitingAfterMessages", void 0);
     (0, _defineProperty2["default"])(this, "logger", void 0);
     (0, _defineProperty2["default"])(this, "log", void 0);
     (0, _defineProperty2["default"])(this, "shouldDestroy", void 0);
@@ -910,9 +913,16 @@ var VatisTechClient = /*#__PURE__*/function () {
     this.logger({
       currentState: "@vatis-tech/asr-client-js: Initilizing plugin.",
       description: "@vatis-tech/asr-client-js: This is the base constructor which initilizez everything for the LIVE ASR service of Vatis Tech."
-    }); // this is a flag that says if the whole response for the previous packet was received or not
+    });
 
-    this.waitingForFinalPacket = false; // this is a flag that says if the user wants to destroy the VTC client
+    if (waitingAfterMessages && waitingAfterMessages > 0) {
+      this.waitingAfterMessages = waitingAfterMessages;
+    } else {
+      this.waitingAfterMessages = WAIT_AFTER_MESSAGES;
+    } // this is a flag that says if the whole response for the previous packet was received or not
+
+
+    this.waitingForFinalPacket = 0; // this is a flag that says if the user wants to destroy the VTC client
     // but since there might be data to be received by the socket, or to be sent by the socket
     // the VTC client will wait for that to finis
 
@@ -987,7 +997,7 @@ var VatisTechClient = /*#__PURE__*/function () {
           hard = _ref2.hard;
 
       // check if there is still data to be received or to be sent
-      if ((this.waitingForFinalPacket || !this.microphoneQueue.isEmpty) && hard !== true) {
+      if ((this.waitingForFinalPacket > 0 || !this.microphoneQueue.isEmpty) && hard !== true) {
         // let the messaging know that we want the client to be destroyed
         this.shouldDestroy = true; // pause the microphone so it won't record anymore
 
@@ -1092,8 +1102,8 @@ var VatisTechClient = /*#__PURE__*/function () {
       if (this.microphoneQueue === undefined) return;
       this.microphoneQueue.enqueue(data);
 
-      if (this.waitingForFinalPacket === false && this.microphoneQueue.peek()) {
-        this.waitingForFinalPacket = true;
+      if (this.waitingForFinalPacket < this.waitingAfterMessages && this.microphoneQueue.peek()) {
+        this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
         this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
       }
     } // get data from SocketIOClientGenerator from the SOCKET_IO_CLIENT_RESULT_PATH and send it to user's callback function
@@ -1106,16 +1116,16 @@ var VatisTechClient = /*#__PURE__*/function () {
       this.onData(JSON.parse(data));
 
       if (checkIfFinalPacket(JSON.parse(data))) {
-        if (this.microphoneQueue.peek()) {
-          this.waitingForFinalPacket = true;
+        this.waitingForFinalPacket = this.waitingForFinalPacket - 1;
+
+        if (this.microphoneQueue.peek() && this.waitingForFinalPacket < this.waitingAfterMessages) {
+          this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
           this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
-        } else {
-          this.waitingForFinalPacket = false;
         }
       } // check if the user tried to destroy the VTC client
 
 
-      if (!this.waitingForFinalPacket && this.microphoneQueue.isEmpty && this.shouldDestroy) {
+      if (this.waitingForFinalPacket === 0 && this.microphoneQueue.isEmpty && this.shouldDestroy) {
         this.destroy();
       }
     }
@@ -1125,7 +1135,7 @@ var VatisTechClient = /*#__PURE__*/function () {
 
 var _default = VatisTechClient;
 exports["default"] = _default;
-},{"./components/ApiKeyGenerator.js":1,"./components/InstanceReservation.js":2,"./components/MicrophoneGenerator.js":3,"./components/MicrophoneQueue.js":4,"./components/SocketIOClientGenerator.js":5,"./helpers/functions/index.js":11,"@babel/runtime/helpers/classCallCheck":14,"@babel/runtime/helpers/createClass":15,"@babel/runtime/helpers/defineProperty":16,"@babel/runtime/helpers/interopRequireDefault":17}],13:[function(require,module,exports){
+},{"./components/ApiKeyGenerator.js":1,"./components/InstanceReservation.js":2,"./components/MicrophoneGenerator.js":3,"./components/MicrophoneQueue.js":4,"./components/SocketIOClientGenerator.js":5,"./helpers/constants/index.js":6,"./helpers/functions/index.js":11,"@babel/runtime/helpers/classCallCheck":14,"@babel/runtime/helpers/createClass":15,"@babel/runtime/helpers/defineProperty":16,"@babel/runtime/helpers/interopRequireDefault":17}],13:[function(require,module,exports){
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
   try {
     var info = gen[key](arg);
@@ -1221,69 +1231,6 @@ module.exports = _interopRequireDefault, module.exports.__esModule = true, modul
 module.exports = require("regenerator-runtime");
 
 },{"regenerator-runtime":47}],19:[function(require,module,exports){
-/*
- * base64-arraybuffer 1.0.1 <https://github.com/niklasvh/base64-arraybuffer>
- * Copyright (c) 2022 Niklas von Hertzen <https://hertzen.com>
- * Released under MIT License
- */
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-    typeof define === 'function' && define.amd ? define(['exports'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global['base64-arraybuffer'] = {}));
-}(this, (function (exports) { 'use strict';
-
-    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-    // Use a lookup table to find the index.
-    var lookup = typeof Uint8Array === 'undefined' ? [] : new Uint8Array(256);
-    for (var i = 0; i < chars.length; i++) {
-        lookup[chars.charCodeAt(i)] = i;
-    }
-    var encode = function (arraybuffer) {
-        var bytes = new Uint8Array(arraybuffer), i, len = bytes.length, base64 = '';
-        for (i = 0; i < len; i += 3) {
-            base64 += chars[bytes[i] >> 2];
-            base64 += chars[((bytes[i] & 3) << 4) | (bytes[i + 1] >> 4)];
-            base64 += chars[((bytes[i + 1] & 15) << 2) | (bytes[i + 2] >> 6)];
-            base64 += chars[bytes[i + 2] & 63];
-        }
-        if (len % 3 === 2) {
-            base64 = base64.substring(0, base64.length - 1) + '=';
-        }
-        else if (len % 3 === 1) {
-            base64 = base64.substring(0, base64.length - 2) + '==';
-        }
-        return base64;
-    };
-    var decode = function (base64) {
-        var bufferLength = base64.length * 0.75, len = base64.length, i, p = 0, encoded1, encoded2, encoded3, encoded4;
-        if (base64[base64.length - 1] === '=') {
-            bufferLength--;
-            if (base64[base64.length - 2] === '=') {
-                bufferLength--;
-            }
-        }
-        var arraybuffer = new ArrayBuffer(bufferLength), bytes = new Uint8Array(arraybuffer);
-        for (i = 0; i < len; i += 4) {
-            encoded1 = lookup[base64.charCodeAt(i)];
-            encoded2 = lookup[base64.charCodeAt(i + 1)];
-            encoded3 = lookup[base64.charCodeAt(i + 2)];
-            encoded4 = lookup[base64.charCodeAt(i + 3)];
-            bytes[p++] = (encoded1 << 2) | (encoded2 >> 4);
-            bytes[p++] = ((encoded2 & 15) << 4) | (encoded3 >> 2);
-            bytes[p++] = ((encoded3 & 3) << 6) | (encoded4 & 63);
-        }
-        return arraybuffer;
-    };
-
-    exports.decode = decode;
-    exports.encode = encode;
-
-    Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
-
-
-},{}],20:[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -1461,7 +1408,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],21:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 
 /**
  * Expose `Backoff`.
@@ -1548,7 +1495,7 @@ Backoff.prototype.setJitter = function(jitter){
 };
 
 
-},{}],22:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -1700,7 +1647,7 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],23:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
@@ -3481,7 +3428,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":22,"buffer":23,"ieee754":42}],24:[function(require,module,exports){
+},{"base64-js":21,"buffer":22,"ieee754":42}],23:[function(require,module,exports){
 (function (process){(function (){
 /* eslint-env browser */
 
@@ -3754,7 +3701,7 @@ formatters.j = function (v) {
 };
 
 }).call(this)}).call(this,require('_process'))
-},{"./common":25,"_process":46}],25:[function(require,module,exports){
+},{"./common":24,"_process":46}],24:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -4030,7 +3977,7 @@ function setup(env) {
 
 module.exports = setup;
 
-},{"ms":43}],26:[function(require,module,exports){
+},{"ms":43}],25:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = (() => {
@@ -4045,7 +3992,7 @@ exports.default = (() => {
     }
 })();
 
-},{}],27:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.installTimerFunctions = exports.transports = exports.Transport = exports.protocol = exports.Socket = void 0;
@@ -4059,7 +4006,7 @@ Object.defineProperty(exports, "transports", { enumerable: true, get: function (
 var util_js_1 = require("./util.js");
 Object.defineProperty(exports, "installTimerFunctions", { enumerable: true, get: function () { return util_js_1.installTimerFunctions; } });
 
-},{"./socket.js":28,"./transport.js":29,"./transports/index.js":30,"./util.js":36}],28:[function(require,module,exports){
+},{"./socket.js":27,"./transport.js":28,"./transports/index.js":29,"./util.js":35}],27:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -4651,7 +4598,7 @@ function clone(obj) {
     return o;
 }
 
-},{"./transports/index.js":30,"./util.js":36,"@socket.io/component-emitter":20,"debug":24,"engine.io-parser":40,"parseqs":44,"parseuri":45}],29:[function(require,module,exports){
+},{"./transports/index.js":29,"./util.js":35,"@socket.io/component-emitter":19,"debug":23,"engine.io-parser":40,"parseqs":44,"parseuri":45}],28:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -4774,7 +4721,7 @@ class Transport extends component_emitter_1.Emitter {
 }
 exports.Transport = Transport;
 
-},{"./util.js":36,"@socket.io/component-emitter":20,"debug":24,"engine.io-parser":40}],30:[function(require,module,exports){
+},{"./util.js":35,"@socket.io/component-emitter":19,"debug":23,"engine.io-parser":40}],29:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.transports = void 0;
@@ -4785,7 +4732,7 @@ exports.transports = {
     polling: polling_xhr_js_1.XHR
 };
 
-},{"./polling-xhr.js":31,"./websocket.js":34}],31:[function(require,module,exports){
+},{"./polling-xhr.js":30,"./websocket.js":33}],30:[function(require,module,exports){
 "use strict";
 /* global attachEvent */
 var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -5065,7 +5012,7 @@ function unloadHandler() {
     }
 }
 
-},{"../globalThis.js":26,"../util.js":36,"./polling.js":32,"./xmlhttprequest.js":35,"@socket.io/component-emitter":20,"debug":24}],32:[function(require,module,exports){
+},{"../globalThis.js":25,"../util.js":35,"./polling.js":31,"./xmlhttprequest.js":34,"@socket.io/component-emitter":19,"debug":23}],31:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -5251,7 +5198,7 @@ class Polling extends transport_js_1.Transport {
 }
 exports.Polling = Polling;
 
-},{"../transport.js":29,"debug":24,"engine.io-parser":40,"parseqs":44,"yeast":56}],33:[function(require,module,exports){
+},{"../transport.js":28,"debug":23,"engine.io-parser":40,"parseqs":44,"yeast":56}],32:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -5272,7 +5219,7 @@ exports.WebSocket = globalThis_js_1.default.WebSocket || globalThis_js_1.default
 exports.usingBrowserWebSocket = true;
 exports.defaultBinaryType = "arraybuffer";
 
-},{"../globalThis.js":26}],34:[function(require,module,exports){
+},{"../globalThis.js":25}],33:[function(require,module,exports){
 (function (Buffer){(function (){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -5470,7 +5417,7 @@ class WS extends transport_js_1.Transport {
 exports.WS = WS;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../transport.js":29,"../util.js":36,"./websocket-constructor.js":33,"buffer":23,"debug":24,"engine.io-parser":40,"parseqs":44,"yeast":56}],35:[function(require,module,exports){
+},{"../transport.js":28,"../util.js":35,"./websocket-constructor.js":32,"buffer":22,"debug":23,"engine.io-parser":40,"parseqs":44,"yeast":56}],34:[function(require,module,exports){
 "use strict";
 // browser shim for xmlhttprequest module
 var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -5497,7 +5444,7 @@ function default_1(opts) {
 }
 exports.default = default_1;
 
-},{"../globalThis.js":26,"has-cors":41}],36:[function(require,module,exports){
+},{"../globalThis.js":25,"has-cors":41}],35:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -5529,7 +5476,7 @@ function installTimerFunctions(obj, opts) {
 }
 exports.installTimerFunctions = installTimerFunctions;
 
-},{"./globalThis.js":26}],37:[function(require,module,exports){
+},{"./globalThis.js":25}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ERROR_PACKET = exports.PACKET_TYPES_REVERSE = exports.PACKET_TYPES = void 0;
@@ -5550,11 +5497,60 @@ Object.keys(PACKET_TYPES).forEach(key => {
 const ERROR_PACKET = { type: "error", data: "parser error" };
 exports.ERROR_PACKET = ERROR_PACKET;
 
+},{}],37:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.decode = exports.encode = void 0;
+const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+// Use a lookup table to find the index.
+const lookup = typeof Uint8Array === 'undefined' ? [] : new Uint8Array(256);
+for (let i = 0; i < chars.length; i++) {
+    lookup[chars.charCodeAt(i)] = i;
+}
+const encode = (arraybuffer) => {
+    let bytes = new Uint8Array(arraybuffer), i, len = bytes.length, base64 = '';
+    for (i = 0; i < len; i += 3) {
+        base64 += chars[bytes[i] >> 2];
+        base64 += chars[((bytes[i] & 3) << 4) | (bytes[i + 1] >> 4)];
+        base64 += chars[((bytes[i + 1] & 15) << 2) | (bytes[i + 2] >> 6)];
+        base64 += chars[bytes[i + 2] & 63];
+    }
+    if (len % 3 === 2) {
+        base64 = base64.substring(0, base64.length - 1) + '=';
+    }
+    else if (len % 3 === 1) {
+        base64 = base64.substring(0, base64.length - 2) + '==';
+    }
+    return base64;
+};
+exports.encode = encode;
+const decode = (base64) => {
+    let bufferLength = base64.length * 0.75, len = base64.length, i, p = 0, encoded1, encoded2, encoded3, encoded4;
+    if (base64[base64.length - 1] === '=') {
+        bufferLength--;
+        if (base64[base64.length - 2] === '=') {
+            bufferLength--;
+        }
+    }
+    const arraybuffer = new ArrayBuffer(bufferLength), bytes = new Uint8Array(arraybuffer);
+    for (i = 0; i < len; i += 4) {
+        encoded1 = lookup[base64.charCodeAt(i)];
+        encoded2 = lookup[base64.charCodeAt(i + 1)];
+        encoded3 = lookup[base64.charCodeAt(i + 2)];
+        encoded4 = lookup[base64.charCodeAt(i + 3)];
+        bytes[p++] = (encoded1 << 2) | (encoded2 >> 4);
+        bytes[p++] = ((encoded2 & 15) << 4) | (encoded3 >> 2);
+        bytes[p++] = ((encoded3 & 3) << 6) | (encoded4 & 63);
+    }
+    return arraybuffer;
+};
+exports.decode = decode;
+
 },{}],38:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const commons_js_1 = require("./commons.js");
-const base64_arraybuffer_1 = require("@socket.io/base64-arraybuffer");
+const base64_arraybuffer_js_1 = require("./contrib/base64-arraybuffer.js");
 const withNativeArrayBuffer = typeof ArrayBuffer === "function";
 const decodePacket = (encodedPacket, binaryType) => {
     if (typeof encodedPacket !== "string") {
@@ -5585,7 +5581,7 @@ const decodePacket = (encodedPacket, binaryType) => {
 };
 const decodeBase64Packet = (data, binaryType) => {
     if (withNativeArrayBuffer) {
-        const decoded = (0, base64_arraybuffer_1.decode)(data);
+        const decoded = (0, base64_arraybuffer_js_1.decode)(data);
         return mapBinary(decoded, binaryType);
     }
     else {
@@ -5603,7 +5599,7 @@ const mapBinary = (data, binaryType) => {
 };
 exports.default = decodePacket;
 
-},{"./commons.js":37,"@socket.io/base64-arraybuffer":19}],39:[function(require,module,exports){
+},{"./commons.js":36,"./contrib/base64-arraybuffer.js":37}],39:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const commons_js_1 = require("./commons.js");
@@ -5648,7 +5644,7 @@ const encodeBlobAsBase64 = (data, callback) => {
 };
 exports.default = encodePacket;
 
-},{"./commons.js":37}],40:[function(require,module,exports){
+},{"./commons.js":36}],40:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.decodePayload = exports.decodePacket = exports.encodePayload = exports.encodePacket = exports.protocol = void 0;
@@ -7080,7 +7076,7 @@ Object.defineProperty(exports, "protocol", { enumerable: true, get: function () 
 
 module.exports = lookup;
 
-},{"./manager.js":49,"./socket.js":51,"./url.js":52,"debug":24,"socket.io-parser":54}],49:[function(require,module,exports){
+},{"./manager.js":49,"./socket.js":51,"./url.js":52,"debug":23,"socket.io-parser":54}],49:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -7477,7 +7473,7 @@ class Manager extends component_emitter_1.Emitter {
 }
 exports.Manager = Manager;
 
-},{"./on.js":50,"./socket.js":51,"@socket.io/component-emitter":20,"backo2":21,"debug":24,"engine.io-client":27,"socket.io-parser":54}],50:[function(require,module,exports){
+},{"./on.js":50,"./socket.js":51,"@socket.io/component-emitter":19,"backo2":20,"debug":23,"engine.io-client":26,"socket.io-parser":54}],50:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.on = void 0;
@@ -7999,7 +7995,7 @@ class Socket extends component_emitter_1.Emitter {
 }
 exports.Socket = Socket;
 
-},{"./on.js":50,"@socket.io/component-emitter":20,"debug":24,"socket.io-parser":54}],52:[function(require,module,exports){
+},{"./on.js":50,"@socket.io/component-emitter":19,"debug":23,"socket.io-parser":54}],52:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -8071,7 +8067,7 @@ function url(uri, path = "", loc) {
 }
 exports.url = url;
 
-},{"debug":24,"parseuri":45}],53:[function(require,module,exports){
+},{"debug":23,"parseuri":45}],53:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reconstructPacket = exports.deconstructPacket = void 0;
@@ -8436,7 +8432,7 @@ class BinaryReconstructor {
     }
 }
 
-},{"./binary.js":53,"./is-binary.js":55,"@socket.io/component-emitter":20,"debug":24}],55:[function(require,module,exports){
+},{"./binary.js":53,"./is-binary.js":55,"@socket.io/component-emitter":19,"debug":23}],55:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.hasBinary = exports.isBinary = void 0;
