@@ -27,12 +27,9 @@ var _index = _interopRequireDefault(require("./helpers/constants/index.js"));
 
 var _index2 = _interopRequireDefault(require("./helpers/functions/index.js"));
 
-// import constants from "../helpers/constants/index.js";
-// const {
-//
-// } = constants;
-var generateApiUrl = _index["default"].generateApiUrl,
-    checkIfFinalPacket = _index["default"].checkIfFinalPacket;
+var WAIT_AFTER_MESSAGES = _index["default"].WAIT_AFTER_MESSAGES;
+var generateApiUrl = _index2["default"].generateApiUrl,
+    checkIfFinalPacket = _index2["default"].checkIfFinalPacket;
 
 var VatisTechClient = /*#__PURE__*/function () {
   function VatisTechClient(_ref) {
@@ -49,7 +46,8 @@ var VatisTechClient = /*#__PURE__*/function () {
         frameLength = _ref.frameLength,
         frameOverlap = _ref.frameOverlap,
         bufferOffset = _ref.bufferOffset,
-        errorHandler = _ref.errorHandler;
+        errorHandler = _ref.errorHandler,
+        waitingAfterMessages = _ref.waitingAfterMessages;
     (0, _classCallCheck2["default"])(this, VatisTechClient);
     (0, _defineProperty2["default"])(this, "microphoneGenerator", void 0);
     (0, _defineProperty2["default"])(this, "instanceReservation", void 0);
@@ -58,6 +56,7 @@ var VatisTechClient = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "microphoneQueue", void 0);
     (0, _defineProperty2["default"])(this, "onData", void 0);
     (0, _defineProperty2["default"])(this, "waitingForFinalPacket", void 0);
+    (0, _defineProperty2["default"])(this, "waitingAfterMessages", void 0);
     (0, _defineProperty2["default"])(this, "logger", void 0);
     (0, _defineProperty2["default"])(this, "log", void 0);
     (0, _defineProperty2["default"])(this, "shouldDestroy", void 0);
