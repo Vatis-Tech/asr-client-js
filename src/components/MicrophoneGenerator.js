@@ -83,11 +83,11 @@ class MicrophoneGenerator {
             let reader = new FileReader();
             reader.onloadend = () => {
               // You can upload the base64 to server here.
-              this.onDataCallback(
-                reader.result
+              this.onDataCallback({
+                data: reader.result
                   .replace("data:audio/webm;codecs=opus;base64,", "")
-                  .replace("data:audio/webm; codecs=opus; base64,", "")
-              );
+                  .replace("data:audio/webm; codecs=opus; base64,", ""),
+              });
             };
 
             reader.readAsDataURL(e.data);
