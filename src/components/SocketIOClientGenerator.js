@@ -125,9 +125,7 @@ class SocketIOClientGenerator {
     // });
   }
   emitData(data) {
-    this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, {
-      data,
-    });
+    this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, data);
   }
   destroy() {
     this.socketRef.off("disconnect");
