@@ -62,7 +62,8 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
         this.mediaRecorder.stop();
         this.onDataCallback({
           data: "",
-          flush: "True"
+          flush: "True",
+          close: "True"
         });
       }
 

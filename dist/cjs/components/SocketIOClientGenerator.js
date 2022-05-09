@@ -51,6 +51,7 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "frameOverlap", void 0);
     (0, _defineProperty2["default"])(this, "bufferOffset", void 0);
     (0, _defineProperty2["default"])(this, "errorHandler", void 0);
+    (0, _defineProperty2["default"])(this, "sendClosePacket", void 0);
     this.errorHandler = errorHandler;
     this.logger = logger;
     this.logger({
@@ -63,6 +64,7 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
     this.frameLength = frameLength;
     this.frameOverlap = frameOverlap;
     this.bufferOffset = bufferOffset;
+    this.sendClosePacket = true;
   }
 
   (0, _createClass2["default"])(SocketIOClientGenerator, [{
@@ -138,16 +140,24 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
   }, {
     key: "emitData",
     value: function emitData(data) {
+      if (data.close === "True" || data.flush === "True") {
+        this.sendClosePacket = false;
+      }
+
       this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, data);
     }
   }, {
     key: "destroy",
     value: function destroy() {
       this.socketRef.off("disconnect");
-      this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, {
-        close: "True",
-        data: ""
-      });
+
+      if (this.sendClosePacket) {
+        this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, {
+          close: "True",
+          data: ""
+        });
+      }
+
       this.socketRef.disconnect();
     }
   }]);
