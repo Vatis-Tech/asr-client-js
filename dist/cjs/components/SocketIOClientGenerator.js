@@ -138,14 +138,16 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
   }, {
     key: "emitData",
     value: function emitData(data) {
-      this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, {
-        data: data
-      });
+      this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, data);
     }
   }, {
     key: "destroy",
     value: function destroy() {
       this.socketRef.off("disconnect");
+      this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, {
+        close: "True",
+        data: ""
+      });
       this.socketRef.disconnect();
     }
   }]);

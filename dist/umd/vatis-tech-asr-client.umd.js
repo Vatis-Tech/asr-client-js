@@ -166,7 +166,9 @@ var InstanceReservation = /*#__PURE__*/function () {
     key: "onLoad",
     value: function onLoad() {
       if (this.xmlHttp.status !== 200) {
-        this.onError(JSON.parse(this.xmlHttp.responseText));
+        this.onError({
+          status: this.xmlHttp.status
+        });
         return;
       }
 
@@ -254,6 +256,10 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
     value: function destroy() {
       if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
         this.mediaRecorder.stop();
+        this.onDataCallback({
+          data: "",
+          flush: "True"
+        });
       }
 
       if (this.stream) {
@@ -309,7 +315,9 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
 
                     reader.onloadend = function () {
                       // You can upload the base64 to server here.
-                      _this2.onDataCallback(reader.result.replace("data:audio/webm;codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus; base64,", ""));
+                      _this2.onDataCallback({
+                        data: reader.result.replace("data:audio/webm;codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus; base64,", "")
+                      });
                     };
 
                     reader.readAsDataURL(e.data); // if (e.data.size > 0) {
@@ -582,14 +590,16 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
   }, {
     key: "emitData",
     value: function emitData(data) {
-      this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, {
-        data: data
-      });
+      this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, data);
     }
   }, {
     key: "destroy",
     value: function destroy() {
       this.socketRef.off("disconnect");
+      this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, {
+        close: "True",
+        data: ""
+      });
       this.socketRef.disconnect();
     }
   }]);
@@ -616,13 +626,13 @@ var SOCKET_IO_CLIENT_RESULT_PATH = "/asr_result";
 var SOCKET_IO_CLIENT_REQUEST_PATH = "/asr_request";
 var SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET = "SplitPacket";
 var SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET = "FinalSplitPacket";
-var SOCKET_IO_CLIENT_FRAME_OVERLAP = 0.3;
-var SOCKET_IO_CLIENT_BUFFER_OFFSET = 0.3;
+var SOCKET_IO_CLIENT_FRAME_OVERLAP = 1.0;
+var SOCKET_IO_CLIENT_BUFFER_OFFSET = 0.5;
 var SOCKET_IO_CLIENT_AUDIO_FORMAT = "webm";
 var SOCKET_IO_CLIENT_SENDING_HEADERS = "True";
-var MICROPHONE_FRAME_LENGTH = 0.3;
-var MICROPHONE_BIT_RATE_SAMPLES = 8000;
-var MICROPHONE_TIMESLICE = 250;
+var MICROPHONE_FRAME_LENGTH = 0.6;
+var MICROPHONE_BIT_RATE_SAMPLES = 16000;
+var MICROPHONE_TIMESLICE = 500;
 var projectConstants = {
   API_URL_PATH: API_URL_PATH,
   API_URL: API_URL,
