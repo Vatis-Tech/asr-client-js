@@ -35,6 +35,10 @@ class MicrophoneGenerator {
   destroy() {
     if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
       this.mediaRecorder.stop();
+      this.onDataCallback({
+        data: "",
+        flush: "True",
+      });
     }
     if (this.stream) {
       this.stream.getTracks().forEach(function (track) {
