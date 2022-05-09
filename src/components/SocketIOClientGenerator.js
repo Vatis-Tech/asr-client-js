@@ -29,6 +29,7 @@ class SocketIOClientGenerator {
   frameOverlap;
   bufferOffset;
   errorHandler;
+  sendClosePacket;
   constructor({
     onConnectCallback,
     onAsrResultCallback,
@@ -56,6 +57,8 @@ class SocketIOClientGenerator {
     this.frameLength = frameLength;
     this.frameOverlap = frameOverlap;
     this.bufferOffset = bufferOffset;
+
+    this.sendClosePacket = true;
   }
   init({ streamHost, authToken, streamUrl, reservationToken }) {
     this.logger({
@@ -125,14 +128,19 @@ class SocketIOClientGenerator {
     // });
   }
   emitData(data) {
+    if (data.close === "True" || data.flush === "True") {
+      this.sendClosePacket = false;
+    }
     this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, data);
   }
   destroy() {
     this.socketRef.off("disconnect");
-    this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, {
-      close: "True",
-      data: "",
-    });
+    if (this.sendClosePacket) {
+      this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, {
+        close: "True",
+        data: "",
+      });
+    }
     this.socketRef.disconnect();
   }
 }
