@@ -38,6 +38,7 @@ class MicrophoneGenerator {
       this.onDataCallback({
         data: "",
         flush: "True",
+        close: "True",
       });
     }
     if (this.stream) {
