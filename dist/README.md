@@ -1,6 +1,6 @@
 # @vatis-tech/asr-client-js
 
-![version](https://img.shields.io/badge/version-1.3.0-blue.svg)
+![version](https://img.shields.io/badge/version-1.3.1-blue.svg)
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 ![GitHub issues open](https://img.shields.io/github/issues/Vatis-Tech/asr-client-js.svg)
 ![GitHub issues closed](https://img.shields.io/github/issues-closed-raw/Vatis-Tech/asr-client-js.svg)
