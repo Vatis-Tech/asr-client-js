@@ -13,6 +13,11 @@ const {
   SOCKET_IO_CLIENT_AUDIO_FORMAT,
   SOCKET_IO_CLIENT_SENDING_HEADERS,
 
+  SOCKET_IO_CLIENT_DISABLE_DISFLUENCIES,
+  SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION,
+  SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION,
+  SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION,
+
   MICROPHONE_FRAME_LENGTH,
   MICROPHONE_TIMESLICE,
 } = constants;
@@ -29,6 +34,7 @@ class SocketIOClientGenerator {
   frameOverlap;
   bufferOffset;
   errorHandler;
+  sendClosePacket;
   constructor({
     onConnectCallback,
     onAsrResultCallback,
@@ -56,6 +62,8 @@ class SocketIOClientGenerator {
     this.frameLength = frameLength;
     this.frameOverlap = frameOverlap;
     this.bufferOffset = bufferOffset;
+
+    this.sendClosePacket = true;
   }
   init({ streamHost, authToken, streamUrl, reservationToken }) {
     this.logger({
@@ -84,6 +92,11 @@ class SocketIOClientGenerator {
           : SOCKET_IO_CLIENT_BUFFER_OFFSET,
         AudioFormat: SOCKET_IO_CLIENT_AUDIO_FORMAT,
         SendingHeaders: SOCKET_IO_CLIENT_SENDING_HEADERS,
+        DisableDisfluencies: SOCKET_IO_CLIENT_DISABLE_DISFLUENCIES,
+        EnablePunctuationCapitalization:
+          SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION,
+        EnableEntitiesRecognition: SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION,
+        EnableNumeralsConversion: SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION,
       },
     });
     this.socketRef.on("connect", () => {
@@ -125,12 +138,19 @@ class SocketIOClientGenerator {
     // });
   }
   emitData(data) {
-    this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, {
-      data,
-    });
+    if (data.close === "True" || data.flush === "True") {
+      this.sendClosePacket = false;
+    }
+    this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, data);
   }
   destroy() {
     this.socketRef.off("disconnect");
+    if (this.sendClosePacket) {
+      this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, {
+        close: "True",
+        data: "",
+      });
+    }
     this.socketRef.disconnect();
   }
 }

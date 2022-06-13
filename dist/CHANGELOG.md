@@ -51,6 +51,24 @@ No fixes were made.
 
 Each time you add new changes to this file, please add them bellow this line - i.e. between the [insertion](#insterion) section and the last version added.
 
+## [1.4.0] - 2022-06-13
+
+### Added
+
+- Add close package when disconnecting from the ASR Service
+
+### Changed
+
+No changes were made.
+
+### Removed
+
+Nothing was removed.
+
+### Fixed
+
+- Solve error when receiving `429` status code
+
 ## [1.3.0] - 2022-05-03
 
 ### Added

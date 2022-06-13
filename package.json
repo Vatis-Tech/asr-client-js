@@ -1,6 +1,6 @@
 {
   "name": "@vatis-tech/asr-client-js",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "description": "JavaScript client for Vatis Tech ASR services.",
   "main": "cjs/index.js",
   "scripts": {
@@ -9,7 +9,8 @@
     "build:cjs": "babel src -d dist/cjs",
     "build:umd": "browserify --entry dist/cjs/index.js --outfile dist/umd/vatis-tech-asr-client.umd.js --standalone VatisTechClient",
     "build": "npm-run-all --sequential build:*",
-    "deploy": "npm run install:clean && rm -rf dist && npm run build && cp package.json ./dist && cp README.md ./dist && cp LICENSE.md ./dist && cp CHANGELOG.md ./dist && cp CODE_OF_CONDUCT.md ./dist && cp CONTRIBUTING.md ./dist && cd dist && npm publish --access=public && cd ../"
+    "deploy:latest": "npm run install:clean && rm -rf dist && npm run build && cp package.json ./dist && cp README.md ./dist && cp LICENSE.md ./dist && cp CHANGELOG.md ./dist && cp CODE_OF_CONDUCT.md ./dist && cp CONTRIBUTING.md ./dist && cd dist && npm publish --access=public && cd ../",
+    "deploy:next": "npm run install:clean && rm -rf dist && npm run build && cp package.json ./dist && cp README.md ./dist && cp LICENSE.md ./dist && cp CHANGELOG.md ./dist && cp CODE_OF_CONDUCT.md ./dist && cp CONTRIBUTING.md ./dist && cd dist && npm publish --tag=next --access=public && cd ../"
   },
   "repository": {
     "type": "git",

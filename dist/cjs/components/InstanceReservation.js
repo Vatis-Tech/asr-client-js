@@ -73,7 +73,9 @@ var InstanceReservation = /*#__PURE__*/function () {
     key: "onLoad",
     value: function onLoad() {
       if (this.xmlHttp.status !== 200) {
-        this.onError(JSON.parse(this.xmlHttp.responseText));
+        this.onError({
+          status: this.xmlHttp.status
+        });
         return;
       }
 
