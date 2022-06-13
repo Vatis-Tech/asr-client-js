@@ -166,7 +166,9 @@ var InstanceReservation = /*#__PURE__*/function () {
     key: "onLoad",
     value: function onLoad() {
       if (this.xmlHttp.status !== 200) {
-        this.onError(JSON.parse(this.xmlHttp.responseText));
+        this.onError({
+          status: this.xmlHttp.status
+        });
         return;
       }
 
@@ -254,6 +256,11 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
     value: function destroy() {
       if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
         this.mediaRecorder.stop();
+        this.onDataCallback({
+          data: "",
+          flush: "True",
+          close: "True"
+        });
       }
 
       if (this.stream) {
@@ -309,7 +316,9 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
 
                     reader.onloadend = function () {
                       // You can upload the base64 to server here.
-                      _this2.onDataCallback(reader.result.replace("data:audio/webm;codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus; base64,", ""));
+                      _this2.onDataCallback({
+                        data: reader.result.replace("data:audio/webm;codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus; base64,", "")
+                      });
                     };
 
                     reader.readAsDataURL(e.data); // if (e.data.size > 0) {
@@ -470,6 +479,10 @@ var SOCKET_IO_CLIENT_NAMESPACE = _index["default"].SOCKET_IO_CLIENT_NAMESPACE,
     SOCKET_IO_CLIENT_BUFFER_OFFSET = _index["default"].SOCKET_IO_CLIENT_BUFFER_OFFSET,
     SOCKET_IO_CLIENT_AUDIO_FORMAT = _index["default"].SOCKET_IO_CLIENT_AUDIO_FORMAT,
     SOCKET_IO_CLIENT_SENDING_HEADERS = _index["default"].SOCKET_IO_CLIENT_SENDING_HEADERS,
+    SOCKET_IO_CLIENT_DISABLE_DISFLUENCIES = _index["default"].SOCKET_IO_CLIENT_DISABLE_DISFLUENCIES,
+    SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION = _index["default"].SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION,
+    SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION = _index["default"].SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION,
+    SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION = _index["default"].SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION,
     MICROPHONE_FRAME_LENGTH = _index["default"].MICROPHONE_FRAME_LENGTH,
     MICROPHONE_TIMESLICE = _index["default"].MICROPHONE_TIMESLICE;
 
@@ -495,6 +508,7 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "frameOverlap", void 0);
     (0, _defineProperty2["default"])(this, "bufferOffset", void 0);
     (0, _defineProperty2["default"])(this, "errorHandler", void 0);
+    (0, _defineProperty2["default"])(this, "sendClosePacket", void 0);
     this.errorHandler = errorHandler;
     this.logger = logger;
     this.logger({
@@ -507,6 +521,7 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
     this.frameLength = frameLength;
     this.frameOverlap = frameOverlap;
     this.bufferOffset = bufferOffset;
+    this.sendClosePacket = true;
   }
 
   (0, _createClass2["default"])(SocketIOClientGenerator, [{
@@ -536,7 +551,11 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
           FrameOverlap: this.frameOverlap ? this.frameOverlap : SOCKET_IO_CLIENT_FRAME_OVERLAP,
           BufferOffset: this.bufferOffset ? this.bufferOffset : SOCKET_IO_CLIENT_BUFFER_OFFSET,
           AudioFormat: SOCKET_IO_CLIENT_AUDIO_FORMAT,
-          SendingHeaders: SOCKET_IO_CLIENT_SENDING_HEADERS
+          SendingHeaders: SOCKET_IO_CLIENT_SENDING_HEADERS,
+          DisableDisfluencies: SOCKET_IO_CLIENT_DISABLE_DISFLUENCIES,
+          EnablePunctuationCapitalization: SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION,
+          EnableEntitiesRecognition: SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION,
+          EnableNumeralsConversion: SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION
         }
       });
       this.socketRef.on("connect", function () {
@@ -582,14 +601,24 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
   }, {
     key: "emitData",
     value: function emitData(data) {
-      this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, {
-        data: data
-      });
+      if (data.close === "True" || data.flush === "True") {
+        this.sendClosePacket = false;
+      }
+
+      this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, data);
     }
   }, {
     key: "destroy",
     value: function destroy() {
       this.socketRef.off("disconnect");
+
+      if (this.sendClosePacket) {
+        this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, {
+          close: "True",
+          data: ""
+        });
+      }
+
       this.socketRef.disconnect();
     }
   }]);
@@ -608,7 +637,7 @@ exports["default"] = void 0;
 var API_URL = "https://vatis.tech/api/v1";
 var API_URL_PATH = "/asr-client/auth?service=<service>&model=<model>&language=<language>";
 var RESERVATION_URL = "<service_host>/asr/v1/registry/stream/reserve";
-var WAIT_AFTER_MESSAGES = 5;
+var WAIT_AFTER_MESSAGES = 10;
 var SOCKET_IO_CLIENT_NAMESPACE = "/asr_stream";
 var SOCKET_IO_CLIENT_TRANSPORTS = ["websocket"];
 var SOCKET_IO_CLIENT_PATH = "/live/transcribe/socket.io";
@@ -616,13 +645,17 @@ var SOCKET_IO_CLIENT_RESULT_PATH = "/asr_result";
 var SOCKET_IO_CLIENT_REQUEST_PATH = "/asr_request";
 var SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET = "SplitPacket";
 var SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET = "FinalSplitPacket";
-var SOCKET_IO_CLIENT_FRAME_OVERLAP = 0.3;
-var SOCKET_IO_CLIENT_BUFFER_OFFSET = 0.3;
+var SOCKET_IO_CLIENT_FRAME_OVERLAP = 1.0;
+var SOCKET_IO_CLIENT_BUFFER_OFFSET = 0.5;
 var SOCKET_IO_CLIENT_AUDIO_FORMAT = "webm";
 var SOCKET_IO_CLIENT_SENDING_HEADERS = "True";
-var MICROPHONE_FRAME_LENGTH = 0.3;
-var MICROPHONE_BIT_RATE_SAMPLES = 8000;
-var MICROPHONE_TIMESLICE = 250;
+var SOCKET_IO_CLIENT_DISABLE_DISFLUENCIES = "True";
+var SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION = "True";
+var SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION = "True";
+var SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION = "True";
+var MICROPHONE_FRAME_LENGTH = 0.6;
+var MICROPHONE_BIT_RATE_SAMPLES = 16000;
+var MICROPHONE_TIMESLICE = 500;
 var projectConstants = {
   API_URL_PATH: API_URL_PATH,
   API_URL: API_URL,
@@ -639,6 +672,10 @@ var projectConstants = {
   SOCKET_IO_CLIENT_BUFFER_OFFSET: SOCKET_IO_CLIENT_BUFFER_OFFSET,
   SOCKET_IO_CLIENT_AUDIO_FORMAT: SOCKET_IO_CLIENT_AUDIO_FORMAT,
   SOCKET_IO_CLIENT_SENDING_HEADERS: SOCKET_IO_CLIENT_SENDING_HEADERS,
+  SOCKET_IO_CLIENT_DISABLE_DISFLUENCIES: SOCKET_IO_CLIENT_DISABLE_DISFLUENCIES,
+  SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION: SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION,
+  SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION: SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION,
+  SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION: SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION,
   MICROPHONE_FRAME_LENGTH: MICROPHONE_FRAME_LENGTH,
   MICROPHONE_BIT_RATE_SAMPLES: MICROPHONE_BIT_RATE_SAMPLES,
   MICROPHONE_TIMESLICE: MICROPHONE_TIMESLICE

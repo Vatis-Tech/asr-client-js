@@ -35,6 +35,11 @@ class MicrophoneGenerator {
   destroy() {
     if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
       this.mediaRecorder.stop();
+      this.onDataCallback({
+        data: "",
+        flush: "True",
+        close: "True",
+      });
     }
     if (this.stream) {
       this.stream.getTracks().forEach(function (track) {
@@ -79,11 +84,11 @@ class MicrophoneGenerator {
             let reader = new FileReader();
             reader.onloadend = () => {
               // You can upload the base64 to server here.
-              this.onDataCallback(
-                reader.result
+              this.onDataCallback({
+                data: reader.result
                   .replace("data:audio/webm;codecs=opus;base64,", "")
-                  .replace("data:audio/webm; codecs=opus; base64,", "")
-              );
+                  .replace("data:audio/webm; codecs=opus; base64,", ""),
+              });
             };
 
             reader.readAsDataURL(e.data);

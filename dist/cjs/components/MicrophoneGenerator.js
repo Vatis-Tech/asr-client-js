@@ -60,6 +60,11 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
     value: function destroy() {
       if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
         this.mediaRecorder.stop();
+        this.onDataCallback({
+          data: "",
+          flush: "True",
+          close: "True"
+        });
       }
 
       if (this.stream) {
@@ -115,7 +120,9 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
 
                     reader.onloadend = function () {
                       // You can upload the base64 to server here.
-                      _this2.onDataCallback(reader.result.replace("data:audio/webm;codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus; base64,", ""));
+                      _this2.onDataCallback({
+                        data: reader.result.replace("data:audio/webm;codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus; base64,", "")
+                      });
                     };
 
                     reader.readAsDataURL(e.data); // if (e.data.size > 0) {
