@@ -1,25 +1,20 @@
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
-
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
-
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
-
 var ApiKeyGenerator = /*#__PURE__*/function () {
   function ApiKeyGenerator(_ref) {
     var apiUrl = _ref.apiUrl,
-        responseCallback = _ref.responseCallback,
-        apiKey = _ref.apiKey,
-        logger = _ref.logger,
-        errorHandler = _ref.errorHandler;
+      responseCallback = _ref.responseCallback,
+      apiKey = _ref.apiKey,
+      logger = _ref.logger,
+      errorHandler = _ref.errorHandler;
     (0, _classCallCheck2["default"])(this, ApiKeyGenerator);
     (0, _defineProperty2["default"])(this, "apiUrl", void 0);
     (0, _defineProperty2["default"])(this, "responseCallback", void 0);
@@ -42,7 +37,6 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
     this.xmlHttp.onload = this.onLoad.bind(this);
     this.xmlHttp.onerror = this.onError.bind(this);
   }
-
   (0, _createClass2["default"])(ApiKeyGenerator, [{
     key: "init",
     value: function init() {
@@ -70,7 +64,6 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
         this.onError(JSON.parse(this.xmlHttp.responseText));
         return;
       }
-
       this.logger({
         currentState: "@vatis-tech/asr-client-js: Initialized the \"ApiKeyGenerator\" plugin.",
         description: "@vatis-tech/asr-client-js: A valid key was received from the Vatis Tech API, in order to use the LIVE ASR service."
@@ -86,6 +79,5 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
   }]);
   return ApiKeyGenerator;
 }();
-
 var _default = ApiKeyGenerator;
 exports["default"] = _default;

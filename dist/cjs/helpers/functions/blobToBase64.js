@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
 var blobToBase64 = function blobToBase64(blob) {
   var reader = new FileReader();
   reader.readAsDataURL(blob);
@@ -14,6 +13,5 @@ var blobToBase64 = function blobToBase64(blob) {
     };
   });
 };
-
 var _default = blobToBase64;
 exports["default"] = _default;

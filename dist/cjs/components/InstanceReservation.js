@@ -1,27 +1,20 @@
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
-
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
-
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
-
 var _index = _interopRequireDefault(require("../helpers/functions/index.js"));
-
 var generateReservationUrl = _index["default"].generateReservationUrl;
-
 var InstanceReservation = /*#__PURE__*/function () {
   function InstanceReservation(_ref) {
     var responseCallback = _ref.responseCallback,
-        logger = _ref.logger,
-        errorHandler = _ref.errorHandler;
+      logger = _ref.logger,
+      errorHandler = _ref.errorHandler;
     (0, _classCallCheck2["default"])(this, InstanceReservation);
     (0, _defineProperty2["default"])(this, "serviceHost", void 0);
     (0, _defineProperty2["default"])(this, "responseCallback", void 0);
@@ -42,12 +35,11 @@ var InstanceReservation = /*#__PURE__*/function () {
     this.xmlHttp.onload = this.onLoad.bind(this);
     this.xmlHttp.onerror = this.onError.bind(this);
   }
-
   (0, _createClass2["default"])(InstanceReservation, [{
     key: "init",
     value: function init(_ref2) {
       var serviceHost = _ref2.serviceHost,
-          authToken = _ref2.authToken;
+        authToken = _ref2.authToken;
       this.serviceHost = serviceHost;
       this.authToken = authToken;
       this.logger({
@@ -78,7 +70,6 @@ var InstanceReservation = /*#__PURE__*/function () {
         });
         return;
       }
-
       this.logger({
         currentState: "@vatis-tech/asr-client-js: Initialized the \"InstanceReservation\" plugin.",
         description: "@vatis-tech/asr-client-js: A live asr instance has been reserved."
@@ -97,6 +88,5 @@ var InstanceReservation = /*#__PURE__*/function () {
   }]);
   return InstanceReservation;
 }();
-
 var _default = InstanceReservation;
 exports["default"] = _default;
