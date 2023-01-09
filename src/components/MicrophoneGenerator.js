@@ -87,6 +87,7 @@ class MicrophoneGenerator {
               this.onDataCallback({
                 data: reader.result
                   .replace("data:audio/webm;codecs=opus;base64,", "")
+                  .replace("data:audio/webm; codecs=opus;base64,", "")
                   .replace("data:audio/webm; codecs=opus; base64,", ""),
               });
             };

@@ -1,48 +1,40 @@
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
-
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
-
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
-
 var _socket = _interopRequireDefault(require("socket.io-client"));
-
 var _index = _interopRequireDefault(require("../helpers/constants/index.js"));
-
 var SOCKET_IO_CLIENT_NAMESPACE = _index["default"].SOCKET_IO_CLIENT_NAMESPACE,
-    SOCKET_IO_CLIENT_PATH = _index["default"].SOCKET_IO_CLIENT_PATH,
-    SOCKET_IO_CLIENT_TRANSPORTS = _index["default"].SOCKET_IO_CLIENT_TRANSPORTS,
-    SOCKET_IO_CLIENT_RESULT_PATH = _index["default"].SOCKET_IO_CLIENT_RESULT_PATH,
-    SOCKET_IO_CLIENT_REQUEST_PATH = _index["default"].SOCKET_IO_CLIENT_REQUEST_PATH,
-    SOCKET_IO_CLIENT_FRAME_OVERLAP = _index["default"].SOCKET_IO_CLIENT_FRAME_OVERLAP,
-    SOCKET_IO_CLIENT_BUFFER_OFFSET = _index["default"].SOCKET_IO_CLIENT_BUFFER_OFFSET,
-    SOCKET_IO_CLIENT_AUDIO_FORMAT = _index["default"].SOCKET_IO_CLIENT_AUDIO_FORMAT,
-    SOCKET_IO_CLIENT_SENDING_HEADERS = _index["default"].SOCKET_IO_CLIENT_SENDING_HEADERS,
-    SOCKET_IO_CLIENT_DISABLE_DISFLUENCIES = _index["default"].SOCKET_IO_CLIENT_DISABLE_DISFLUENCIES,
-    SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION = _index["default"].SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION,
-    SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION = _index["default"].SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION,
-    SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION = _index["default"].SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION,
-    MICROPHONE_FRAME_LENGTH = _index["default"].MICROPHONE_FRAME_LENGTH,
-    MICROPHONE_TIMESLICE = _index["default"].MICROPHONE_TIMESLICE;
-
+  SOCKET_IO_CLIENT_PATH = _index["default"].SOCKET_IO_CLIENT_PATH,
+  SOCKET_IO_CLIENT_TRANSPORTS = _index["default"].SOCKET_IO_CLIENT_TRANSPORTS,
+  SOCKET_IO_CLIENT_RESULT_PATH = _index["default"].SOCKET_IO_CLIENT_RESULT_PATH,
+  SOCKET_IO_CLIENT_REQUEST_PATH = _index["default"].SOCKET_IO_CLIENT_REQUEST_PATH,
+  SOCKET_IO_CLIENT_FRAME_OVERLAP = _index["default"].SOCKET_IO_CLIENT_FRAME_OVERLAP,
+  SOCKET_IO_CLIENT_BUFFER_OFFSET = _index["default"].SOCKET_IO_CLIENT_BUFFER_OFFSET,
+  SOCKET_IO_CLIENT_AUDIO_FORMAT = _index["default"].SOCKET_IO_CLIENT_AUDIO_FORMAT,
+  SOCKET_IO_CLIENT_SENDING_HEADERS = _index["default"].SOCKET_IO_CLIENT_SENDING_HEADERS,
+  SOCKET_IO_CLIENT_DISABLE_DISFLUENCIES = _index["default"].SOCKET_IO_CLIENT_DISABLE_DISFLUENCIES,
+  SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION = _index["default"].SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION,
+  SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION = _index["default"].SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION,
+  SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION = _index["default"].SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION,
+  MICROPHONE_FRAME_LENGTH = _index["default"].MICROPHONE_FRAME_LENGTH,
+  MICROPHONE_TIMESLICE = _index["default"].MICROPHONE_TIMESLICE;
 var SocketIOClientGenerator = /*#__PURE__*/function () {
   function SocketIOClientGenerator(_ref) {
     var onConnectCallback = _ref.onConnectCallback,
-        onAsrResultCallback = _ref.onAsrResultCallback,
-        logger = _ref.logger,
-        destroyVTC = _ref.destroyVTC,
-        frameLength = _ref.frameLength,
-        frameOverlap = _ref.frameOverlap,
-        bufferOffset = _ref.bufferOffset,
-        errorHandler = _ref.errorHandler;
+      onAsrResultCallback = _ref.onAsrResultCallback,
+      logger = _ref.logger,
+      destroyVTC = _ref.destroyVTC,
+      frameLength = _ref.frameLength,
+      frameOverlap = _ref.frameOverlap,
+      bufferOffset = _ref.bufferOffset,
+      errorHandler = _ref.errorHandler;
     (0, _classCallCheck2["default"])(this, SocketIOClientGenerator);
     (0, _defineProperty2["default"])(this, "socketRef", void 0);
     (0, _defineProperty2["default"])(this, "streamHost", void 0);
@@ -70,16 +62,14 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
     this.bufferOffset = bufferOffset;
     this.sendClosePacket = true;
   }
-
   (0, _createClass2["default"])(SocketIOClientGenerator, [{
     key: "init",
     value: function init(_ref2) {
       var _this = this;
-
       var streamHost = _ref2.streamHost,
-          authToken = _ref2.authToken,
-          streamUrl = _ref2.streamUrl,
-          reservationToken = _ref2.reservationToken;
+        authToken = _ref2.authToken,
+        streamUrl = _ref2.streamUrl,
+        reservationToken = _ref2.reservationToken;
       this.logger({
         currentState: "@vatis-tech/asr-client-js: Initializing the \"SocketIOClientGenerator\" plugin.",
         description: "@vatis-tech/asr-client-js: Here, the socket.io-client gets instantianted and initialized."
@@ -110,7 +100,6 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
           currentState: "@vatis-tech/asr-client-js: Initialized the \"SocketIOClientGenerator\" plugin.",
           description: "@vatis-tech/asr-client-js: A successful connection between @vatis-tech/asr-client-js and Vatis Tech LIVE ASR service has been established."
         });
-
         _this.onConnectCallback();
       });
       this.socketRef.on("disconnect", function () {
@@ -118,7 +107,6 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
           currentState: "@vatis-tech/asr-client-js: Destroy the \"SocketIOClientGenerator\" plugin.",
           description: "@vatis-tech/asr-client-js: The connection between @vatis-tech/asr-client-js and Vatis Tech LIVE ASR service has been closed by the Vatis Tech LIVE ASR service."
         });
-
         _this.destroyVTC({
           hard: true
         });
@@ -128,12 +116,12 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
           currentState: "@vatis-tech/asr-client-js: Could not initilize the \"SocketIOClientGenerator\" plugin.",
           description: "@vatis-tech/asr-client-js: " + error
         });
-
         _this.errorHandler(error);
       });
       this.socketRef.on(SOCKET_IO_CLIENT_RESULT_PATH, function (args) {
         _this.onAsrResultCallback(args);
-      }); // TODO: add some callbacks for all states
+      });
+      // TODO: add some callbacks for all states
       // NOTE: this would be usefull for end users to know the state of
       // NOTE: the Vatis Tech Client plugin
       // NOTE: Something like, states of the key, then states of the socket
@@ -151,26 +139,22 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
       if (data.close === "True" || data.flush === "True") {
         this.sendClosePacket = false;
       }
-
       this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, data);
     }
   }, {
     key: "destroy",
     value: function destroy() {
       this.socketRef.off("disconnect");
-
       if (this.sendClosePacket) {
         this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, {
           close: "True",
           data: ""
         });
       }
-
       this.socketRef.disconnect();
     }
   }]);
   return SocketIOClientGenerator;
 }();
-
 var _default = SocketIOClientGenerator;
 exports["default"] = _default;

@@ -2,25 +2,20 @@
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
-
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
-
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
-
 var ApiKeyGenerator = /*#__PURE__*/function () {
   function ApiKeyGenerator(_ref) {
     var apiUrl = _ref.apiUrl,
-        responseCallback = _ref.responseCallback,
-        apiKey = _ref.apiKey,
-        logger = _ref.logger,
-        errorHandler = _ref.errorHandler;
+      responseCallback = _ref.responseCallback,
+      apiKey = _ref.apiKey,
+      logger = _ref.logger,
+      errorHandler = _ref.errorHandler;
     (0, _classCallCheck2["default"])(this, ApiKeyGenerator);
     (0, _defineProperty2["default"])(this, "apiUrl", void 0);
     (0, _defineProperty2["default"])(this, "responseCallback", void 0);
@@ -43,7 +38,6 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
     this.xmlHttp.onload = this.onLoad.bind(this);
     this.xmlHttp.onerror = this.onError.bind(this);
   }
-
   (0, _createClass2["default"])(ApiKeyGenerator, [{
     key: "init",
     value: function init() {
@@ -71,7 +65,6 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
         this.onError(JSON.parse(this.xmlHttp.responseText));
         return;
       }
-
       this.logger({
         currentState: "@vatis-tech/asr-client-js: Initialized the \"ApiKeyGenerator\" plugin.",
         description: "@vatis-tech/asr-client-js: A valid key was received from the Vatis Tech API, in order to use the LIVE ASR service."
@@ -87,34 +80,26 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
   }]);
   return ApiKeyGenerator;
 }();
-
 var _default = ApiKeyGenerator;
 exports["default"] = _default;
 },{"@babel/runtime/helpers/classCallCheck":14,"@babel/runtime/helpers/createClass":15,"@babel/runtime/helpers/defineProperty":16,"@babel/runtime/helpers/interopRequireDefault":17}],2:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
-
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
-
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
-
 var _index = _interopRequireDefault(require("../helpers/functions/index.js"));
-
 var generateReservationUrl = _index["default"].generateReservationUrl;
-
 var InstanceReservation = /*#__PURE__*/function () {
   function InstanceReservation(_ref) {
     var responseCallback = _ref.responseCallback,
-        logger = _ref.logger,
-        errorHandler = _ref.errorHandler;
+      logger = _ref.logger,
+      errorHandler = _ref.errorHandler;
     (0, _classCallCheck2["default"])(this, InstanceReservation);
     (0, _defineProperty2["default"])(this, "serviceHost", void 0);
     (0, _defineProperty2["default"])(this, "responseCallback", void 0);
@@ -135,12 +120,11 @@ var InstanceReservation = /*#__PURE__*/function () {
     this.xmlHttp.onload = this.onLoad.bind(this);
     this.xmlHttp.onerror = this.onError.bind(this);
   }
-
   (0, _createClass2["default"])(InstanceReservation, [{
     key: "init",
     value: function init(_ref2) {
       var serviceHost = _ref2.serviceHost,
-          authToken = _ref2.authToken;
+        authToken = _ref2.authToken;
       this.serviceHost = serviceHost;
       this.authToken = authToken;
       this.logger({
@@ -171,7 +155,6 @@ var InstanceReservation = /*#__PURE__*/function () {
         });
         return;
       }
-
       this.logger({
         currentState: "@vatis-tech/asr-client-js: Initialized the \"InstanceReservation\" plugin.",
         description: "@vatis-tech/asr-client-js: A live asr instance has been reserved."
@@ -190,43 +173,32 @@ var InstanceReservation = /*#__PURE__*/function () {
   }]);
   return InstanceReservation;
 }();
-
 var _default = InstanceReservation;
 exports["default"] = _default;
 },{"../helpers/functions/index.js":11,"@babel/runtime/helpers/classCallCheck":14,"@babel/runtime/helpers/createClass":15,"@babel/runtime/helpers/defineProperty":16,"@babel/runtime/helpers/interopRequireDefault":17}],3:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
-
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
-
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
-
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
-
 var _index = _interopRequireDefault(require("../helpers/constants/index.js"));
-
 var _index2 = _interopRequireDefault(require("../helpers/functions/index.js"));
-
 var MICROPHONE_BIT_RATE_SAMPLES = _index["default"].MICROPHONE_BIT_RATE_SAMPLES,
-    MICROPHONE_TIMESLICE = _index["default"].MICROPHONE_TIMESLICE;
+  MICROPHONE_TIMESLICE = _index["default"].MICROPHONE_TIMESLICE;
 var base64ArrayBuffer = _index2["default"].base64ArrayBuffer;
-
 var MicrophoneGenerator = /*#__PURE__*/function () {
   function MicrophoneGenerator(_ref) {
     var onDataCallback = _ref.onDataCallback,
-        logger = _ref.logger,
-        microphoneTimeslice = _ref.microphoneTimeslice,
-        errorHandler = _ref.errorHandler;
+      logger = _ref.logger,
+      microphoneTimeslice = _ref.microphoneTimeslice,
+      errorHandler = _ref.errorHandler;
     (0, _classCallCheck2["default"])(this, MicrophoneGenerator);
     (0, _defineProperty2["default"])(this, "stream", void 0);
     (0, _defineProperty2["default"])(this, "onDataCallback", void 0);
@@ -242,15 +214,14 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
       description: "@vatis-tech/asr-client-js: This is the constructor of MicrophoneGenerator class. This class, when it will be initialized, will ask user's permission for microphone usage. If accepted, the data from the microphone will be sent to the LIVE ASR service, using the SocketIOClientGenerator instance."
     });
     this.onDataCallback = onDataCallback;
-
     if (microphoneTimeslice) {
       this.microphoneTimeslice = microphoneTimeslice;
     } else {
       this.microphoneTimeslice = MICROPHONE_TIMESLICE;
     }
-  } // on destroy we want to stop the MediaRecorder from recording
+  }
 
-
+  // on destroy we want to stop the MediaRecorder from recording
   (0, _createClass2["default"])(MicrophoneGenerator, [{
     key: "destroy",
     value: function destroy() {
@@ -262,20 +233,21 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
           close: "True"
         });
       }
-
       if (this.stream) {
         this.stream.getTracks().forEach(function (track) {
           track.stop();
         });
       }
-    } // lets the user pause recording
+    }
 
+    // lets the user pause recording
   }, {
     key: "pause",
     value: function pause() {
       this.mediaRecorder.pause();
-    } // lets the user resume recording
+    }
 
+    // lets the user resume recording
   }, {
     key: "resume",
     value: function resume() {
@@ -286,7 +258,6 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
     value: function () {
       var _init = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
         var _this = this;
-
         return _regenerator["default"].wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -307,21 +278,18 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
                     audioBitrateMode: "constant"
                   };
                   _this.mediaRecorder = new MediaRecorder(stream, options);
-
                   _this.mediaRecorder.addEventListener("dataavailable", function (e) {
                     var _this2 = this;
-
                     // Converting audio blob to base64
                     var reader = new FileReader();
-
                     reader.onloadend = function () {
                       // You can upload the base64 to server here.
                       _this2.onDataCallback({
-                        data: reader.result.replace("data:audio/webm;codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus; base64,", "")
+                        data: reader.result.replace("data:audio/webm;codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus; base64,", "")
                       });
                     };
-
-                    reader.readAsDataURL(e.data); // if (e.data.size > 0) {
+                    reader.readAsDataURL(e.data);
+                    // if (e.data.size > 0) {
                     //   if (this.blobState) {
                     //     this.blobState = new Blob([this.blobState, e.data]);
                     //   } else {
@@ -353,9 +321,7 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
                     //   }
                     // }
                   }.bind(_this));
-
                   _this.mediaRecorder.start(_this.microphoneTimeslice);
-
                   _this.logger({
                     currentState: "@vatis-tech/asr-client-js: Initialized the \"MicrophoneGenerator\" plugin.",
                     description: "@vatis-tech/asr-client-js: The MicrophoneGenerator was successful into getting user's microphone, and will start sending data each ".concat(_this.microphoneTimeslice, " miliseconds.")
@@ -365,10 +331,8 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
                     currentState: "@vatis-tech/asr-client-js: Could not initilize the \"MicrophoneGenerator\" plugin.",
                     description: "@vatis-tech/asr-client-js: " + err
                   });
-
                   _this.errorHandler(err);
                 });
-
               case 3:
               case "end":
                 return _context.stop();
@@ -376,11 +340,9 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
           }
         }, _callee, this);
       }));
-
       function init() {
         return _init.apply(this, arguments);
       }
-
       return init;
     }()
   }, {
@@ -391,25 +353,19 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
   }]);
   return MicrophoneGenerator;
 }();
-
 var _default = MicrophoneGenerator;
 exports["default"] = _default;
 },{"../helpers/constants/index.js":6,"../helpers/functions/index.js":11,"@babel/runtime/helpers/asyncToGenerator":13,"@babel/runtime/helpers/classCallCheck":14,"@babel/runtime/helpers/createClass":15,"@babel/runtime/helpers/defineProperty":16,"@babel/runtime/helpers/interopRequireDefault":17,"@babel/runtime/regenerator":20}],4:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
-
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
-
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
-
 var MicrophoneQueue = /*#__PURE__*/function () {
   function MicrophoneQueue(_ref) {
     var logger = _ref.logger;
@@ -423,7 +379,6 @@ var MicrophoneQueue = /*#__PURE__*/function () {
     });
     this.queue = [];
   }
-
   (0, _createClass2["default"])(MicrophoneQueue, [{
     key: "dequeue",
     value: function dequeue() {
@@ -447,55 +402,46 @@ var MicrophoneQueue = /*#__PURE__*/function () {
   }]);
   return MicrophoneQueue;
 }();
-
 var _default = MicrophoneQueue;
 exports["default"] = _default;
 },{"@babel/runtime/helpers/classCallCheck":14,"@babel/runtime/helpers/createClass":15,"@babel/runtime/helpers/defineProperty":16,"@babel/runtime/helpers/interopRequireDefault":17}],5:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
-
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
-
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
-
 var _socket = _interopRequireDefault(require("socket.io-client"));
-
 var _index = _interopRequireDefault(require("../helpers/constants/index.js"));
-
 var SOCKET_IO_CLIENT_NAMESPACE = _index["default"].SOCKET_IO_CLIENT_NAMESPACE,
-    SOCKET_IO_CLIENT_PATH = _index["default"].SOCKET_IO_CLIENT_PATH,
-    SOCKET_IO_CLIENT_TRANSPORTS = _index["default"].SOCKET_IO_CLIENT_TRANSPORTS,
-    SOCKET_IO_CLIENT_RESULT_PATH = _index["default"].SOCKET_IO_CLIENT_RESULT_PATH,
-    SOCKET_IO_CLIENT_REQUEST_PATH = _index["default"].SOCKET_IO_CLIENT_REQUEST_PATH,
-    SOCKET_IO_CLIENT_FRAME_OVERLAP = _index["default"].SOCKET_IO_CLIENT_FRAME_OVERLAP,
-    SOCKET_IO_CLIENT_BUFFER_OFFSET = _index["default"].SOCKET_IO_CLIENT_BUFFER_OFFSET,
-    SOCKET_IO_CLIENT_AUDIO_FORMAT = _index["default"].SOCKET_IO_CLIENT_AUDIO_FORMAT,
-    SOCKET_IO_CLIENT_SENDING_HEADERS = _index["default"].SOCKET_IO_CLIENT_SENDING_HEADERS,
-    SOCKET_IO_CLIENT_DISABLE_DISFLUENCIES = _index["default"].SOCKET_IO_CLIENT_DISABLE_DISFLUENCIES,
-    SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION = _index["default"].SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION,
-    SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION = _index["default"].SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION,
-    SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION = _index["default"].SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION,
-    MICROPHONE_FRAME_LENGTH = _index["default"].MICROPHONE_FRAME_LENGTH,
-    MICROPHONE_TIMESLICE = _index["default"].MICROPHONE_TIMESLICE;
-
+  SOCKET_IO_CLIENT_PATH = _index["default"].SOCKET_IO_CLIENT_PATH,
+  SOCKET_IO_CLIENT_TRANSPORTS = _index["default"].SOCKET_IO_CLIENT_TRANSPORTS,
+  SOCKET_IO_CLIENT_RESULT_PATH = _index["default"].SOCKET_IO_CLIENT_RESULT_PATH,
+  SOCKET_IO_CLIENT_REQUEST_PATH = _index["default"].SOCKET_IO_CLIENT_REQUEST_PATH,
+  SOCKET_IO_CLIENT_FRAME_OVERLAP = _index["default"].SOCKET_IO_CLIENT_FRAME_OVERLAP,
+  SOCKET_IO_CLIENT_BUFFER_OFFSET = _index["default"].SOCKET_IO_CLIENT_BUFFER_OFFSET,
+  SOCKET_IO_CLIENT_AUDIO_FORMAT = _index["default"].SOCKET_IO_CLIENT_AUDIO_FORMAT,
+  SOCKET_IO_CLIENT_SENDING_HEADERS = _index["default"].SOCKET_IO_CLIENT_SENDING_HEADERS,
+  SOCKET_IO_CLIENT_DISABLE_DISFLUENCIES = _index["default"].SOCKET_IO_CLIENT_DISABLE_DISFLUENCIES,
+  SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION = _index["default"].SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION,
+  SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION = _index["default"].SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION,
+  SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION = _index["default"].SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION,
+  MICROPHONE_FRAME_LENGTH = _index["default"].MICROPHONE_FRAME_LENGTH,
+  MICROPHONE_TIMESLICE = _index["default"].MICROPHONE_TIMESLICE;
 var SocketIOClientGenerator = /*#__PURE__*/function () {
   function SocketIOClientGenerator(_ref) {
     var onConnectCallback = _ref.onConnectCallback,
-        onAsrResultCallback = _ref.onAsrResultCallback,
-        logger = _ref.logger,
-        destroyVTC = _ref.destroyVTC,
-        frameLength = _ref.frameLength,
-        frameOverlap = _ref.frameOverlap,
-        bufferOffset = _ref.bufferOffset,
-        errorHandler = _ref.errorHandler;
+      onAsrResultCallback = _ref.onAsrResultCallback,
+      logger = _ref.logger,
+      destroyVTC = _ref.destroyVTC,
+      frameLength = _ref.frameLength,
+      frameOverlap = _ref.frameOverlap,
+      bufferOffset = _ref.bufferOffset,
+      errorHandler = _ref.errorHandler;
     (0, _classCallCheck2["default"])(this, SocketIOClientGenerator);
     (0, _defineProperty2["default"])(this, "socketRef", void 0);
     (0, _defineProperty2["default"])(this, "streamHost", void 0);
@@ -523,16 +469,14 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
     this.bufferOffset = bufferOffset;
     this.sendClosePacket = true;
   }
-
   (0, _createClass2["default"])(SocketIOClientGenerator, [{
     key: "init",
     value: function init(_ref2) {
       var _this = this;
-
       var streamHost = _ref2.streamHost,
-          authToken = _ref2.authToken,
-          streamUrl = _ref2.streamUrl,
-          reservationToken = _ref2.reservationToken;
+        authToken = _ref2.authToken,
+        streamUrl = _ref2.streamUrl,
+        reservationToken = _ref2.reservationToken;
       this.logger({
         currentState: "@vatis-tech/asr-client-js: Initializing the \"SocketIOClientGenerator\" plugin.",
         description: "@vatis-tech/asr-client-js: Here, the socket.io-client gets instantianted and initialized."
@@ -563,7 +507,6 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
           currentState: "@vatis-tech/asr-client-js: Initialized the \"SocketIOClientGenerator\" plugin.",
           description: "@vatis-tech/asr-client-js: A successful connection between @vatis-tech/asr-client-js and Vatis Tech LIVE ASR service has been established."
         });
-
         _this.onConnectCallback();
       });
       this.socketRef.on("disconnect", function () {
@@ -571,7 +514,6 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
           currentState: "@vatis-tech/asr-client-js: Destroy the \"SocketIOClientGenerator\" plugin.",
           description: "@vatis-tech/asr-client-js: The connection between @vatis-tech/asr-client-js and Vatis Tech LIVE ASR service has been closed by the Vatis Tech LIVE ASR service."
         });
-
         _this.destroyVTC({
           hard: true
         });
@@ -581,12 +523,12 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
           currentState: "@vatis-tech/asr-client-js: Could not initilize the \"SocketIOClientGenerator\" plugin.",
           description: "@vatis-tech/asr-client-js: " + error
         });
-
         _this.errorHandler(error);
       });
       this.socketRef.on(SOCKET_IO_CLIENT_RESULT_PATH, function (args) {
         _this.onAsrResultCallback(args);
-      }); // TODO: add some callbacks for all states
+      });
+      // TODO: add some callbacks for all states
       // NOTE: this would be usefull for end users to know the state of
       // NOTE: the Vatis Tech Client plugin
       // NOTE: Something like, states of the key, then states of the socket
@@ -604,27 +546,23 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
       if (data.close === "True" || data.flush === "True") {
         this.sendClosePacket = false;
       }
-
       this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, data);
     }
   }, {
     key: "destroy",
     value: function destroy() {
       this.socketRef.off("disconnect");
-
       if (this.sendClosePacket) {
         this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, {
           close: "True",
           data: ""
         });
       }
-
       this.socketRef.disconnect();
     }
   }]);
   return SocketIOClientGenerator;
 }();
-
 var _default = SocketIOClientGenerator;
 exports["default"] = _default;
 },{"../helpers/constants/index.js":6,"@babel/runtime/helpers/classCallCheck":14,"@babel/runtime/helpers/createClass":15,"@babel/runtime/helpers/defineProperty":16,"@babel/runtime/helpers/interopRequireDefault":17,"socket.io-client":49}],6:[function(require,module,exports){
@@ -689,7 +627,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
 function base64ArrayBuffer(arrayBuffer) {
   var base64 = "";
   var encodings = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -698,165 +635,134 @@ function base64ArrayBuffer(arrayBuffer) {
   var byteRemainder = byteLength % 3;
   var mainLength = byteLength - byteRemainder;
   var a, b, c, d;
-  var chunk; // Main loop deals with bytes in chunks of 3
+  var chunk;
 
+  // Main loop deals with bytes in chunks of 3
   for (var i = 0; i < mainLength; i = i + 3) {
     // Combine the three bytes into a single integer
-    chunk = bytes[i] << 16 | bytes[i + 1] << 8 | bytes[i + 2]; // Use bitmasks to extract 6-bit segments from the triplet
+    chunk = bytes[i] << 16 | bytes[i + 1] << 8 | bytes[i + 2];
 
+    // Use bitmasks to extract 6-bit segments from the triplet
     a = (chunk & 16515072) >> 18; // 16515072 = (2^6 - 1) << 18
-
     b = (chunk & 258048) >> 12; // 258048   = (2^6 - 1) << 12
-
     c = (chunk & 4032) >> 6; // 4032     = (2^6 - 1) << 6
-
     d = chunk & 63; // 63       = 2^6 - 1
+
     // Convert the raw binary segments to the appropriate ASCII encoding
-
     base64 += encodings[a] + encodings[b] + encodings[c] + encodings[d];
-  } // Deal with the remaining bytes and padding
+  }
 
-
+  // Deal with the remaining bytes and padding
   if (byteRemainder == 1) {
     chunk = bytes[mainLength];
     a = (chunk & 252) >> 2; // 252 = (2^6 - 1) << 2
-    // Set the 4 least significant bits to zero
 
+    // Set the 4 least significant bits to zero
     b = (chunk & 3) << 4; // 3   = 2^2 - 1
 
     base64 += encodings[a] + encodings[b] + "==";
   } else if (byteRemainder == 2) {
     chunk = bytes[mainLength] << 8 | bytes[mainLength + 1];
     a = (chunk & 64512) >> 10; // 64512 = (2^6 - 1) << 10
-
     b = (chunk & 1008) >> 4; // 1008  = (2^6 - 1) << 4
-    // Set the 2 least significant bits to zero
 
+    // Set the 2 least significant bits to zero
     c = (chunk & 15) << 2; // 15    = 2^4 - 1
 
     base64 += encodings[a] + encodings[b] + encodings[c] + "=";
   }
-
   return base64;
 }
-
 var _default = base64ArrayBuffer;
 exports["default"] = _default;
 },{}],8:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
 var _index = _interopRequireDefault(require("../constants/index.js"));
-
 var SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET = _index["default"].SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET,
-    SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET = _index["default"].SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET;
-
+  SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET = _index["default"].SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET;
 var checkIfFinalPacket = function checkIfFinalPacket(data) {
   return !data.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET) || data.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET) && data.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET) && data.headers.SplitPacket === true && data.headers.FinalSplitPacket === true;
 };
-
 var _default = checkIfFinalPacket;
 exports["default"] = _default;
 },{"../constants/index.js":6,"@babel/runtime/helpers/interopRequireDefault":17}],9:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
 var _index = _interopRequireDefault(require("../constants/index.js"));
-
 var API_URL = _index["default"].API_URL,
-    API_URL_PATH = _index["default"].API_URL_PATH;
-
+  API_URL_PATH = _index["default"].API_URL_PATH;
 function generateApiUrl(_ref) {
   var service = _ref.service,
-      model = _ref.model,
-      language = _ref.language,
-      host = _ref.host;
+    model = _ref.model,
+    language = _ref.language,
+    host = _ref.host;
   var apiUrl = (host ? host : API_URL) + API_URL_PATH;
-
   if (service) {
     apiUrl = apiUrl.replace("<service>", service);
   } else {
     apiUrl = apiUrl.replace("?service=<service>", "?");
   }
-
   if (model) {
     apiUrl = apiUrl.replace("<model>", model);
   } else {
     apiUrl = apiUrl.replace("&model=<model>", "");
   }
-
   if (language) {
     apiUrl = apiUrl.replace("<language>", language);
   } else {
     apiUrl = apiUrl.replace("&language=<language>", "");
   }
-
   if (apiUrl.includes("?&")) {
     apiUrl = apiUrl.replace("?&", "?");
   }
-
   if (apiUrl.endsWith("?")) {
     apiUrl = apiUrl.replace("?", "");
   }
-
   return apiUrl;
 }
-
 var _default = generateApiUrl;
 exports["default"] = _default;
 },{"../constants/index.js":6,"@babel/runtime/helpers/interopRequireDefault":17}],10:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
 var _index = _interopRequireDefault(require("../constants/index.js"));
-
 var RESERVATION_URL = _index["default"].RESERVATION_URL;
-
 function generateReservationUrl(_ref) {
   var serviceHost = _ref.serviceHost;
   var reservationUrl = RESERVATION_URL;
   reservationUrl = reservationUrl.replace("<service_host>", serviceHost);
   return reservationUrl;
 }
-
 var _default = generateReservationUrl;
 exports["default"] = _default;
 },{"../constants/index.js":6,"@babel/runtime/helpers/interopRequireDefault":17}],11:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
 var _checkIfFinalPacket = _interopRequireDefault(require("./checkIfFinalPacket.js"));
-
 var _generateApiUrl = _interopRequireDefault(require("./generateApiUrl.js"));
-
 var _base64ArrayBuffer = _interopRequireDefault(require("./base64ArrayBuffer.js"));
-
 var _generateReservationUrl = _interopRequireDefault(require("./generateReservationUrl.js"));
-
 var functions = {
   checkIfFinalPacket: _checkIfFinalPacket["default"],
   generateApiUrl: _generateApiUrl["default"],
@@ -869,53 +775,40 @@ exports["default"] = _default;
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
-
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
-
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
-
 var _ApiKeyGenerator = _interopRequireDefault(require("./components/ApiKeyGenerator.js"));
-
 var _InstanceReservation = _interopRequireDefault(require("./components/InstanceReservation.js"));
-
 var _SocketIOClientGenerator = _interopRequireDefault(require("./components/SocketIOClientGenerator.js"));
-
 var _MicrophoneGenerator = _interopRequireDefault(require("./components/MicrophoneGenerator.js"));
-
 var _MicrophoneQueue = _interopRequireDefault(require("./components/MicrophoneQueue.js"));
-
 var _index = _interopRequireDefault(require("./helpers/constants/index.js"));
-
 var _index2 = _interopRequireDefault(require("./helpers/functions/index.js"));
-
 var WAIT_AFTER_MESSAGES = _index["default"].WAIT_AFTER_MESSAGES;
 var generateApiUrl = _index2["default"].generateApiUrl,
-    checkIfFinalPacket = _index2["default"].checkIfFinalPacket;
-
+  checkIfFinalPacket = _index2["default"].checkIfFinalPacket;
 var VatisTechClient = /*#__PURE__*/function () {
   function VatisTechClient(_ref) {
     var service = _ref.service,
-        model = _ref.model,
-        language = _ref.language,
-        apiKey = _ref.apiKey,
-        onData = _ref.onData,
-        log = _ref.log,
-        logger = _ref.logger,
-        onDestroyCallback = _ref.onDestroyCallback,
-        host = _ref.host,
-        microphoneTimeslice = _ref.microphoneTimeslice,
-        frameLength = _ref.frameLength,
-        frameOverlap = _ref.frameOverlap,
-        bufferOffset = _ref.bufferOffset,
-        errorHandler = _ref.errorHandler,
-        waitingAfterMessages = _ref.waitingAfterMessages;
+      model = _ref.model,
+      language = _ref.language,
+      apiKey = _ref.apiKey,
+      onData = _ref.onData,
+      log = _ref.log,
+      logger = _ref.logger,
+      onDestroyCallback = _ref.onDestroyCallback,
+      host = _ref.host,
+      microphoneTimeslice = _ref.microphoneTimeslice,
+      frameLength = _ref.frameLength,
+      frameOverlap = _ref.frameOverlap,
+      bufferOffset = _ref.bufferOffset,
+      errorHandler = _ref.errorHandler,
+      waitingAfterMessages = _ref.waitingAfterMessages;
     (0, _classCallCheck2["default"])(this, VatisTechClient);
     (0, _defineProperty2["default"])(this, "microphoneGenerator", void 0);
     (0, _defineProperty2["default"])(this, "instanceReservation", void 0);
@@ -930,15 +823,12 @@ var VatisTechClient = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "shouldDestroy", void 0);
     (0, _defineProperty2["default"])(this, "onDestroyCallback", void 0);
     (0, _defineProperty2["default"])(this, "errorHandler", void 0);
-
     if (errorHandler) {
       this.errorHandler = errorHandler;
     } else {
       this.errorHandler = function (e) {};
     }
-
     this.log = log;
-
     if (this.log === true && typeof logger === "function") {
       this.logger = logger;
     } else if (this.log === true) {
@@ -946,44 +836,45 @@ var VatisTechClient = /*#__PURE__*/function () {
     } else {
       this.logger = function () {};
     }
-
     this.logger({
       currentState: "@vatis-tech/asr-client-js: Initilizing plugin.",
       description: "@vatis-tech/asr-client-js: This is the base constructor which initilizez everything for the LIVE ASR service of Vatis Tech."
     });
-
     if (waitingAfterMessages && waitingAfterMessages > 0) {
       this.waitingAfterMessages = waitingAfterMessages;
     } else {
       this.waitingAfterMessages = WAIT_AFTER_MESSAGES;
-    } // this is a flag that says if the whole response for the previous packet was received or not
+    }
 
+    // this is a flag that says if the whole response for the previous packet was received or not
+    this.waitingForFinalPacket = 0;
 
-    this.waitingForFinalPacket = 0; // this is a flag that says if the user wants to destroy the VTC client
+    // this is a flag that says if the user wants to destroy the VTC client
     // but since there might be data to be received by the socket, or to be sent by the socket
     // the VTC client will wait for that to finis
+    this.shouldDestroy = false;
 
-    this.shouldDestroy = false; // callback when successfully destroyed
-
+    // callback when successfully destroyed
     if (onDestroyCallback === undefined) {
       this.onDestroyCallback = function () {};
     } else {
       this.onDestroyCallback = onDestroyCallback;
-    } // callback for sending to the user the data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
+    }
 
-
+    // callback for sending to the user the data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
     if (onData === undefined) {
       this.onData = function () {};
     } else {
       this.onData = onData;
-    } // instantiante MicrophoneQueue - this will keep all the microphone buffers until they can be sent to the ASR SERVICE through the SocketIOClientGenerator
+    }
 
-
+    // instantiante MicrophoneQueue - this will keep all the microphone buffers until they can be sent to the ASR SERVICE through the SocketIOClientGenerator
     this.microphoneQueue = new _MicrophoneQueue["default"]({
       logger: this.logger.bind(this),
       errorHandler: this.errorHandler
-    }); // instantiante ApiKeyGenerator - this will return on the responseCallback the serviceHost and the authToken for the InstanceReservation to reserve a live asr instance based on the apiUrl and apiKey
+    });
 
+    // instantiante ApiKeyGenerator - this will return on the responseCallback the serviceHost and the authToken for the InstanceReservation to reserve a live asr instance based on the apiUrl and apiKey
     this.apiKeyGenerator = new _ApiKeyGenerator["default"]({
       apiUrl: generateApiUrl({
         service: service,
@@ -995,14 +886,16 @@ var VatisTechClient = /*#__PURE__*/function () {
       apiKey: apiKey,
       logger: this.logger.bind(this),
       errorHandler: this.errorHandler
-    }); // instantiante InstanceReservation - this will return on the responseCallback the streamUrl, reservationToken, and podName for the SocketIOClientGenerator to connect based on the serviceHost and authToken
+    });
 
+    // instantiante InstanceReservation - this will return on the responseCallback the streamUrl, reservationToken, and podName for the SocketIOClientGenerator to connect based on the serviceHost and authToken
     this.instanceReservation = new _InstanceReservation["default"]({
       responseCallback: this.initSocketIOClient.bind(this),
       logger: this.logger.bind(this),
       errorHandler: this.errorHandler
-    }); // instantiante SocketIOClientGenerator - this will return on the onAsrResultCallback the results that it gets back from the ASR SERVICE and when it connects to the ASR SERVICE it will initilize the MicrophoneGenerator through the onConnectCallback
+    });
 
+    // instantiante SocketIOClientGenerator - this will return on the onAsrResultCallback the results that it gets back from the ASR SERVICE and when it connects to the ASR SERVICE it will initilize the MicrophoneGenerator through the onConnectCallback
     this.socketIOClientGenerator = new _SocketIOClientGenerator["default"]({
       onConnectCallback: this.initMicrophone.bind(this),
       onAsrResultCallback: this.onSocketIOClientGeneratorOnAsrResultCallback.bind(this),
@@ -1012,41 +905,45 @@ var VatisTechClient = /*#__PURE__*/function () {
       frameLength: frameLength,
       frameOverlap: frameOverlap,
       bufferOffset: bufferOffset
-    }); // instantiante MicrophoneGenerator - this will return on the this.onMicrophoneGeneratorDataCallback the data that it captures from the user's microphone
+    });
 
+    // instantiante MicrophoneGenerator - this will return on the this.onMicrophoneGeneratorDataCallback the data that it captures from the user's microphone
     this.microphoneGenerator = new _MicrophoneGenerator["default"]({
       onDataCallback: this.onMicrophoneGeneratorDataCallback.bind(this),
       logger: this.logger.bind(this),
       errorHandler: this.errorHandler,
       microphoneTimeslice: microphoneTimeslice
-    }); // initilize ApiKeyGenerator (if successful it will initilize SocketIOClientGenerator (if successful it will initilize the MicrophoneGenerator))
+    });
 
+    // initilize ApiKeyGenerator (if successful it will initilize SocketIOClientGenerator (if successful it will initilize the MicrophoneGenerator))
     this.initApiKey();
-  } // this will make everything undefined on the this instance - i.e. this instance will not be of any use anymore
+  }
 
-
+  // this will make everything undefined on the this instance - i.e. this instance will not be of any use anymore
   (0, _createClass2["default"])(VatisTechClient, [{
     key: "destroy",
     value: function destroy() {
       var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
-        hard: false
-      },
-          hard = _ref2.hard;
-
+          hard: false
+        },
+        hard = _ref2.hard;
       // check if there is still data to be received or to be sent
       if ((this.waitingForFinalPacket > 0 || !this.microphoneQueue.isEmpty) && hard !== true) {
         // let the messaging know that we want the client to be destroyed
-        this.shouldDestroy = true; // pause the microphone so it won't record anymore
-
+        this.shouldDestroy = true;
+        // pause the microphone so it won't record anymore
         this.microphoneGenerator.pause();
       } else {
         // notify destruction
-        this.onDestroyCallback(); // stop the microphone - i.e. stop data being recorded by the MediaRecorder
+        this.onDestroyCallback();
 
-        this.microphoneGenerator.destroy(); // destroy the socket
+        // stop the microphone - i.e. stop data being recorded by the MediaRecorder
+        this.microphoneGenerator.destroy();
 
-        this.socketIOClientGenerator.destroy(); // delete data members
+        // destroy the socket
+        this.socketIOClientGenerator.destroy();
 
+        // delete data members
         this.microphoneGenerator = undefined;
         this.apiKeyGenerator = undefined;
         this.instanceReservation = undefined;
@@ -1056,8 +953,9 @@ var VatisTechClient = /*#__PURE__*/function () {
         this.waitingForFinalPacket = undefined;
         this.logger = undefined;
         this.log = undefined;
-        this.shouldDestroy = undefined; // delete methods
+        this.shouldDestroy = undefined;
 
+        // delete methods
         this.initApiKey = false;
         this.initSocketIOClient = false;
         this.initMicrophone = false;
@@ -1065,103 +963,106 @@ var VatisTechClient = /*#__PURE__*/function () {
         this.onSocketIOClientGeneratorOnAsrResultCallback = false;
         this.onDestroyCallback = false;
       }
-    } // lets the user pause recording
+    }
 
+    // lets the user pause recording
   }, {
     key: "pause",
     value: function pause() {
       this.microphoneGenerator.pause();
-    } // lets the user resume recording
+    }
 
+    // lets the user resume recording
   }, {
     key: "resume",
     value: function resume() {
       this.microphoneGenerator.resume();
-    } // initilize ApiKeyGenerator
-    // this is called after the instantiantion of all Generators
+    }
 
+    // initilize ApiKeyGenerator
+    // this is called after the instantiantion of all Generators
   }, {
     key: "initApiKey",
     value: function initApiKey() {
       this.apiKeyGenerator.init();
-    } // initilize InstanceReservation
-    // get a reserved link for socket.io-client
+    }
 
+    // initilize InstanceReservation
+    // get a reserved link for socket.io-client
   }, {
     key: "initInstanceReservation",
     value: function initInstanceReservation(_ref3) {
       var serviceHost = _ref3.serviceHost,
-          authToken = _ref3.authToken;
+        authToken = _ref3.authToken;
       this.instanceReservation.init({
         serviceHost: serviceHost,
         authToken: authToken
       });
-    } // initilize SocketIOClientGenerator
+    }
+
+    // initilize SocketIOClientGenerator
     // connect to the ASR SERVICE based on the serviceHost and authToken of ApiKeyGenerator
     // this is called as a callback after the successful initialization of the ApiKeyGenerator
-
   }, {
     key: "initSocketIOClient",
     value: function initSocketIOClient(_ref4) {
       var streamHost = _ref4.streamHost,
-          streamUrl = _ref4.streamUrl,
-          reservationToken = _ref4.reservationToken,
-          authToken = _ref4.authToken;
+        streamUrl = _ref4.streamUrl,
+        reservationToken = _ref4.reservationToken,
+        authToken = _ref4.authToken;
       this.socketIOClientGenerator.init({
         streamHost: streamHost,
         streamUrl: streamUrl,
         reservationToken: reservationToken,
         authToken: authToken
       });
-    } // initilize MicrophoneGenerator
+    }
+
+    // initilize MicrophoneGenerator
     // it will ask for user's microphone, and when the user gives permission for the microphone usage, it will start sending the data that it records using the this.onMicrophoneGeneratorDataCallback
     // this is called as a callback after the successful initialization of the SocketIOClientGenerator
-
   }, {
     key: "initMicrophone",
     value: function initMicrophone() {
       var _this = this;
-
       this.microphoneGenerator.init().then(function () {})["catch"](function (err) {
         _this.logger({
           currentState: "@vatis-tech/asr-client-js: Could not initilize the \"MicrophoneGenerator\" plugin.",
           description: "@vatis-tech/asr-client-js: " + err
         });
-
         _this.errorHandler(err);
       });
-    } // get data from MicrophoneGenerator and add it to the queue
-    // if the SocketIOClientGenerator is not waiting for a packet response then it should emit a new pachet with the data that is waiting in the queue
+    }
 
+    // get data from MicrophoneGenerator and add it to the queue
+    // if the SocketIOClientGenerator is not waiting for a packet response then it should emit a new pachet with the data that is waiting in the queue
   }, {
     key: "onMicrophoneGeneratorDataCallback",
     value: function onMicrophoneGeneratorDataCallback(data) {
       if (this.microphoneQueue === undefined) return;
       this.microphoneQueue.enqueue(data);
-
       if (this.waitingForFinalPacket < this.waitingAfterMessages && this.microphoneQueue.peek()) {
         this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
         this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
       }
-    } // get data from SocketIOClientGenerator from the SOCKET_IO_CLIENT_RESULT_PATH and send it to user's callback function
+    }
+
+    // get data from SocketIOClientGenerator from the SOCKET_IO_CLIENT_RESULT_PATH and send it to user's callback function
     // if the data was final, and the MicrophoneQueue was not empty, send a new data to the ASR SERVICE through the SocketIOClientGenerator
     // if the data was final, and the MicrophoneQueue was empty, let the MicrophoneGenerator know that, when it gets new data, it can send it to the ASR SERVICE through the SocketIOClientGenerator
-
   }, {
     key: "onSocketIOClientGeneratorOnAsrResultCallback",
     value: function onSocketIOClientGeneratorOnAsrResultCallback(data) {
       this.onData(JSON.parse(data));
-
       if (checkIfFinalPacket(JSON.parse(data))) {
         this.waitingForFinalPacket = this.waitingForFinalPacket - 1;
-
         if (this.microphoneQueue.peek() && this.waitingForFinalPacket < this.waitingAfterMessages) {
           this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
           this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
         }
-      } // check if the user tried to destroy the VTC client
+      }
 
-
+      // check if the user tried to destroy the VTC client
       if (this.waitingForFinalPacket === 0 && this.microphoneQueue.isEmpty && this.shouldDestroy) {
         this.destroy();
       }
@@ -1169,7 +1070,6 @@ var VatisTechClient = /*#__PURE__*/function () {
   }]);
   return VatisTechClient;
 }();
-
 var _default = VatisTechClient;
 exports["default"] = _default;
 },{"./components/ApiKeyGenerator.js":1,"./components/InstanceReservation.js":2,"./components/MicrophoneGenerator.js":3,"./components/MicrophoneQueue.js":4,"./components/SocketIOClientGenerator.js":5,"./helpers/constants/index.js":6,"./helpers/functions/index.js":11,"@babel/runtime/helpers/classCallCheck":14,"@babel/runtime/helpers/createClass":15,"@babel/runtime/helpers/defineProperty":16,"@babel/runtime/helpers/interopRequireDefault":17}],13:[function(require,module,exports){
@@ -1181,34 +1081,28 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     reject(error);
     return;
   }
-
   if (info.done) {
     resolve(value);
   } else {
     Promise.resolve(value).then(_next, _throw);
   }
 }
-
 function _asyncToGenerator(fn) {
   return function () {
     var self = this,
-        args = arguments;
+      args = arguments;
     return new Promise(function (resolve, reject) {
       var gen = fn.apply(self, args);
-
       function _next(value) {
         asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
       }
-
       function _throw(err) {
         asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
       }
-
       _next(undefined);
     });
   };
 }
-
 module.exports = _asyncToGenerator, module.exports.__esModule = true, module.exports["default"] = module.exports;
 },{}],14:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) {
@@ -1216,7 +1110,6 @@ function _classCallCheck(instance, Constructor) {
     throw new TypeError("Cannot call a class as a function");
   }
 }
-
 module.exports = _classCallCheck, module.exports.__esModule = true, module.exports["default"] = module.exports;
 },{}],15:[function(require,module,exports){
 function _defineProperties(target, props) {
@@ -1228,7 +1121,6 @@ function _defineProperties(target, props) {
     Object.defineProperty(target, descriptor.key, descriptor);
   }
 }
-
 function _createClass(Constructor, protoProps, staticProps) {
   if (protoProps) _defineProperties(Constructor.prototype, protoProps);
   if (staticProps) _defineProperties(Constructor, staticProps);
@@ -1237,7 +1129,6 @@ function _createClass(Constructor, protoProps, staticProps) {
   });
   return Constructor;
 }
-
 module.exports = _createClass, module.exports.__esModule = true, module.exports["default"] = module.exports;
 },{}],16:[function(require,module,exports){
 function _defineProperty(obj, key, value) {
@@ -1251,10 +1142,8 @@ function _defineProperty(obj, key, value) {
   } else {
     obj[key] = value;
   }
-
   return obj;
 }
-
 module.exports = _defineProperty, module.exports.__esModule = true, module.exports["default"] = module.exports;
 },{}],17:[function(require,module,exports){
 function _interopRequireDefault(obj) {
@@ -1262,26 +1151,24 @@ function _interopRequireDefault(obj) {
     "default": obj
   };
 }
-
 module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;
 },{}],18:[function(require,module,exports){
 var _typeof = require("./typeof.js")["default"];
-
 function _regeneratorRuntime() {
-  "use strict";
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
-
+  "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
   module.exports = _regeneratorRuntime = function _regeneratorRuntime() {
     return exports;
   }, module.exports.__esModule = true, module.exports["default"] = module.exports;
   var exports = {},
-      Op = Object.prototype,
-      hasOwn = Op.hasOwnProperty,
-      $Symbol = "function" == typeof Symbol ? Symbol : {},
-      iteratorSymbol = $Symbol.iterator || "@@iterator",
-      asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
-      toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
+    Op = Object.prototype,
+    hasOwn = Op.hasOwnProperty,
+    defineProperty = Object.defineProperty || function (obj, key, desc) {
+      obj[key] = desc.value;
+    },
+    $Symbol = "function" == typeof Symbol ? Symbol : {},
+    iteratorSymbol = $Symbol.iterator || "@@iterator",
+    asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
+    toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
   function define(obj, key, value) {
     return Object.defineProperty(obj, key, {
       value: value,
@@ -1290,7 +1177,6 @@ function _regeneratorRuntime() {
       writable: !0
     }), obj[key];
   }
-
   try {
     define({}, "");
   } catch (err) {
@@ -1298,54 +1184,14 @@ function _regeneratorRuntime() {
       return obj[key] = value;
     };
   }
-
   function wrap(innerFn, outerFn, self, tryLocsList) {
     var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,
-        generator = Object.create(protoGenerator.prototype),
-        context = new Context(tryLocsList || []);
-    return generator._invoke = function (innerFn, self, context) {
-      var state = "suspendedStart";
-      return function (method, arg) {
-        if ("executing" === state) throw new Error("Generator is already running");
-
-        if ("completed" === state) {
-          if ("throw" === method) throw arg;
-          return doneResult();
-        }
-
-        for (context.method = method, context.arg = arg;;) {
-          var delegate = context.delegate;
-
-          if (delegate) {
-            var delegateResult = maybeInvokeDelegate(delegate, context);
-
-            if (delegateResult) {
-              if (delegateResult === ContinueSentinel) continue;
-              return delegateResult;
-            }
-          }
-
-          if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
-            if ("suspendedStart" === state) throw state = "completed", context.arg;
-            context.dispatchException(context.arg);
-          } else "return" === context.method && context.abrupt("return", context.arg);
-          state = "executing";
-          var record = tryCatch(innerFn, self, context);
-
-          if ("normal" === record.type) {
-            if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
-            return {
-              value: record.arg,
-              done: context.done
-            };
-          }
-
-          "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
-        }
-      };
-    }(innerFn, self, context), generator;
+      generator = Object.create(protoGenerator.prototype),
+      context = new Context(tryLocsList || []);
+    return defineProperty(generator, "_invoke", {
+      value: makeInvokeMethod(innerFn, self, context)
+    }), generator;
   }
-
   function tryCatch(fn, obj, arg) {
     try {
       return {
@@ -1359,25 +1205,19 @@ function _regeneratorRuntime() {
       };
     }
   }
-
   exports.wrap = wrap;
   var ContinueSentinel = {};
-
   function Generator() {}
-
   function GeneratorFunction() {}
-
   function GeneratorFunctionPrototype() {}
-
   var IteratorPrototype = {};
   define(IteratorPrototype, iteratorSymbol, function () {
     return this;
   });
   var getProto = Object.getPrototypeOf,
-      NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+    NativeIteratorPrototype = getProto && getProto(getProto(values([])));
   NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype);
   var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
-
   function defineIteratorMethods(prototype) {
     ["next", "throw", "return"].forEach(function (method) {
       define(prototype, method, function (arg) {
@@ -1385,14 +1225,12 @@ function _regeneratorRuntime() {
       });
     });
   }
-
   function AsyncIterator(generator, PromiseImpl) {
     function invoke(method, arg, resolve, reject) {
       var record = tryCatch(generator[method], generator, arg);
-
       if ("throw" !== record.type) {
         var result = record.arg,
-            value = result.value;
+          value = result.value;
         return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) {
           invoke("next", value, resolve, reject);
         }, function (err) {
@@ -1403,92 +1241,116 @@ function _regeneratorRuntime() {
           return invoke("throw", error, resolve, reject);
         });
       }
-
       reject(record.arg);
     }
-
     var previousPromise;
-
-    this._invoke = function (method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new PromiseImpl(function (resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
+    defineProperty(this, "_invoke", {
+      value: function value(method, arg) {
+        function callInvokeWithMethodAndArg() {
+          return new PromiseImpl(function (resolve, reject) {
+            invoke(method, arg, resolve, reject);
+          });
+        }
+        return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
       }
-
-      return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
+    });
+  }
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = "suspendedStart";
+    return function (method, arg) {
+      if ("executing" === state) throw new Error("Generator is already running");
+      if ("completed" === state) {
+        if ("throw" === method) throw arg;
+        return doneResult();
+      }
+      for (context.method = method, context.arg = arg;;) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+        if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
+          if ("suspendedStart" === state) throw state = "completed", context.arg;
+          context.dispatchException(context.arg);
+        } else "return" === context.method && context.abrupt("return", context.arg);
+        state = "executing";
+        var record = tryCatch(innerFn, self, context);
+        if ("normal" === record.type) {
+          if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
+          return {
+            value: record.arg,
+            done: context.done
+          };
+        }
+        "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
+      }
     };
   }
-
   function maybeInvokeDelegate(delegate, context) {
     var method = delegate.iterator[context.method];
-
     if (undefined === method) {
       if (context.delegate = null, "throw" === context.method) {
         if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel;
         context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method");
       }
-
       return ContinueSentinel;
     }
-
     var record = tryCatch(method, delegate.iterator, context.arg);
     if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;
     var info = record.arg;
     return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel);
   }
-
   function pushTryEntry(locs) {
     var entry = {
       tryLoc: locs[0]
     };
     1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry);
   }
-
   function resetTryEntry(entry) {
     var record = entry.completion || {};
     record.type = "normal", delete record.arg, entry.completion = record;
   }
-
   function Context(tryLocsList) {
     this.tryEntries = [{
       tryLoc: "root"
     }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0);
   }
-
   function values(iterable) {
     if (iterable) {
       var iteratorMethod = iterable[iteratorSymbol];
       if (iteratorMethod) return iteratorMethod.call(iterable);
       if ("function" == typeof iterable.next) return iterable;
-
       if (!isNaN(iterable.length)) {
         var i = -1,
-            next = function next() {
-          for (; ++i < iterable.length;) {
-            if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
-          }
-
-          return next.value = undefined, next.done = !0, next;
-        };
-
+          next = function next() {
+            for (; ++i < iterable.length;) {
+              if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
+            }
+            return next.value = undefined, next.done = !0, next;
+          };
         return next.next = next;
       }
     }
-
     return {
       next: doneResult
     };
   }
-
   function doneResult() {
     return {
       value: undefined,
       done: !0
     };
   }
-
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", {
+    value: GeneratorFunctionPrototype,
+    configurable: !0
+  }), defineProperty(GeneratorFunctionPrototype, "constructor", {
+    value: GeneratorFunction,
+    configurable: !0
+  }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
     var ctor = "function" == typeof genFun && genFun.constructor;
     return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name));
   }, exports.mark = function (genFun) {
@@ -1509,19 +1371,17 @@ function _regeneratorRuntime() {
     return this;
   }), define(Gp, "toString", function () {
     return "[object Generator]";
-  }), exports.keys = function (object) {
-    var keys = [];
-
+  }), exports.keys = function (val) {
+    var object = Object(val),
+      keys = [];
     for (var key in object) {
       keys.push(key);
     }
-
     return keys.reverse(), function next() {
       for (; keys.length;) {
         var key = keys.pop();
         if (key in object) return next.value = key, next.done = !1, next;
       }
-
       return next.done = !0, next;
     };
   }, exports.values = values, Context.prototype = {
@@ -1540,20 +1400,16 @@ function _regeneratorRuntime() {
     dispatchException: function dispatchException(exception) {
       if (this.done) throw exception;
       var context = this;
-
       function handle(loc, caught) {
         return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught;
       }
-
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i],
-            record = entry.completion;
+          record = entry.completion;
         if ("root" === entry.tryLoc) return handle("end");
-
         if (entry.tryLoc <= this.prev) {
           var hasCatch = hasOwn.call(entry, "catchLoc"),
-              hasFinally = hasOwn.call(entry, "finallyLoc");
-
+            hasFinally = hasOwn.call(entry, "finallyLoc");
           if (hasCatch && hasFinally) {
             if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
             if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
@@ -1569,13 +1425,11 @@ function _regeneratorRuntime() {
     abrupt: function abrupt(type, arg) {
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i];
-
         if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {
           var finallyEntry = entry;
           break;
         }
       }
-
       finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null);
       var record = finallyEntry ? finallyEntry.completion : {};
       return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record);
@@ -1593,19 +1447,15 @@ function _regeneratorRuntime() {
     "catch": function _catch(tryLoc) {
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i];
-
         if (entry.tryLoc === tryLoc) {
           var record = entry.completion;
-
           if ("throw" === record.type) {
             var thrown = record.arg;
             resetTryEntry(entry);
           }
-
           return thrown;
         }
       }
-
       throw new Error("illegal catch attempt");
     },
     delegateYield: function delegateYield(iterable, resultName, nextLoc) {
@@ -1617,7 +1467,6 @@ function _regeneratorRuntime() {
     }
   }, exports;
 }
-
 module.exports = _regeneratorRuntime, module.exports.__esModule = true, module.exports["default"] = module.exports;
 },{"./typeof.js":19}],19:[function(require,module,exports){
 function _typeof(obj) {
@@ -1629,7 +1478,6 @@ function _typeof(obj) {
     return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
   }, module.exports.__esModule = true, module.exports["default"] = module.exports), _typeof(obj);
 }
-
 module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
 },{}],20:[function(require,module,exports){
 // TODO(Babel 8): Remove this file.
