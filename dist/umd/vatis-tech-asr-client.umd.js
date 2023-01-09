@@ -259,84 +259,82 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
       var _init = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
         var _this = this;
         return _regenerator["default"].wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                this.logger({
-                  currentState: "@vatis-tech/asr-client-js: Initializing the \"MicrophoneGenerator\" plugin.",
-                  description: "@vatis-tech/asr-client-js: The MicrophoneGenerator will request for the user's microphone."
-                });
-                _context.next = 3;
-                return navigator.mediaDevices.getUserMedia({
-                  video: false,
-                  audio: true
-                }).then(function (stream) {
-                  _this.stream = stream;
-                  var options = {
-                    mimeType: "audio/webm",
-                    bitsPerSecond: 128000,
-                    audioBitrateMode: "constant"
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              this.logger({
+                currentState: "@vatis-tech/asr-client-js: Initializing the \"MicrophoneGenerator\" plugin.",
+                description: "@vatis-tech/asr-client-js: The MicrophoneGenerator will request for the user's microphone."
+              });
+              _context.next = 3;
+              return navigator.mediaDevices.getUserMedia({
+                video: false,
+                audio: true
+              }).then(function (stream) {
+                _this.stream = stream;
+                var options = {
+                  mimeType: "audio/webm",
+                  bitsPerSecond: 128000,
+                  audioBitrateMode: "constant"
+                };
+                _this.mediaRecorder = new MediaRecorder(stream, options);
+                _this.mediaRecorder.addEventListener("dataavailable", function (e) {
+                  var _this2 = this;
+                  // Converting audio blob to base64
+                  var reader = new FileReader();
+                  reader.onloadend = function () {
+                    // You can upload the base64 to server here.
+                    _this2.onDataCallback({
+                      data: reader.result.replace("data:audio/webm;codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus; base64,", "")
+                    });
                   };
-                  _this.mediaRecorder = new MediaRecorder(stream, options);
-                  _this.mediaRecorder.addEventListener("dataavailable", function (e) {
-                    var _this2 = this;
-                    // Converting audio blob to base64
-                    var reader = new FileReader();
-                    reader.onloadend = function () {
-                      // You can upload the base64 to server here.
-                      _this2.onDataCallback({
-                        data: reader.result.replace("data:audio/webm;codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus; base64,", "")
-                      });
-                    };
-                    reader.readAsDataURL(e.data);
-                    // if (e.data.size > 0) {
-                    //   if (this.blobState) {
-                    //     this.blobState = new Blob([this.blobState, e.data]);
-                    //   } else {
-                    //     this.blobState = e.data;
-                    //   }
-                    //   if (this.blobState.size > MICROPHONE_BIT_RATE_SAMPLES) {
-                    //     this.blobState.arrayBuffer().then((buffer) => {
-                    //       for (
-                    //         var i = 0;
-                    //         i <
-                    //         Math.trunc(
-                    //           this.blobState.size / MICROPHONE_BIT_RATE_SAMPLES
-                    //         );
-                    //         i++
-                    //       ) {
-                    //         let dataSamples = buffer.slice(
-                    //           i * MICROPHONE_BIT_RATE_SAMPLES,
-                    //           MICROPHONE_BIT_RATE_SAMPLES +
-                    //             i * MICROPHONE_BIT_RATE_SAMPLES
-                    //         );
-                    //         // this.onDataCallback(new Int32Array(dataSamples));
-                    //         this.onDataCallback(base64ArrayBuffer(dataSamples));
-                    //       }
-                    //       this.blobState = this.blobState.slice(
-                    //         i * MICROPHONE_BIT_RATE_SAMPLES,
-                    //         this.blobState.size
-                    //       );
-                    //     });
-                    //   }
-                    // }
-                  }.bind(_this));
-                  _this.mediaRecorder.start(_this.microphoneTimeslice);
-                  _this.logger({
-                    currentState: "@vatis-tech/asr-client-js: Initialized the \"MicrophoneGenerator\" plugin.",
-                    description: "@vatis-tech/asr-client-js: The MicrophoneGenerator was successful into getting user's microphone, and will start sending data each ".concat(_this.microphoneTimeslice, " miliseconds.")
-                  });
-                })["catch"](function (err) {
-                  _this.logger({
-                    currentState: "@vatis-tech/asr-client-js: Could not initilize the \"MicrophoneGenerator\" plugin.",
-                    description: "@vatis-tech/asr-client-js: " + err
-                  });
-                  _this.errorHandler(err);
+                  reader.readAsDataURL(e.data);
+                  // if (e.data.size > 0) {
+                  //   if (this.blobState) {
+                  //     this.blobState = new Blob([this.blobState, e.data]);
+                  //   } else {
+                  //     this.blobState = e.data;
+                  //   }
+                  //   if (this.blobState.size > MICROPHONE_BIT_RATE_SAMPLES) {
+                  //     this.blobState.arrayBuffer().then((buffer) => {
+                  //       for (
+                  //         var i = 0;
+                  //         i <
+                  //         Math.trunc(
+                  //           this.blobState.size / MICROPHONE_BIT_RATE_SAMPLES
+                  //         );
+                  //         i++
+                  //       ) {
+                  //         let dataSamples = buffer.slice(
+                  //           i * MICROPHONE_BIT_RATE_SAMPLES,
+                  //           MICROPHONE_BIT_RATE_SAMPLES +
+                  //             i * MICROPHONE_BIT_RATE_SAMPLES
+                  //         );
+                  //         // this.onDataCallback(new Int32Array(dataSamples));
+                  //         this.onDataCallback(base64ArrayBuffer(dataSamples));
+                  //       }
+                  //       this.blobState = this.blobState.slice(
+                  //         i * MICROPHONE_BIT_RATE_SAMPLES,
+                  //         this.blobState.size
+                  //       );
+                  //     });
+                  //   }
+                  // }
+                }.bind(_this));
+                _this.mediaRecorder.start(_this.microphoneTimeslice);
+                _this.logger({
+                  currentState: "@vatis-tech/asr-client-js: Initialized the \"MicrophoneGenerator\" plugin.",
+                  description: "@vatis-tech/asr-client-js: The MicrophoneGenerator was successful into getting user's microphone, and will start sending data each ".concat(_this.microphoneTimeslice, " miliseconds.")
                 });
-              case 3:
-              case "end":
-                return _context.stop();
-            }
+              })["catch"](function (err) {
+                _this.logger({
+                  currentState: "@vatis-tech/asr-client-js: Could not initilize the \"MicrophoneGenerator\" plugin.",
+                  description: "@vatis-tech/asr-client-js: " + err
+                });
+                _this.errorHandler(err);
+              });
+            case 3:
+            case "end":
+              return _context.stop();
           }
         }, _callee, this);
       }));
@@ -355,7 +353,7 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
 }();
 var _default = MicrophoneGenerator;
 exports["default"] = _default;
-},{"../helpers/constants/index.js":6,"../helpers/functions/index.js":11,"@babel/runtime/helpers/asyncToGenerator":13,"@babel/runtime/helpers/classCallCheck":14,"@babel/runtime/helpers/createClass":15,"@babel/runtime/helpers/defineProperty":16,"@babel/runtime/helpers/interopRequireDefault":17,"@babel/runtime/regenerator":20}],4:[function(require,module,exports){
+},{"../helpers/constants/index.js":6,"../helpers/functions/index.js":11,"@babel/runtime/helpers/asyncToGenerator":13,"@babel/runtime/helpers/classCallCheck":14,"@babel/runtime/helpers/createClass":15,"@babel/runtime/helpers/defineProperty":16,"@babel/runtime/helpers/interopRequireDefault":17,"@babel/runtime/regenerator":22}],4:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -565,7 +563,7 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
 }();
 var _default = SocketIOClientGenerator;
 exports["default"] = _default;
-},{"../helpers/constants/index.js":6,"@babel/runtime/helpers/classCallCheck":14,"@babel/runtime/helpers/createClass":15,"@babel/runtime/helpers/defineProperty":16,"@babel/runtime/helpers/interopRequireDefault":17,"socket.io-client":49}],6:[function(require,module,exports){
+},{"../helpers/constants/index.js":6,"@babel/runtime/helpers/classCallCheck":14,"@babel/runtime/helpers/createClass":15,"@babel/runtime/helpers/defineProperty":16,"@babel/runtime/helpers/interopRequireDefault":17,"socket.io-client":51}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1112,13 +1110,14 @@ function _classCallCheck(instance, Constructor) {
 }
 module.exports = _classCallCheck, module.exports.__esModule = true, module.exports["default"] = module.exports;
 },{}],15:[function(require,module,exports){
+var toPropertyKey = require("./toPropertyKey.js");
 function _defineProperties(target, props) {
   for (var i = 0; i < props.length; i++) {
     var descriptor = props[i];
     descriptor.enumerable = descriptor.enumerable || false;
     descriptor.configurable = true;
     if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
+    Object.defineProperty(target, toPropertyKey(descriptor.key), descriptor);
   }
 }
 function _createClass(Constructor, protoProps, staticProps) {
@@ -1130,8 +1129,10 @@ function _createClass(Constructor, protoProps, staticProps) {
   return Constructor;
 }
 module.exports = _createClass, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],16:[function(require,module,exports){
+},{"./toPropertyKey.js":20}],16:[function(require,module,exports){
+var toPropertyKey = require("./toPropertyKey.js");
 function _defineProperty(obj, key, value) {
+  key = toPropertyKey(key);
   if (key in obj) {
     Object.defineProperty(obj, key, {
       value: value,
@@ -1145,7 +1146,7 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 module.exports = _defineProperty, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],17:[function(require,module,exports){
+},{"./toPropertyKey.js":20}],17:[function(require,module,exports){
 function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : {
     "default": obj
@@ -1290,14 +1291,9 @@ function _regeneratorRuntime() {
     };
   }
   function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-    if (undefined === method) {
-      if (context.delegate = null, "throw" === context.method) {
-        if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel;
-        context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method");
-      }
-      return ContinueSentinel;
-    }
+    var methodName = context.method,
+      method = delegate.iterator[methodName];
+    if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel;
     var record = tryCatch(method, delegate.iterator, context.arg);
     if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;
     var info = record.arg;
@@ -1326,9 +1322,7 @@ function _regeneratorRuntime() {
       if (!isNaN(iterable.length)) {
         var i = -1,
           next = function next() {
-            for (; ++i < iterable.length;) {
-              if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
-            }
+            for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
             return next.value = undefined, next.done = !0, next;
           };
         return next.next = next;
@@ -1374,9 +1368,7 @@ function _regeneratorRuntime() {
   }), exports.keys = function (val) {
     var object = Object(val),
       keys = [];
-    for (var key in object) {
-      keys.push(key);
-    }
+    for (var key in object) keys.push(key);
     return keys.reverse(), function next() {
       for (; keys.length;) {
         var key = keys.pop();
@@ -1387,9 +1379,7 @@ function _regeneratorRuntime() {
   }, exports.values = values, Context.prototype = {
     constructor: Context,
     reset: function reset(skipTempReset) {
-      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) {
-        "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
-      }
+      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
     },
     stop: function stop() {
       this.done = !0;
@@ -1468,7 +1458,28 @@ function _regeneratorRuntime() {
   }, exports;
 }
 module.exports = _regeneratorRuntime, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{"./typeof.js":19}],19:[function(require,module,exports){
+},{"./typeof.js":21}],19:[function(require,module,exports){
+var _typeof = require("./typeof.js")["default"];
+function _toPrimitive(input, hint) {
+  if (_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+module.exports = _toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
+},{"./typeof.js":21}],20:[function(require,module,exports){
+var _typeof = require("./typeof.js")["default"];
+var toPrimitive = require("./toPrimitive.js");
+function _toPropertyKey(arg) {
+  var key = toPrimitive(arg, "string");
+  return _typeof(key) === "symbol" ? key : String(key);
+}
+module.exports = _toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
+},{"./toPrimitive.js":19,"./typeof.js":21}],21:[function(require,module,exports){
 function _typeof(obj) {
   "@babel/helpers - typeof";
 
@@ -1479,7 +1490,7 @@ function _typeof(obj) {
   }, module.exports.__esModule = true, module.exports["default"] = module.exports), _typeof(obj);
 }
 module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],20:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 // TODO(Babel 8): Remove this file.
 
 var runtime = require("../helpers/regeneratorRuntime")();
@@ -1496,7 +1507,7 @@ try {
   }
 }
 
-},{"../helpers/regeneratorRuntime":18}],21:[function(require,module,exports){
+},{"../helpers/regeneratorRuntime":18}],23:[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -1674,7 +1685,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],22:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 
 /**
  * Expose `Backoff`.
@@ -1761,7 +1772,7 @@ Backoff.prototype.setJitter = function(jitter){
 };
 
 
-},{}],23:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -1913,7 +1924,7 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],24:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
@@ -3694,7 +3705,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":23,"buffer":24,"ieee754":44}],25:[function(require,module,exports){
+},{"base64-js":25,"buffer":26,"ieee754":46}],27:[function(require,module,exports){
 (function (process){(function (){
 /* eslint-env browser */
 
@@ -3967,7 +3978,7 @@ formatters.j = function (v) {
 };
 
 }).call(this)}).call(this,require('_process'))
-},{"./common":26,"_process":48}],26:[function(require,module,exports){
+},{"./common":28,"_process":50}],28:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -4243,7 +4254,7 @@ function setup(env) {
 
 module.exports = setup;
 
-},{"ms":45}],27:[function(require,module,exports){
+},{"ms":47}],29:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = (() => {
@@ -4258,7 +4269,7 @@ exports.default = (() => {
     }
 })();
 
-},{}],28:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.installTimerFunctions = exports.transports = exports.Transport = exports.protocol = exports.Socket = void 0;
@@ -4272,7 +4283,7 @@ Object.defineProperty(exports, "transports", { enumerable: true, get: function (
 var util_js_1 = require("./util.js");
 Object.defineProperty(exports, "installTimerFunctions", { enumerable: true, get: function () { return util_js_1.installTimerFunctions; } });
 
-},{"./socket.js":29,"./transport.js":30,"./transports/index.js":31,"./util.js":37}],29:[function(require,module,exports){
+},{"./socket.js":31,"./transport.js":32,"./transports/index.js":33,"./util.js":39}],31:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -4864,7 +4875,7 @@ function clone(obj) {
     return o;
 }
 
-},{"./transports/index.js":31,"./util.js":37,"@socket.io/component-emitter":21,"debug":25,"engine.io-parser":42,"parseqs":46,"parseuri":47}],30:[function(require,module,exports){
+},{"./transports/index.js":33,"./util.js":39,"@socket.io/component-emitter":23,"debug":27,"engine.io-parser":44,"parseqs":48,"parseuri":49}],32:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -4987,7 +4998,7 @@ class Transport extends component_emitter_1.Emitter {
 }
 exports.Transport = Transport;
 
-},{"./util.js":37,"@socket.io/component-emitter":21,"debug":25,"engine.io-parser":42}],31:[function(require,module,exports){
+},{"./util.js":39,"@socket.io/component-emitter":23,"debug":27,"engine.io-parser":44}],33:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.transports = void 0;
@@ -4998,7 +5009,7 @@ exports.transports = {
     polling: polling_xhr_js_1.XHR
 };
 
-},{"./polling-xhr.js":32,"./websocket.js":35}],32:[function(require,module,exports){
+},{"./polling-xhr.js":34,"./websocket.js":37}],34:[function(require,module,exports){
 "use strict";
 /* global attachEvent */
 var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -5278,7 +5289,7 @@ function unloadHandler() {
     }
 }
 
-},{"../globalThis.js":27,"../util.js":37,"./polling.js":33,"./xmlhttprequest.js":36,"@socket.io/component-emitter":21,"debug":25}],33:[function(require,module,exports){
+},{"../globalThis.js":29,"../util.js":39,"./polling.js":35,"./xmlhttprequest.js":38,"@socket.io/component-emitter":23,"debug":27}],35:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -5464,7 +5475,7 @@ class Polling extends transport_js_1.Transport {
 }
 exports.Polling = Polling;
 
-},{"../transport.js":30,"debug":25,"engine.io-parser":42,"parseqs":46,"yeast":57}],34:[function(require,module,exports){
+},{"../transport.js":32,"debug":27,"engine.io-parser":44,"parseqs":48,"yeast":59}],36:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -5485,7 +5496,7 @@ exports.WebSocket = globalThis_js_1.default.WebSocket || globalThis_js_1.default
 exports.usingBrowserWebSocket = true;
 exports.defaultBinaryType = "arraybuffer";
 
-},{"../globalThis.js":27}],35:[function(require,module,exports){
+},{"../globalThis.js":29}],37:[function(require,module,exports){
 (function (Buffer){(function (){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -5683,7 +5694,7 @@ class WS extends transport_js_1.Transport {
 exports.WS = WS;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../transport.js":30,"../util.js":37,"./websocket-constructor.js":34,"buffer":24,"debug":25,"engine.io-parser":42,"parseqs":46,"yeast":57}],36:[function(require,module,exports){
+},{"../transport.js":32,"../util.js":39,"./websocket-constructor.js":36,"buffer":26,"debug":27,"engine.io-parser":44,"parseqs":48,"yeast":59}],38:[function(require,module,exports){
 "use strict";
 // browser shim for xmlhttprequest module
 var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -5710,7 +5721,7 @@ function default_1(opts) {
 }
 exports.default = default_1;
 
-},{"../globalThis.js":27,"has-cors":43}],37:[function(require,module,exports){
+},{"../globalThis.js":29,"has-cors":45}],39:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -5742,7 +5753,7 @@ function installTimerFunctions(obj, opts) {
 }
 exports.installTimerFunctions = installTimerFunctions;
 
-},{"./globalThis.js":27}],38:[function(require,module,exports){
+},{"./globalThis.js":29}],40:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ERROR_PACKET = exports.PACKET_TYPES_REVERSE = exports.PACKET_TYPES = void 0;
@@ -5763,10 +5774,11 @@ Object.keys(PACKET_TYPES).forEach(key => {
 const ERROR_PACKET = { type: "error", data: "parser error" };
 exports.ERROR_PACKET = ERROR_PACKET;
 
-},{}],39:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.decode = exports.encode = void 0;
+// imported from https://github.com/socketio/base64-arraybuffer
 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 // Use a lookup table to find the index.
 const lookup = typeof Uint8Array === 'undefined' ? [] : new Uint8Array(256);
@@ -5812,7 +5824,7 @@ const decode = (base64) => {
 };
 exports.decode = decode;
 
-},{}],40:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const commons_js_1 = require("./commons.js");
@@ -5865,7 +5877,7 @@ const mapBinary = (data, binaryType) => {
 };
 exports.default = decodePacket;
 
-},{"./commons.js":38,"./contrib/base64-arraybuffer.js":39}],41:[function(require,module,exports){
+},{"./commons.js":40,"./contrib/base64-arraybuffer.js":41}],43:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const commons_js_1 = require("./commons.js");
@@ -5904,13 +5916,13 @@ const encodeBlobAsBase64 = (data, callback) => {
     const fileReader = new FileReader();
     fileReader.onload = function () {
         const content = fileReader.result.split(",")[1];
-        callback("b" + content);
+        callback("b" + (content || ""));
     };
     return fileReader.readAsDataURL(data);
 };
 exports.default = encodePacket;
 
-},{"./commons.js":38}],42:[function(require,module,exports){
+},{"./commons.js":40}],44:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.decodePayload = exports.decodePacket = exports.encodePayload = exports.encodePacket = exports.protocol = void 0;
@@ -5950,7 +5962,7 @@ const decodePayload = (encodedPayload, binaryType) => {
 exports.decodePayload = decodePayload;
 exports.protocol = 4;
 
-},{"./decodePacket.js":40,"./encodePacket.js":41}],43:[function(require,module,exports){
+},{"./decodePacket.js":42,"./encodePacket.js":43}],45:[function(require,module,exports){
 
 /**
  * Module exports.
@@ -5969,7 +5981,7 @@ try {
   module.exports = false;
 }
 
-},{}],44:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
@@ -6056,7 +6068,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],45:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -6220,7 +6232,7 @@ function plural(ms, msAbs, n, name) {
   return Math.round(ms / n) + ' ' + name + (isPlural ? 's' : '');
 }
 
-},{}],46:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 /**
  * Compiles a querystring
  * Returns string representation of the object
@@ -6259,7 +6271,7 @@ exports.decode = function(qs){
   return qry;
 };
 
-},{}],47:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 /**
  * Parses an URI
  *
@@ -6329,7 +6341,7 @@ function queryKey(uri, query) {
     return data;
 }
 
-},{}],48:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -6515,7 +6527,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],49:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -6586,7 +6598,7 @@ Object.defineProperty(exports, "protocol", { enumerable: true, get: function () 
 
 module.exports = lookup;
 
-},{"./manager.js":50,"./socket.js":52,"./url.js":53,"debug":25,"socket.io-parser":55}],50:[function(require,module,exports){
+},{"./manager.js":52,"./socket.js":54,"./url.js":55,"debug":27,"socket.io-parser":57}],52:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -6983,7 +6995,7 @@ class Manager extends component_emitter_1.Emitter {
 }
 exports.Manager = Manager;
 
-},{"./on.js":51,"./socket.js":52,"@socket.io/component-emitter":21,"backo2":22,"debug":25,"engine.io-client":28,"socket.io-parser":55}],51:[function(require,module,exports){
+},{"./on.js":53,"./socket.js":54,"@socket.io/component-emitter":23,"backo2":24,"debug":27,"engine.io-client":30,"socket.io-parser":57}],53:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.on = void 0;
@@ -6995,7 +7007,7 @@ function on(obj, ev, fn) {
 }
 exports.on = on;
 
-},{}],52:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -7505,7 +7517,7 @@ class Socket extends component_emitter_1.Emitter {
 }
 exports.Socket = Socket;
 
-},{"./on.js":51,"@socket.io/component-emitter":21,"debug":25,"socket.io-parser":55}],53:[function(require,module,exports){
+},{"./on.js":53,"@socket.io/component-emitter":23,"debug":27,"socket.io-parser":57}],55:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -7577,7 +7589,7 @@ function url(uri, path = "", loc) {
 }
 exports.url = url;
 
-},{"debug":25,"parseuri":47}],54:[function(require,module,exports){
+},{"debug":27,"parseuri":49}],56:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reconstructPacket = exports.deconstructPacket = void 0;
@@ -7659,7 +7671,7 @@ function _reconstructPacket(data, buffers) {
     return data;
 }
 
-},{"./is-binary.js":56}],55:[function(require,module,exports){
+},{"./is-binary.js":58}],57:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Decoder = exports.Encoder = exports.PacketType = exports.protocol = void 0;
@@ -7942,7 +7954,7 @@ class BinaryReconstructor {
     }
 }
 
-},{"./binary.js":54,"./is-binary.js":56,"@socket.io/component-emitter":21,"debug":25}],56:[function(require,module,exports){
+},{"./binary.js":56,"./is-binary.js":58,"@socket.io/component-emitter":23,"debug":27}],58:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.hasBinary = exports.isBinary = void 0;
@@ -7999,7 +8011,7 @@ function hasBinary(obj, toJSON) {
 }
 exports.hasBinary = hasBinary;
 
-},{}],57:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 'use strict';
 
 var alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_'.split('')
