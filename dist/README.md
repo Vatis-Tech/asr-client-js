@@ -109,6 +109,46 @@ const vtc = new VatisTechClient.default({
 
 ## Props
 
+### `config`
+
+This is an **Object** with the following structure:
+
+```
+{
+  "spokenCommandsList": [
+    {
+      "command": "COMMAND_NAME",
+      "regex": [ "regex1", "regex2", "regex3", ... ]
+    },
+    ...
+  ]
+}
+```
+
+Where the value of `spokenCommandsList` is an array of objects that have two properties, `command` and `regex`.
+
+The value of the `command`, i.e. `COMMAND_NAME`, is a **String**.
+
+The value of the `regex`, i.e. `[ "regex1", "regex2", "regex3", ... ]`, is an **Array of Strings**, i.e. `regex1`, `regex2`, `regex3` are **Strings**.
+
+The ideea with this `spokenCommandsList`, is that each time one of the values from the `regex` array is matched in the transcript, it will fire the [onCommandData callback](#oncommanddata), with a special `header` on the data, named `SpokenCommand`.
+The value of the `SpokenCommand` header will be exactly the value of the `command`, i.e. `COMMAND_NAME`.
+
+For example, you can use this `spokenCommandsList` to define rules of when you want a new paragraph:
+
+```
+{
+  "spokenCommandsList": [
+    {
+      "command": "COMMAND_NAME",
+      "regex": [ "new line", "new paragraph", "from the start", "start new line" ]
+    }
+  ]
+}
+```
+
+So each time the back-end algorithm will find in the transcript one of `"new line"`, `"new paragraph"`, `"from the start"`, `"start new line"` phrases, the VTC client will fire the [onCommandData callback](#oncommanddata). This way, in your applocation, you will be able to know, when to start a new paragraph.
+
 ### `service`
 
 This is a **String** that refers to the service that you would like to use.
@@ -167,6 +207,30 @@ function onData(data) {
 ```
 
 The `data` object that is received has the following props:
+
+### `onCommandData`
+
+This is a **Function** on which you will receive from the back-end the transcript chunks for speciffic commands.
+
+For example, if you initialize the plugin with a set of commands (e.g. `{spokenCommandsList: [ { "command": "NEW_PARAGRAPH", "regex": ["start new paragraph", "new phrase", "new sentence"] } ] }`), each time the back-end algorithm will find these sets of commands, it will send on this function the data.
+
+It has the following signature:
+
+```
+const onCommandData = (data) => {
+	/* do something with data */
+}
+```
+
+Or with function names:
+
+```
+function onCommandData(data) {
+	/* do something with data */
+}
+```
+
+The `data` object from this callback, is the same as the one from [onData callback](#ondata).
 
 ### `log`
 

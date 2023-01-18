@@ -15,9 +15,11 @@ var _MicrophoneGenerator = _interopRequireDefault(require("./components/Micropho
 var _MicrophoneQueue = _interopRequireDefault(require("./components/MicrophoneQueue.js"));
 var _index = _interopRequireDefault(require("./helpers/constants/index.js"));
 var _index2 = _interopRequireDefault(require("./helpers/functions/index.js"));
-var WAIT_AFTER_MESSAGES = _index["default"].WAIT_AFTER_MESSAGES;
+var WAIT_AFTER_MESSAGES = _index["default"].WAIT_AFTER_MESSAGES,
+  SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA = _index["default"].SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA;
 var generateApiUrl = _index2["default"].generateApiUrl,
-  checkIfFinalPacket = _index2["default"].checkIfFinalPacket;
+  checkIfFinalPacket = _index2["default"].checkIfFinalPacket,
+  checkICommandPacket = _index2["default"].checkICommandPacket;
 var VatisTechClient = /*#__PURE__*/function () {
   function VatisTechClient(_ref) {
     var service = _ref.service,
@@ -25,6 +27,7 @@ var VatisTechClient = /*#__PURE__*/function () {
       language = _ref.language,
       apiKey = _ref.apiKey,
       onData = _ref.onData,
+      onCommandData = _ref.onCommandData,
       log = _ref.log,
       logger = _ref.logger,
       onDestroyCallback = _ref.onDestroyCallback,
@@ -34,7 +37,8 @@ var VatisTechClient = /*#__PURE__*/function () {
       frameOverlap = _ref.frameOverlap,
       bufferOffset = _ref.bufferOffset,
       errorHandler = _ref.errorHandler,
-      waitingAfterMessages = _ref.waitingAfterMessages;
+      waitingAfterMessages = _ref.waitingAfterMessages,
+      config = _ref.config;
     (0, _classCallCheck2["default"])(this, VatisTechClient);
     (0, _defineProperty2["default"])(this, "microphoneGenerator", void 0);
     (0, _defineProperty2["default"])(this, "instanceReservation", void 0);
@@ -42,6 +46,7 @@ var VatisTechClient = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "socketIOClientGenerator", void 0);
     (0, _defineProperty2["default"])(this, "microphoneQueue", void 0);
     (0, _defineProperty2["default"])(this, "onData", void 0);
+    (0, _defineProperty2["default"])(this, "onCommandData", void 0);
     (0, _defineProperty2["default"])(this, "waitingForFinalPacket", void 0);
     (0, _defineProperty2["default"])(this, "waitingAfterMessages", void 0);
     (0, _defineProperty2["default"])(this, "logger", void 0);
@@ -49,6 +54,12 @@ var VatisTechClient = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "shouldDestroy", void 0);
     (0, _defineProperty2["default"])(this, "onDestroyCallback", void 0);
     (0, _defineProperty2["default"])(this, "errorHandler", void 0);
+    (0, _defineProperty2["default"])(this, "config", void 0);
+    if (config) {
+      this.config = config;
+    } else {
+      this.config = undefined;
+    }
     if (errorHandler) {
       this.errorHandler = errorHandler;
     } else {
@@ -94,10 +105,19 @@ var VatisTechClient = /*#__PURE__*/function () {
       this.onData = onData;
     }
 
+    // callback for sending to the user the data that comes as a result for a command from ASR SERVICE through the SocketIOClientGenerator
+    // e.g. data.headers.SpokenCommand === 'NEW_PARAGRAPHS'
+    if (onCommandData === undefined) {
+      this.onCommandData = function () {};
+    } else {
+      this.onCommandData = onCommandData;
+    }
+
     // instantiante MicrophoneQueue - this will keep all the microphone buffers until they can be sent to the ASR SERVICE through the SocketIOClientGenerator
     this.microphoneQueue = new _MicrophoneQueue["default"]({
       logger: this.logger.bind(this),
-      errorHandler: this.errorHandler
+      errorHandler: this.errorHandler,
+      config: this.config
     });
 
     // instantiante ApiKeyGenerator - this will return on the responseCallback the serviceHost and the authToken for the InstanceReservation to reserve a live asr instance based on the apiUrl and apiKey
@@ -176,6 +196,7 @@ var VatisTechClient = /*#__PURE__*/function () {
         this.socketIOClientGenerator = undefined;
         this.microphoneQueue = undefined;
         this.onData = undefined;
+        this.onCommandData = undefined;
         this.waitingForFinalPacket = undefined;
         this.logger = undefined;
         this.log = undefined;
@@ -268,7 +289,9 @@ var VatisTechClient = /*#__PURE__*/function () {
       if (this.microphoneQueue === undefined) return;
       this.microphoneQueue.enqueue(data);
       if (this.waitingForFinalPacket < this.waitingAfterMessages && this.microphoneQueue.peek()) {
-        this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
+        if (this.microphoneQueue.peek().type === SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA) {
+          this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
+        }
         this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
       }
     }
@@ -280,10 +303,15 @@ var VatisTechClient = /*#__PURE__*/function () {
     key: "onSocketIOClientGeneratorOnAsrResultCallback",
     value: function onSocketIOClientGeneratorOnAsrResultCallback(data) {
       this.onData(JSON.parse(data));
+      if (checkICommandPacket(JSON.parse(data))) {
+        this.onCommandData(JSON.parse(data));
+      }
       if (checkIfFinalPacket(JSON.parse(data))) {
         this.waitingForFinalPacket = this.waitingForFinalPacket - 1;
         if (this.microphoneQueue.peek() && this.waitingForFinalPacket < this.waitingAfterMessages) {
-          this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
+          if (this.microphoneQueue.peek().type === SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA) {
+            this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
+          }
           this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
         }
       }
