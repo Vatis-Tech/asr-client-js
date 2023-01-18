@@ -168,6 +168,30 @@ function onData(data) {
 
 The `data` object that is received has the following props:
 
+### `onCommandData`
+
+This is a **Function** on which you will receive from the back-end the transcript chunks for speciffic commands.
+
+For example, if you initialize the plugin with a set of commands (e.g. `{spokenCommandsList: [ { "command": "NEW_PARAGRAPH", "regex": ["start new paragraph", "new phrase", "new sentence"] } ] }`), each time the back-end algorithm will find these sets of commands, it will send on this function the data.
+
+It has the following signature:
+
+```
+const onCommandData = (data) => {
+	/* do something with data */
+}
+```
+
+Or with function names:
+
+```
+function onCommandData(data) {
+	/* do something with data */
+}
+```
+
+The `data` object from this callback, is the same as the one from [onData callback](#ondata).
+
 ### `log`
 
 This is a **Boolean** prop.
