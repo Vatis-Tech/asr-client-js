@@ -9,7 +9,7 @@ import functions from "./helpers/functions/index.js";
 
 const { WAIT_AFTER_MESSAGES } = constants;
 
-const { generateApiUrl, checkIfFinalPacket } = functions;
+const { generateApiUrl, checkIfFinalPacket, checkICommandPacket } = functions;
 
 class VatisTechClient {
   microphoneGenerator;
@@ -18,6 +18,7 @@ class VatisTechClient {
   socketIOClientGenerator;
   microphoneQueue;
   onData;
+  onCommandData;
   waitingForFinalPacket;
   waitingAfterMessages;
   logger;
@@ -31,6 +32,7 @@ class VatisTechClient {
     language,
     apiKey,
     onData,
+    onCommandData,
     log,
     logger,
     onDestroyCallback,
@@ -45,7 +47,7 @@ class VatisTechClient {
     if (errorHandler) {
       this.errorHandler = errorHandler;
     } else {
-      this.errorHandler = (e) => {};
+      this.errorHandler = (e) => { };
     }
 
     this.log = log;
@@ -55,7 +57,7 @@ class VatisTechClient {
     } else if (this.log === true) {
       this.logger = console.log;
     } else {
-      this.logger = () => {};
+      this.logger = () => { };
     }
 
     this.logger({
@@ -79,16 +81,24 @@ class VatisTechClient {
 
     // callback when successfully destroyed
     if (onDestroyCallback === undefined) {
-      this.onDestroyCallback = () => {};
+      this.onDestroyCallback = () => { };
     } else {
       this.onDestroyCallback = onDestroyCallback;
     }
 
     // callback for sending to the user the data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
     if (onData === undefined) {
-      this.onData = () => {};
+      this.onData = () => { };
     } else {
       this.onData = onData;
+    }
+
+    // callback for sending to the user the data that comes as a result for a command from ASR SERVICE through the SocketIOClientGenerator
+    // e.g. data.headers.SpokenCommand === 'NEW_PARAGRAPHS'
+    if (onCommandData === undefined) {
+      this.onCommandData = () => { };
+    } else {
+      this.onCommandData = onCommandData;
     }
 
     // instantiante MicrophoneQueue - this will keep all the microphone buffers until they can be sent to the ASR SERVICE through the SocketIOClientGenerator
@@ -166,6 +176,7 @@ class VatisTechClient {
       this.socketIOClientGenerator = undefined;
       this.microphoneQueue = undefined;
       this.onData = undefined;
+      this.onCommandData = undefined;
       this.waitingForFinalPacket = undefined;
       this.logger = undefined;
       this.log = undefined;
@@ -221,7 +232,7 @@ class VatisTechClient {
   initMicrophone() {
     this.microphoneGenerator
       .init()
-      .then(() => {})
+      .then(() => { })
       .catch((err) => {
         this.logger({
           currentState: `@vatis-tech/asr-client-js: Could not initilize the "MicrophoneGenerator" plugin.`,
@@ -252,6 +263,10 @@ class VatisTechClient {
   // if the data was final, and the MicrophoneQueue was empty, let the MicrophoneGenerator know that, when it gets new data, it can send it to the ASR SERVICE through the SocketIOClientGenerator
   onSocketIOClientGeneratorOnAsrResultCallback(data) {
     this.onData(JSON.parse(data));
+
+    if (checkICommandPacket(JSON.parse(data))) {
+      this.onCommandData(JSON.parse(data));
+    }
 
     if (checkIfFinalPacket(JSON.parse(data))) {
       this.waitingForFinalPacket = this.waitingForFinalPacket - 1;
