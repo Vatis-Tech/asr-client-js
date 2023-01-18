@@ -811,7 +811,7 @@ var WAIT_AFTER_MESSAGES = _index["default"].WAIT_AFTER_MESSAGES,
   SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA = _index["default"].SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA;
 var generateApiUrl = _index2["default"].generateApiUrl,
   checkIfFinalPacket = _index2["default"].checkIfFinalPacket,
-  checkICommandPacket = _index2["default"].checkICommandPacket;
+  checkIfCommandPacket = _index2["default"].checkIfCommandPacket;
 var VatisTechClient = /*#__PURE__*/function () {
   function VatisTechClient(_ref) {
     var service = _ref.service,
@@ -1095,7 +1095,7 @@ var VatisTechClient = /*#__PURE__*/function () {
     key: "onSocketIOClientGeneratorOnAsrResultCallback",
     value: function onSocketIOClientGeneratorOnAsrResultCallback(data) {
       this.onData(JSON.parse(data));
-      if (checkICommandPacket(JSON.parse(data))) {
+      if (checkIfCommandPacket(JSON.parse(data))) {
         this.onCommandData(JSON.parse(data));
       }
       if (checkIfFinalPacket(JSON.parse(data))) {
