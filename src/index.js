@@ -7,7 +7,7 @@ import MicrophoneQueue from "./components/MicrophoneQueue.js";
 import constants from "./helpers/constants/index.js";
 import functions from "./helpers/functions/index.js";
 
-const { WAIT_AFTER_MESSAGES } = constants;
+const { WAIT_AFTER_MESSAGES, SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA } = constants;
 
 const { generateApiUrl, checkIfFinalPacket, checkICommandPacket } = functions;
 
@@ -26,6 +26,7 @@ class VatisTechClient {
   shouldDestroy;
   onDestroyCallback;
   errorHandler;
+  config;
   constructor({
     service,
     model,
@@ -43,7 +44,14 @@ class VatisTechClient {
     bufferOffset,
     errorHandler,
     waitingAfterMessages,
+    config
   }) {
+    if (config) {
+      this.config = config;
+    } else {
+      this.config = undefined;
+    }
+
     if (errorHandler) {
       this.errorHandler = errorHandler;
     } else {
@@ -105,6 +113,7 @@ class VatisTechClient {
     this.microphoneQueue = new MicrophoneQueue({
       logger: this.logger.bind(this),
       errorHandler: this.errorHandler,
+      config: this.config
     });
 
     // instantiante ApiKeyGenerator - this will return on the responseCallback the serviceHost and the authToken for the InstanceReservation to reserve a live asr instance based on the apiUrl and apiKey
@@ -253,7 +262,9 @@ class VatisTechClient {
       this.waitingForFinalPacket < this.waitingAfterMessages &&
       this.microphoneQueue.peek()
     ) {
-      this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
+      if (this.microphoneQueue.peek().type === SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA) {
+        this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
+      }
       this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
     }
   }
@@ -274,7 +285,9 @@ class VatisTechClient {
         this.microphoneQueue.peek() &&
         this.waitingForFinalPacket < this.waitingAfterMessages
       ) {
-        this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
+        if (this.microphoneQueue.peek().type === SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA) {
+          this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
+        }
         this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
       }
     }
