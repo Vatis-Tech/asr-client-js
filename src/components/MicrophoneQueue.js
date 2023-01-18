@@ -1,3 +1,7 @@
+import projectConstants from "../helpers/constants";
+
+const { SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG } = projectConstants;
+
 class MicrophoneQueue {
   queue;
   logger;
