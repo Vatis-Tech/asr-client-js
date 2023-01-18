@@ -36,6 +36,7 @@ class MicrophoneGenerator {
     if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
       this.mediaRecorder.stop();
       this.onDataCallback({
+        type: "DATA",
         data: "",
         flush: "True",
         close: "True",
@@ -85,6 +86,7 @@ class MicrophoneGenerator {
             reader.onloadend = () => {
               // You can upload the base64 to server here.
               this.onDataCallback({
+                type: "DATA",
                 data: reader.result
                   .replace("data:audio/webm;codecs=opus;base64,", "")
                   .replace("data:audio/webm; codecs=opus;base64,", "")
