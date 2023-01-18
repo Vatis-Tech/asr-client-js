@@ -9,7 +9,7 @@ import functions from "./helpers/functions/index.js";
 
 const { WAIT_AFTER_MESSAGES, SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA } = constants;
 
-const { generateApiUrl, checkIfFinalPacket, checkICommandPacket } = functions;
+const { generateApiUrl, checkIfFinalPacket, checkIfCommandPacket } = functions;
 
 class VatisTechClient {
   microphoneGenerator;
@@ -275,7 +275,7 @@ class VatisTechClient {
   onSocketIOClientGeneratorOnAsrResultCallback(data) {
     this.onData(JSON.parse(data));
 
-    if (checkICommandPacket(JSON.parse(data))) {
+    if (checkIfCommandPacket(JSON.parse(data))) {
       this.onCommandData(JSON.parse(data));
     }
 
