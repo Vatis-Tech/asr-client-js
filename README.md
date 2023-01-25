@@ -149,6 +149,8 @@ For example, you can use this `spokenCommandsList` to define rules of when you w
 
 So each time the back-end algorithm will find in the transcript one of `"new line"`, `"new paragraph"`, `"from the start"`, `"start new line"` phrases, the VTC client will fire the [onCommandData callback](#oncommanddata). This way, in your applocation, you will be able to know, when to start a new paragraph.
 
+When sending a `config` to the client, the first callback to be fired, will be the [onConfig callback](#oncommanddata).
+
 ### `service`
 
 This is a **String** that refers to the service that you would like to use.
@@ -206,7 +208,11 @@ function onData(data) {
 }
 ```
 
-The `data` object that is received has the following props:
+The `data` object that is received has the following structure:
+
+```
+
+```
 
 ### `onCommandData`
 
@@ -231,6 +237,24 @@ function onCommandData(data) {
 ```
 
 The `data` object from this callback, is the same as the one from [onData callback](#ondata).
+
+### `onConfig`
+
+This is a **Function** on which you will receive from the back-end a message saying if the config was succesfully added ore not.
+
+It has the following signature:
+
+```
+const onConfig = (data) => {
+	/* do something with data */
+}
+```
+
+Where `data` object has the following structure:
+
+```
+
+```
 
 ### `log`
 
