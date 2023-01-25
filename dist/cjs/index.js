@@ -16,7 +16,8 @@ var _MicrophoneQueue = _interopRequireDefault(require("./components/MicrophoneQu
 var _index = _interopRequireDefault(require("./helpers/constants/index.js"));
 var _index2 = _interopRequireDefault(require("./helpers/functions/index.js"));
 var WAIT_AFTER_MESSAGES = _index["default"].WAIT_AFTER_MESSAGES,
-  SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA = _index["default"].SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA;
+  SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA = _index["default"].SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA,
+  SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED = _index["default"].SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED;
 var generateApiUrl = _index2["default"].generateApiUrl,
   checkIfFinalPacket = _index2["default"].checkIfFinalPacket,
   checkIfCommandPacket = _index2["default"].checkIfCommandPacket;
@@ -38,7 +39,8 @@ var VatisTechClient = /*#__PURE__*/function () {
       bufferOffset = _ref.bufferOffset,
       errorHandler = _ref.errorHandler,
       waitingAfterMessages = _ref.waitingAfterMessages,
-      config = _ref.config;
+      config = _ref.config,
+      onConfig = _ref.onConfig;
     (0, _classCallCheck2["default"])(this, VatisTechClient);
     (0, _defineProperty2["default"])(this, "microphoneGenerator", void 0);
     (0, _defineProperty2["default"])(this, "instanceReservation", void 0);
@@ -55,6 +57,7 @@ var VatisTechClient = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "onDestroyCallback", void 0);
     (0, _defineProperty2["default"])(this, "errorHandler", void 0);
     (0, _defineProperty2["default"])(this, "config", void 0);
+    (0, _defineProperty2["default"])(this, "onConfig", void 0);
     if (config) {
       this.config = config;
     } else {
@@ -113,11 +116,17 @@ var VatisTechClient = /*#__PURE__*/function () {
       this.onCommandData = onCommandData;
     }
 
+    // callback for sending to the user the data that comes as a result for appling a config from ASR SERVICE through the SocketIOClientGenerator
+    if (onConfig === undefined) {
+      this.onConfig = function () {};
+    } else {
+      this.onConfig = onConfig;
+    }
+
     // instantiante MicrophoneQueue - this will keep all the microphone buffers until they can be sent to the ASR SERVICE through the SocketIOClientGenerator
     this.microphoneQueue = new _MicrophoneQueue["default"]({
       logger: this.logger.bind(this),
-      errorHandler: this.errorHandler,
-      config: this.config
+      errorHandler: this.errorHandler
     });
 
     // instantiante ApiKeyGenerator - this will return on the responseCallback the serviceHost and the authToken for the InstanceReservation to reserve a live asr instance based on the apiUrl and apiKey
@@ -148,6 +157,7 @@ var VatisTechClient = /*#__PURE__*/function () {
       logger: this.logger.bind(this),
       destroyVTC: this.destroy.bind(this),
       errorHandler: this.errorHandler,
+      config: this.config,
       frameLength: frameLength,
       frameOverlap: frameOverlap,
       bufferOffset: bufferOffset
@@ -302,6 +312,10 @@ var VatisTechClient = /*#__PURE__*/function () {
   }, {
     key: "onSocketIOClientGeneratorOnAsrResultCallback",
     value: function onSocketIOClientGeneratorOnAsrResultCallback(data) {
+      if (JSON.parse(data).type === SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED) {
+        this.onConfig(JSON.parse(data));
+        return;
+      }
       this.onData(JSON.parse(data));
       if (checkIfCommandPacket(JSON.parse(data))) {
         this.onCommandData(JSON.parse(data));

@@ -10,6 +10,8 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/creat
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 var _socket = _interopRequireDefault(require("socket.io-client"));
 var _index = _interopRequireDefault(require("../helpers/constants/index.js"));
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 var SOCKET_IO_CLIENT_NAMESPACE = _index["default"].SOCKET_IO_CLIENT_NAMESPACE,
   SOCKET_IO_CLIENT_PATH = _index["default"].SOCKET_IO_CLIENT_PATH,
   SOCKET_IO_CLIENT_TRANSPORTS = _index["default"].SOCKET_IO_CLIENT_TRANSPORTS,
@@ -23,8 +25,8 @@ var SOCKET_IO_CLIENT_NAMESPACE = _index["default"].SOCKET_IO_CLIENT_NAMESPACE,
   SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION = _index["default"].SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION,
   SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION = _index["default"].SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION,
   SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION = _index["default"].SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION,
-  MICROPHONE_FRAME_LENGTH = _index["default"].MICROPHONE_FRAME_LENGTH,
-  MICROPHONE_TIMESLICE = _index["default"].MICROPHONE_TIMESLICE;
+  SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG = _index["default"].SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG,
+  MICROPHONE_FRAME_LENGTH = _index["default"].MICROPHONE_FRAME_LENGTH;
 var SocketIOClientGenerator = /*#__PURE__*/function () {
   function SocketIOClientGenerator(_ref) {
     var onConnectCallback = _ref.onConnectCallback,
@@ -34,7 +36,8 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
       frameLength = _ref.frameLength,
       frameOverlap = _ref.frameOverlap,
       bufferOffset = _ref.bufferOffset,
-      errorHandler = _ref.errorHandler;
+      errorHandler = _ref.errorHandler,
+      config = _ref.config;
     (0, _classCallCheck2["default"])(this, SocketIOClientGenerator);
     (0, _defineProperty2["default"])(this, "socketRef", void 0);
     (0, _defineProperty2["default"])(this, "streamHost", void 0);
@@ -48,8 +51,10 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "bufferOffset", void 0);
     (0, _defineProperty2["default"])(this, "errorHandler", void 0);
     (0, _defineProperty2["default"])(this, "sendClosePacket", void 0);
+    (0, _defineProperty2["default"])(this, "config", void 0);
     this.errorHandler = errorHandler;
     this.logger = logger;
+    this.config = config;
     this.logger({
       currentState: "@vatis-tech/asr-client-js: Instantianting the \"SocketIOClientGenerator\" plugin.",
       description: "@vatis-tech/asr-client-js: In this plugin, the connection between @vatis-tech/asr-client-js plugin and Vatis Tech LIVE ASR service is established. This plugin will send the data that is stored inside the MicrophoneQueue to the LIVE ASR service, and will receive the transcript for that data. And on the \"onData\" callback, will send the received transcript."
@@ -107,6 +112,11 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
           currentState: "@vatis-tech/asr-client-js: Destroy the \"SocketIOClientGenerator\" plugin.",
           description: "@vatis-tech/asr-client-js: The connection between @vatis-tech/asr-client-js and Vatis Tech LIVE ASR service has been closed by the Vatis Tech LIVE ASR service."
         });
+        if (_this.config) {
+          _this.socketRef.emit(_objectSpread({
+            type: SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG
+          }, config));
+        }
         _this.destroyVTC({
           hard: true
         });
