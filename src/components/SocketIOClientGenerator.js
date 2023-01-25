@@ -18,8 +18,9 @@ const {
   SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION,
   SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION,
 
+  SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG,
+
   MICROPHONE_FRAME_LENGTH,
-  MICROPHONE_TIMESLICE,
 } = constants;
 
 class SocketIOClientGenerator {
@@ -35,6 +36,7 @@ class SocketIOClientGenerator {
   bufferOffset;
   errorHandler;
   sendClosePacket;
+  config;
   constructor({
     onConnectCallback,
     onAsrResultCallback,
@@ -44,10 +46,13 @@ class SocketIOClientGenerator {
     frameOverlap,
     bufferOffset,
     errorHandler,
+    config
   }) {
     this.errorHandler = errorHandler;
 
     this.logger = logger;
+
+    this.config = config;
 
     this.logger({
       currentState: `@vatis-tech/asr-client-js: Instantianting the "SocketIOClientGenerator" plugin.`,
@@ -112,6 +117,13 @@ class SocketIOClientGenerator {
         currentState: `@vatis-tech/asr-client-js: Destroy the "SocketIOClientGenerator" plugin.`,
         description: `@vatis-tech/asr-client-js: The connection between @vatis-tech/asr-client-js and Vatis Tech LIVE ASR service has been closed by the Vatis Tech LIVE ASR service.`,
       });
+
+      if (this.config) {
+        this.socketRef.emit({
+          type: SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG,
+          ...config
+        })
+      }
 
       this.destroyVTC({ hard: true });
     });
