@@ -110,6 +110,13 @@ class SocketIOClientGenerator {
         description: `@vatis-tech/asr-client-js: A successful connection between @vatis-tech/asr-client-js and Vatis Tech LIVE ASR service has been established.`,
       });
 
+      if (this.config) {
+        this.socketRef.emit({
+          type: SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG,
+          ...config
+        })
+      }
+
       this.onConnectCallback();
     });
     this.socketRef.on("disconnect", () => {
@@ -117,13 +124,6 @@ class SocketIOClientGenerator {
         currentState: `@vatis-tech/asr-client-js: Destroy the "SocketIOClientGenerator" plugin.`,
         description: `@vatis-tech/asr-client-js: The connection between @vatis-tech/asr-client-js and Vatis Tech LIVE ASR service has been closed by the Vatis Tech LIVE ASR service.`,
       });
-
-      if (this.config) {
-        this.socketRef.emit({
-          type: SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG,
-          ...config
-        })
-      }
 
       this.destroyVTC({ hard: true });
     });
