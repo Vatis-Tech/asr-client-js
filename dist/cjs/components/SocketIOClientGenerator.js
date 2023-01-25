@@ -105,6 +105,11 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
           currentState: "@vatis-tech/asr-client-js: Initialized the \"SocketIOClientGenerator\" plugin.",
           description: "@vatis-tech/asr-client-js: A successful connection between @vatis-tech/asr-client-js and Vatis Tech LIVE ASR service has been established."
         });
+        if (_this.config) {
+          _this.socketRef.emit(_objectSpread({
+            type: SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG
+          }, _this.config));
+        }
         _this.onConnectCallback();
       });
       this.socketRef.on("disconnect", function () {
@@ -112,11 +117,6 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
           currentState: "@vatis-tech/asr-client-js: Destroy the \"SocketIOClientGenerator\" plugin.",
           description: "@vatis-tech/asr-client-js: The connection between @vatis-tech/asr-client-js and Vatis Tech LIVE ASR service has been closed by the Vatis Tech LIVE ASR service."
         });
-        if (_this.config) {
-          _this.socketRef.emit(_objectSpread({
-            type: SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG
-          }, config));
-        }
         _this.destroyVTC({
           hard: true
         });
