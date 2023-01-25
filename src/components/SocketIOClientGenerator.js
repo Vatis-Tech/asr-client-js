@@ -113,7 +113,7 @@ class SocketIOClientGenerator {
       if (this.config) {
         this.socketRef.emit({
           type: SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG,
-          ...config
+          ...this.config
         })
       }
 
