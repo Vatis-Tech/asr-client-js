@@ -111,7 +111,7 @@ class SocketIOClientGenerator {
       });
 
       if (this.config) {
-        this.socketRef.emit({
+        this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, {
           type: SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG,
           ...this.config
         })
