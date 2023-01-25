@@ -7,7 +7,7 @@ import MicrophoneQueue from "./components/MicrophoneQueue.js";
 import constants from "./helpers/constants/index.js";
 import functions from "./helpers/functions/index.js";
 
-const { WAIT_AFTER_MESSAGES, SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA } = constants;
+const { WAIT_AFTER_MESSAGES, SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA, SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED } = constants;
 
 const { generateApiUrl, checkIfFinalPacket, checkIfCommandPacket } = functions;
 
@@ -27,6 +27,7 @@ class VatisTechClient {
   onDestroyCallback;
   errorHandler;
   config;
+  onConfig;
   constructor({
     service,
     model,
@@ -44,7 +45,8 @@ class VatisTechClient {
     bufferOffset,
     errorHandler,
     waitingAfterMessages,
-    config
+    config,
+    onConfig
   }) {
     if (config) {
       this.config = config;
@@ -109,11 +111,17 @@ class VatisTechClient {
       this.onCommandData = onCommandData;
     }
 
+    // callback for sending to the user the data that comes as a result for appling a config from ASR SERVICE through the SocketIOClientGenerator
+    if (onConfig === undefined) {
+      this.onConfig = () => { };
+    } else {
+      this.onConfig = onConfig;
+    }
+
     // instantiante MicrophoneQueue - this will keep all the microphone buffers until they can be sent to the ASR SERVICE through the SocketIOClientGenerator
     this.microphoneQueue = new MicrophoneQueue({
       logger: this.logger.bind(this),
-      errorHandler: this.errorHandler,
-      config: this.config
+      errorHandler: this.errorHandler
     });
 
     // instantiante ApiKeyGenerator - this will return on the responseCallback the serviceHost and the authToken for the InstanceReservation to reserve a live asr instance based on the apiUrl and apiKey
@@ -140,6 +148,7 @@ class VatisTechClient {
       logger: this.logger.bind(this),
       destroyVTC: this.destroy.bind(this),
       errorHandler: this.errorHandler,
+      config: this.config,
       frameLength,
       frameOverlap,
       bufferOffset,
@@ -273,6 +282,11 @@ class VatisTechClient {
   // if the data was final, and the MicrophoneQueue was not empty, send a new data to the ASR SERVICE through the SocketIOClientGenerator
   // if the data was final, and the MicrophoneQueue was empty, let the MicrophoneGenerator know that, when it gets new data, it can send it to the ASR SERVICE through the SocketIOClientGenerator
   onSocketIOClientGeneratorOnAsrResultCallback(data) {
+    if (JSON.parse(data).type === SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED) {
+      this.onConfig(JSON.parse(data));
+      return;
+    }
+
     this.onData(JSON.parse(data));
 
     if (checkIfCommandPacket(JSON.parse(data))) {
