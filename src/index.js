@@ -290,7 +290,11 @@ class VatisTechClient {
     this.onData(JSON.parse(data));
 
     if (checkIfCommandPacket(JSON.parse(data))) {
-      this.onCommandData(JSON.parse(data));
+      const parsedData = JSON.parse(data);
+      this.onCommandData({
+        spokenCommand: parsedData.headers.SpokenCommand,
+        ...parsedData
+      });
     }
 
     if (checkIfFinalPacket(JSON.parse(data))) {
