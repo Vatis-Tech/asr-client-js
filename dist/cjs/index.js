@@ -19,7 +19,8 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 var WAIT_AFTER_MESSAGES = _index["default"].WAIT_AFTER_MESSAGES,
   SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA = _index["default"].SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA,
-  SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED = _index["default"].SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED;
+  SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED = _index["default"].SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED,
+  SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME = _index["default"].SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME;
 var generateApiUrl = _index2["default"].generateApiUrl,
   checkIfFinalPacket = _index2["default"].checkIfFinalPacket,
   checkIfCommandPacket = _index2["default"].checkIfCommandPacket;
@@ -332,19 +333,25 @@ var VatisTechClient = /*#__PURE__*/function () {
   }, {
     key: "onSocketIOClientGeneratorOnAsrResultCallback",
     value: function onSocketIOClientGeneratorOnAsrResultCallback(data) {
-      if (JSON.parse(data).type === SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED) {
-        this.onConfig(JSON.parse(data));
+      var parsedData = JSON.parse(data);
+      if (parsedData.type === SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED) {
+        this.onConfig(parsedData);
         return;
       }
-      this.onData(JSON.parse(data));
-      if (checkIfCommandPacket(JSON.parse(data))) {
-        var parsedData = JSON.parse(data);
+      this.onData(parsedData);
+      if (checkIfCommandPacket(parsedData)) {
         this.onCommandData(_objectSpread({
           spokenCommand: parsedData.headers.SpokenCommand
         }, parsedData));
       }
-      if (checkIfFinalPacket(JSON.parse(data))) {
-        this.onFinalData(JSON.parse(data));
+      if (parsedData.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME) && parsedData.headers[SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME]) {
+        if (parsedData.words && parsedData.words.length) {
+          this.onFinalData(parsedData);
+        }
+      } else {
+        this.onPartialData(parsedData);
+      }
+      if (checkIfFinalPacket(parsedData)) {
         this.waitingForFinalPacket = this.waitingForFinalPacket - 1;
         if (this.microphoneQueue.peek() && this.waitingForFinalPacket < this.waitingAfterMessages) {
           if (this.microphoneQueue.peek().type === SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA) {
@@ -352,8 +359,6 @@ var VatisTechClient = /*#__PURE__*/function () {
           }
           this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
         }
-      } else {
-        this.onPartialData(JSON.parse(data));
       }
 
       // check if the user tried to destroy the VTC client
