@@ -236,7 +236,7 @@ function onCommandData(data) {
 }
 ```
 
-The `data` object from this callback, is the same as the one from [onData callback](#ondata).
+The `data` object from this callback, is the same as the one from [onData callback](#ondata), but it also has a new property, named `spokenCommand`, with the actual command that triggered the callback.
 
 ### `onConfig`
 
