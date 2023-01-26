@@ -7,7 +7,12 @@ import MicrophoneQueue from "./components/MicrophoneQueue.js";
 import constants from "./helpers/constants/index.js";
 import functions from "./helpers/functions/index.js";
 
-const { WAIT_AFTER_MESSAGES, SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA, SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED } = constants;
+const {
+  WAIT_AFTER_MESSAGES,
+  SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA,
+  SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED,
+  SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME
+} = constants;
 
 const { generateApiUrl, checkIfFinalPacket, checkIfCommandPacket } = functions;
 
@@ -300,23 +305,37 @@ class VatisTechClient {
   // if the data was final, and the MicrophoneQueue was not empty, send a new data to the ASR SERVICE through the SocketIOClientGenerator
   // if the data was final, and the MicrophoneQueue was empty, let the MicrophoneGenerator know that, when it gets new data, it can send it to the ASR SERVICE through the SocketIOClientGenerator
   onSocketIOClientGeneratorOnAsrResultCallback(data) {
-    if (JSON.parse(data).type === SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED) {
-      this.onConfig(JSON.parse(data));
+
+    const parsedData = JSON.parse(data);
+
+
+    if (parsedData.type === SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED) {
+      this.onConfig(parsedData);
       return;
     }
 
-    this.onData(JSON.parse(data));
+    this.onData(parsedData);
 
-    if (checkIfCommandPacket(JSON.parse(data))) {
-      const parsedData = JSON.parse(data);
+    if (checkIfCommandPacket(parsedData)) {
       this.onCommandData({
         spokenCommand: parsedData.headers.SpokenCommand,
         ...parsedData
       });
     }
 
-    if (checkIfFinalPacket(JSON.parse(data))) {
-      this.onFinalData(JSON.parse(data));
+    if (
+      parsedData.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME) &&
+      parsedData.headers[SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME]
+    ) {
+      if (parsedData.words && parsedData.words.length) {
+        this.onFinalData(parsedData);
+      }
+    }
+    else {
+      this.onPartialData(parsedData);
+    }
+
+    if (checkIfFinalPacket(parsedData)) {
       this.waitingForFinalPacket = this.waitingForFinalPacket - 1;
       if (
         this.microphoneQueue.peek() &&
@@ -327,8 +346,6 @@ class VatisTechClient {
         }
         this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
       }
-    } else {
-      this.onPartialData(JSON.parse(data));
     }
 
     // check if the user tried to destroy the VTC client
