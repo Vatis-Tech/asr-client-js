@@ -42,7 +42,9 @@ var VatisTechClient = /*#__PURE__*/function () {
       errorHandler = _ref.errorHandler,
       waitingAfterMessages = _ref.waitingAfterMessages,
       config = _ref.config,
-      onConfig = _ref.onConfig;
+      onConfig = _ref.onConfig,
+      onPartialData = _ref.onPartialData,
+      onFinalData = _ref.onFinalData;
     (0, _classCallCheck2["default"])(this, VatisTechClient);
     (0, _defineProperty2["default"])(this, "microphoneGenerator", void 0);
     (0, _defineProperty2["default"])(this, "instanceReservation", void 0);
@@ -60,6 +62,8 @@ var VatisTechClient = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "errorHandler", void 0);
     (0, _defineProperty2["default"])(this, "config", void 0);
     (0, _defineProperty2["default"])(this, "onConfig", void 0);
+    (0, _defineProperty2["default"])(this, "onPartialData", void 0);
+    (0, _defineProperty2["default"])(this, "onFinalData", void 0);
     if (config) {
       this.config = config;
     } else {
@@ -108,6 +112,20 @@ var VatisTechClient = /*#__PURE__*/function () {
       this.onData = function () {};
     } else {
       this.onData = onData;
+    }
+
+    // callback for sending to the user the partial data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
+    if (onPartialData === undefined) {
+      this.onPartialData = function () {};
+    } else {
+      this.onPartialData = onPartialData;
+    }
+
+    // callback for sending to the user the final data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
+    if (onFinalData === undefined) {
+      this.onFinalData = function () {};
+    } else {
+      this.onFinalData = onFinalData;
     }
 
     // callback for sending to the user the data that comes as a result for a command from ASR SERVICE through the SocketIOClientGenerator
@@ -326,6 +344,7 @@ var VatisTechClient = /*#__PURE__*/function () {
         }, parsedData));
       }
       if (checkIfFinalPacket(JSON.parse(data))) {
+        this.onFinalData(JSON.parse(data));
         this.waitingForFinalPacket = this.waitingForFinalPacket - 1;
         if (this.microphoneQueue.peek() && this.waitingForFinalPacket < this.waitingAfterMessages) {
           if (this.microphoneQueue.peek().type === SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA) {
@@ -333,6 +352,8 @@ var VatisTechClient = /*#__PURE__*/function () {
           }
           this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
         }
+      } else {
+        this.onPartialData(JSON.parse(data));
       }
 
       // check if the user tried to destroy the VTC client

@@ -190,7 +190,7 @@ To get one, please follow these instructions:
 
 ### `onData`
 
-This is a **Function** on which you will receive from the back-end the transcript chunks.
+This is a **Function** on which you will receive from the back-end the transcript chunks. **It is a callback it is always fired.**.
 
 It has the following signature:
 
@@ -209,6 +209,81 @@ function onData(data) {
 ```
 
 The `data` object that is received has the following structure:
+
+```
+
+```
+
+#### Notes
+
+So, the `data` can be final frame - i.e. the backend has fully finalized the transcript for those words and the time intervals (start and end time).
+Or can be partial frame - i.e. the backend has not fully finalized the transcript for those words and the time intervals, and it will most likely change until it is overlapped by a final frame.
+
+### `onPartialData`
+
+This is a **Function** on which you will receive from the back-end the partial transcript chunks.
+
+It is identical to what the [onData callback](#ondata) does, just that the `data` will always represent partial frames.
+
+It has the following signature:
+
+```
+const onPartialData = (data) => {
+	/* do something with data */
+}
+```
+
+Or with function names:
+
+```
+function onPartialData(data) {
+	/* do something with data */
+}
+```
+
+#### NOTE
+
+The `data` object that comes on the current `onPartialData` callback overrides the `data` object that came on the previous `onPartialData` callback.
+
+### `onFinalData`
+
+This is a **Function** on which you will receive from the back-end the final transcript chunks.
+
+It is identical to what the [onData callback](#ondata) does, just that the `data` will always represent final frames.
+
+It has the following signature:
+
+```
+const onFinalData = (data) => {
+	/* do something with data */
+}
+```
+
+Or with function names:
+
+```
+function onFinalData(data) {
+	/* do something with data */
+}
+```
+
+#### NOTE
+
+The `data` object that comes from the `onFinalData` callback overrides the `data` object that came on the previous `onPartialData` callback.
+
+### `onConfig`
+
+This is a **Function** on which you will receive from the back-end a message saying if the config was succesfully added ore not.
+
+It has the following signature:
+
+```
+const onConfig = (data) => {
+	/* do something with data */
+}
+```
+
+Where `data` object has the following structure:
 
 ```
 
@@ -237,24 +312,6 @@ function onCommandData(data) {
 ```
 
 The `data` object from this callback, is the same as the one from [onData callback](#ondata), but it also has a new property, named `spokenCommand`, with the actual command that triggered the callback.
-
-### `onConfig`
-
-This is a **Function** on which you will receive from the back-end a message saying if the config was succesfully added ore not.
-
-It has the following signature:
-
-```
-const onConfig = (data) => {
-	/* do something with data */
-}
-```
-
-Where `data` object has the following structure:
-
-```
-
-```
 
 ### `log`
 
