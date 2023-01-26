@@ -106,7 +106,7 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
           description: "@vatis-tech/asr-client-js: A successful connection between @vatis-tech/asr-client-js and Vatis Tech LIVE ASR service has been established."
         });
         if (_this.config) {
-          _this.socketRef.emit(_objectSpread({
+          _this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, _objectSpread({
             type: SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG
           }, _this.config));
         }
