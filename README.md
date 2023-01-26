@@ -190,7 +190,7 @@ To get one, please follow these instructions:
 
 ### `onData`
 
-This is a **Function** on which you will receive from the back-end the transcript chunks.
+This is a **Function** on which you will receive from the back-end the transcript chunks. **It is a callback it is always fired.**.
 
 It has the following signature:
 
