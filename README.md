@@ -214,6 +214,11 @@ The `data` object that is received has the following structure:
 
 ```
 
+#### Notes
+
+So, the `data` can be final frame - i.e. the backend has fully finalized the transcript for those words and the time intervals (start and end time).
+Or can be partial frame - i.e. the backend has not fully finalized the transcript for those words and the time intervals, and it will most likely change until it is overlapped by a final frame.
+
 ### `onCommandData`
 
 This is a **Function** on which you will receive from the back-end the transcript chunks for speciffic commands.
@@ -237,6 +242,50 @@ function onCommandData(data) {
 ```
 
 The `data` object from this callback, is the same as the one from [onData callback](#ondata), but it also has a new property, named `spokenCommand`, with the actual command that triggered the callback.
+
+### `onPartialData`
+
+This is a **Function** on which you will receive from the back-end the partial transcript chunks.
+
+It is identical to what the [onData callback](#ondata) does, just that the `data` will always represent partial frames.
+
+It has the following signature:
+
+```
+const onPartialData = (data) => {
+	/* do something with data */
+}
+```
+
+Or with function names:
+
+```
+function onPartialData(data) {
+	/* do something with data */
+}
+```
+
+### `onFinalData`
+
+This is a **Function** on which you will receive from the back-end the final transcript chunks.
+
+It is identical to what the [onData callback](#ondata) does, just that the `data` will always represent final frames.
+
+It has the following signature:
+
+```
+const onFinalData = (data) => {
+	/* do something with data */
+}
+```
+
+Or with function names:
+
+```
+function onFinalData(data) {
+	/* do something with data */
+}
+```
 
 ### `onConfig`
 
