@@ -1,8 +1,7 @@
 import constants from "../constants/index.js";
 
 const {
-  SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET,
-  SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET,
+  SOCKET_IO_CLIENT_RESPONSE_FINAL_PACKET
 } = constants;
 
 const checkIfFinalPacket = (data) => {
