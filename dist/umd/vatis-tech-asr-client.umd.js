@@ -720,8 +720,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 var _index = _interopRequireDefault(require("../constants/index.js"));
-var SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET = _index["default"].SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET,
-  SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET = _index["default"].SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET;
+var SOCKET_IO_CLIENT_RESPONSE_FINAL_PACKET = _index["default"].SOCKET_IO_CLIENT_RESPONSE_FINAL_PACKET;
 var checkIfFinalPacket = function checkIfFinalPacket(data) {
   return data.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_FINAL_PACKET) && data.headers[SOCKET_IO_CLIENT_RESPONSE_FINAL_PACKET] === true;
 };
