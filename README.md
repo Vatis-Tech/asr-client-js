@@ -219,30 +219,6 @@ The `data` object that is received has the following structure:
 So, the `data` can be final frame - i.e. the backend has fully finalized the transcript for those words and the time intervals (start and end time).
 Or can be partial frame - i.e. the backend has not fully finalized the transcript for those words and the time intervals, and it will most likely change until it is overlapped by a final frame.
 
-### `onCommandData`
-
-This is a **Function** on which you will receive from the back-end the transcript chunks for speciffic commands.
-
-For example, if you initialize the plugin with a set of commands (e.g. `{spokenCommandsList: [ { "command": "NEW_PARAGRAPH", "regex": ["start new paragraph", "new phrase", "new sentence"] } ] }`), each time the back-end algorithm will find these sets of commands, it will send on this function the data.
-
-It has the following signature:
-
-```
-const onCommandData = (data) => {
-	/* do something with data */
-}
-```
-
-Or with function names:
-
-```
-function onCommandData(data) {
-	/* do something with data */
-}
-```
-
-The `data` object from this callback, is the same as the one from [onData callback](#ondata), but it also has a new property, named `spokenCommand`, with the actual command that triggered the callback.
-
 ### `onPartialData`
 
 This is a **Function** on which you will receive from the back-end the partial transcript chunks.
@@ -264,6 +240,10 @@ function onPartialData(data) {
 	/* do something with data */
 }
 ```
+
+#### NOTE
+
+The `data` object that comes on the current `onPartialData` callback overrides the `data` object that came on the previous `onPartialData` callback.
 
 ### `onFinalData`
 
@@ -287,6 +267,10 @@ function onFinalData(data) {
 }
 ```
 
+#### NOTE
+
+The `data` object that comes from the `onFinalData` callback overrides the `data` object that came on the previous `onPartialData` callback.
+
 ### `onConfig`
 
 This is a **Function** on which you will receive from the back-end a message saying if the config was succesfully added ore not.
@@ -304,6 +288,30 @@ Where `data` object has the following structure:
 ```
 
 ```
+
+### `onCommandData`
+
+This is a **Function** on which you will receive from the back-end the transcript chunks for speciffic commands.
+
+For example, if you initialize the plugin with a set of commands (e.g. `{spokenCommandsList: [ { "command": "NEW_PARAGRAPH", "regex": ["start new paragraph", "new phrase", "new sentence"] } ] }`), each time the back-end algorithm will find these sets of commands, it will send on this function the data.
+
+It has the following signature:
+
+```
+const onCommandData = (data) => {
+	/* do something with data */
+}
+```
+
+Or with function names:
+
+```
+function onCommandData(data) {
+	/* do something with data */
+}
+```
+
+The `data` object from this callback, is the same as the one from [onData callback](#ondata), but it also has a new property, named `spokenCommand`, with the actual command that triggered the callback.
 
 ### `log`
 
