@@ -28,6 +28,8 @@ class VatisTechClient {
   errorHandler;
   config;
   onConfig;
+  onPartialData;
+  onFinalData;
   constructor({
     service,
     model,
@@ -46,7 +48,9 @@ class VatisTechClient {
     errorHandler,
     waitingAfterMessages,
     config,
-    onConfig
+    onConfig,
+    onPartialData,
+    onFinalData
   }) {
     if (config) {
       this.config = config;
@@ -101,6 +105,20 @@ class VatisTechClient {
       this.onData = () => { };
     } else {
       this.onData = onData;
+    }
+
+    // callback for sending to the user the partial data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
+    if (onPartialData === undefined) {
+      this.onPartialData = () => { };
+    } else {
+      this.onPartialData = onPartialData;
+    }
+
+    // callback for sending to the user the final data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
+    if (onFinalData === undefined) {
+      this.onFinalData = () => { };
+    } else {
+      this.onFinalData = onFinalData;
     }
 
     // callback for sending to the user the data that comes as a result for a command from ASR SERVICE through the SocketIOClientGenerator
@@ -298,6 +316,7 @@ class VatisTechClient {
     }
 
     if (checkIfFinalPacket(JSON.parse(data))) {
+      this.onFinalData(JSON.parse(data));
       this.waitingForFinalPacket = this.waitingForFinalPacket - 1;
       if (
         this.microphoneQueue.peek() &&
@@ -308,6 +327,8 @@ class VatisTechClient {
         }
         this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
       }
+    } else {
+      this.onPartialData(JSON.parse(data));
     }
 
     // check if the user tried to destroy the VTC client
