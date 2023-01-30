@@ -210,11 +210,116 @@ function onData(data) {
 
 The `data` object that is received has the following structure:
 
+#### General structure
+
+```json
+{
+  "type": "<str>",
+  "headers": {
+    "key1": "value1",
+    "key2": "value2"
+  }
+}
 ```
 
+#### Timestamped transcription packet
+
+```json
+{
+  "type": "TIMESTAMPED_TRANSCRIPTION",
+  "headers": {},
+  "transcript": "hello world",
+  "words": [
+    {
+      "word": "hello",
+      "start_time": 1350.39,
+      "end_time": 4600.5,
+      "speaker": "Speaker 1",
+      "confidence": 0.96,
+      "entity": null,
+      "entity_group_id": null
+    },
+    {
+      "word": "world",
+      "start_time": 6200.3,
+      "end_time": 8020.0,
+      "speaker": "Speaker 1",
+      "confidence": 0.98,
+      "entity": null,
+      "entity_group_id": null
+    }
+  ]
+}
 ```
 
-#### Notes
+#### Timestamped transcription packet
+
+```json
+{
+  "type": "PROCESSED_TIMESTAMPED_TRANSCRIPTION",
+  "headers": {},
+  "transcript": "Hello, world!",
+  "words": [
+    {
+      "word": "hello",
+      "start_time": 1350.39,
+      "end_time": 4600.5,
+      "speaker": "Speaker 1",
+      "confidence": 0.96,
+      "entity": null,
+      "entity_group_id": null
+    },
+    {
+      "word": "world",
+      "start_time": 6200.3,
+      "end_time": 8020.0,
+      "speaker": "Speaker 1",
+      "confidence": 0.98,
+      "entity": null,
+      "entity_group_id": null
+    }
+  ],
+  "processed_words": [
+    {
+      "word": "Hello,",
+      "start_time": 1350.39,
+      "end_time": 4600.5,
+      "speaker": "Speaker 1",
+      "confidence": 0.96,
+      "entity": null,
+      "entity_group_id": null
+    },
+    {
+      "word": "world!",
+      "start_time": 6200.3,
+      "end_time": 8020.0,
+      "speaker": "Speaker 1",
+      "confidence": 0.98,
+      "entity": null,
+      "entity_group_id": null
+    }
+  ]
+}
+```
+
+#### Headers
+
+| Name                  | Type    | Description                                                                                                |
+| --------------------- | ------- | ---------------------------------------------------------------------------------------------------------- |
+| PacketNumber          | int     | Incremental packet number                                                                                  |
+| Sid                   | string  | Session id                                                                                                 |
+| FrameStartTime        | double  | Frame start time in milliseconds                                                                           |
+| FrameEndTime          | double  | Frame end time in milliseconds                                                                             |
+| FinalFrame            | boolean | Flag for marking that a segment of speech has ended and it won't be updated                                |
+| SilenceDetected       | boolean | Flag to indicate silence was detected on the audio frame                                                   |
+| ProcessingTimeSeconds | double  | Time of inferencing                                                                                        |
+| SplitPacket           | boolean | Flag that indicates the response packet was split and this is one of the pieces                            |
+| FinalSplitPacket      | boolean | Flag that indicates this is the final piece of the split response                                          |
+| SplitId               | string  | Full packet id in format `<packet_number>.<split_id>.<sub-split-id>.<sub-sub-split-id>`                    |
+| RequestBytes          | int     | Additional bytes requested to produce a frame. This is just an estimation, any number of bytes can be sent |
+| SpokenCommand         | string  | Command detected in frame                                                                                  |
+
+#### NOTE
 
 So, the `data` can be final frame - i.e. the backend has fully finalized the transcript for those words and the time intervals (start and end time).
 Or can be partial frame - i.e. the backend has not fully finalized the transcript for those words and the time intervals, and it will most likely change until it is overlapped by a final frame.
@@ -285,8 +390,23 @@ const onConfig = (data) => {
 
 Where `data` object has the following structure:
 
-```
+#### Config applied packet
 
+```json
+{
+  "type": "CONFIG_APPLIED",
+  "headers": {},
+  "config_packet": {
+    "type": "CONFIG",
+    "headers": {},
+    "spokenCommandsList": [
+      {
+        "command": "NEW_PARAGRAPH",
+        "regex": ["new line"]
+      }
+    ]
+  }
+}
 ```
 
 ### `onCommandData`
