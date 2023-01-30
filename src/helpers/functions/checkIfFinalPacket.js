@@ -12,8 +12,8 @@ const checkIfFinalPacket = (data) => {
       data.headers.hasOwnProperty(
         SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET
       ) &&
-      data.headers.SplitPacket === true &&
-      data.headers.FinalSplitPacket === true)
+      data.headers[SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET] === true &&
+      data.headers[SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET] === true)
   );
 };
 

@@ -82,7 +82,7 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
 }();
 var _default = ApiKeyGenerator;
 exports["default"] = _default;
-},{"@babel/runtime/helpers/classCallCheck":14,"@babel/runtime/helpers/createClass":15,"@babel/runtime/helpers/defineProperty":16,"@babel/runtime/helpers/interopRequireDefault":17}],2:[function(require,module,exports){
+},{"@babel/runtime/helpers/classCallCheck":15,"@babel/runtime/helpers/createClass":16,"@babel/runtime/helpers/defineProperty":17,"@babel/runtime/helpers/interopRequireDefault":18}],2:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -175,7 +175,7 @@ var InstanceReservation = /*#__PURE__*/function () {
 }();
 var _default = InstanceReservation;
 exports["default"] = _default;
-},{"../helpers/functions/index.js":11,"@babel/runtime/helpers/classCallCheck":14,"@babel/runtime/helpers/createClass":15,"@babel/runtime/helpers/defineProperty":16,"@babel/runtime/helpers/interopRequireDefault":17}],3:[function(require,module,exports){
+},{"../helpers/functions/index.js":12,"@babel/runtime/helpers/classCallCheck":15,"@babel/runtime/helpers/createClass":16,"@babel/runtime/helpers/defineProperty":17,"@babel/runtime/helpers/interopRequireDefault":18}],3:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -191,7 +191,8 @@ var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/de
 var _index = _interopRequireDefault(require("../helpers/constants/index.js"));
 var _index2 = _interopRequireDefault(require("../helpers/functions/index.js"));
 var MICROPHONE_BIT_RATE_SAMPLES = _index["default"].MICROPHONE_BIT_RATE_SAMPLES,
-  MICROPHONE_TIMESLICE = _index["default"].MICROPHONE_TIMESLICE;
+  MICROPHONE_TIMESLICE = _index["default"].MICROPHONE_TIMESLICE,
+  SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA = _index["default"].SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA;
 var base64ArrayBuffer = _index2["default"].base64ArrayBuffer;
 var MicrophoneGenerator = /*#__PURE__*/function () {
   function MicrophoneGenerator(_ref) {
@@ -228,6 +229,7 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
       if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
         this.mediaRecorder.stop();
         this.onDataCallback({
+          type: SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA,
           data: "",
           flush: "True",
           close: "True"
@@ -284,6 +286,7 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
                   reader.onloadend = function () {
                     // You can upload the base64 to server here.
                     _this2.onDataCallback({
+                      type: SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA,
                       data: reader.result.replace("data:audio/webm;codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus; base64,", "")
                     });
                   };
@@ -353,7 +356,7 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
 }();
 var _default = MicrophoneGenerator;
 exports["default"] = _default;
-},{"../helpers/constants/index.js":6,"../helpers/functions/index.js":11,"@babel/runtime/helpers/asyncToGenerator":13,"@babel/runtime/helpers/classCallCheck":14,"@babel/runtime/helpers/createClass":15,"@babel/runtime/helpers/defineProperty":16,"@babel/runtime/helpers/interopRequireDefault":17,"@babel/runtime/regenerator":22}],4:[function(require,module,exports){
+},{"../helpers/constants/index.js":6,"../helpers/functions/index.js":12,"@babel/runtime/helpers/asyncToGenerator":14,"@babel/runtime/helpers/classCallCheck":15,"@babel/runtime/helpers/createClass":16,"@babel/runtime/helpers/defineProperty":17,"@babel/runtime/helpers/interopRequireDefault":18,"@babel/runtime/regenerator":23}],4:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -402,7 +405,7 @@ var MicrophoneQueue = /*#__PURE__*/function () {
 }();
 var _default = MicrophoneQueue;
 exports["default"] = _default;
-},{"@babel/runtime/helpers/classCallCheck":14,"@babel/runtime/helpers/createClass":15,"@babel/runtime/helpers/defineProperty":16,"@babel/runtime/helpers/interopRequireDefault":17}],5:[function(require,module,exports){
+},{"@babel/runtime/helpers/classCallCheck":15,"@babel/runtime/helpers/createClass":16,"@babel/runtime/helpers/defineProperty":17,"@babel/runtime/helpers/interopRequireDefault":18}],5:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -415,6 +418,8 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/creat
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 var _socket = _interopRequireDefault(require("socket.io-client"));
 var _index = _interopRequireDefault(require("../helpers/constants/index.js"));
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 var SOCKET_IO_CLIENT_NAMESPACE = _index["default"].SOCKET_IO_CLIENT_NAMESPACE,
   SOCKET_IO_CLIENT_PATH = _index["default"].SOCKET_IO_CLIENT_PATH,
   SOCKET_IO_CLIENT_TRANSPORTS = _index["default"].SOCKET_IO_CLIENT_TRANSPORTS,
@@ -428,8 +433,8 @@ var SOCKET_IO_CLIENT_NAMESPACE = _index["default"].SOCKET_IO_CLIENT_NAMESPACE,
   SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION = _index["default"].SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION,
   SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION = _index["default"].SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION,
   SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION = _index["default"].SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION,
-  MICROPHONE_FRAME_LENGTH = _index["default"].MICROPHONE_FRAME_LENGTH,
-  MICROPHONE_TIMESLICE = _index["default"].MICROPHONE_TIMESLICE;
+  SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG = _index["default"].SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG,
+  MICROPHONE_FRAME_LENGTH = _index["default"].MICROPHONE_FRAME_LENGTH;
 var SocketIOClientGenerator = /*#__PURE__*/function () {
   function SocketIOClientGenerator(_ref) {
     var onConnectCallback = _ref.onConnectCallback,
@@ -439,7 +444,8 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
       frameLength = _ref.frameLength,
       frameOverlap = _ref.frameOverlap,
       bufferOffset = _ref.bufferOffset,
-      errorHandler = _ref.errorHandler;
+      errorHandler = _ref.errorHandler,
+      config = _ref.config;
     (0, _classCallCheck2["default"])(this, SocketIOClientGenerator);
     (0, _defineProperty2["default"])(this, "socketRef", void 0);
     (0, _defineProperty2["default"])(this, "streamHost", void 0);
@@ -453,8 +459,10 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "bufferOffset", void 0);
     (0, _defineProperty2["default"])(this, "errorHandler", void 0);
     (0, _defineProperty2["default"])(this, "sendClosePacket", void 0);
+    (0, _defineProperty2["default"])(this, "config", void 0);
     this.errorHandler = errorHandler;
     this.logger = logger;
+    this.config = config;
     this.logger({
       currentState: "@vatis-tech/asr-client-js: Instantianting the \"SocketIOClientGenerator\" plugin.",
       description: "@vatis-tech/asr-client-js: In this plugin, the connection between @vatis-tech/asr-client-js plugin and Vatis Tech LIVE ASR service is established. This plugin will send the data that is stored inside the MicrophoneQueue to the LIVE ASR service, and will receive the transcript for that data. And on the \"onData\" callback, will send the received transcript."
@@ -505,6 +513,11 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
           currentState: "@vatis-tech/asr-client-js: Initialized the \"SocketIOClientGenerator\" plugin.",
           description: "@vatis-tech/asr-client-js: A successful connection between @vatis-tech/asr-client-js and Vatis Tech LIVE ASR service has been established."
         });
+        if (_this.config) {
+          _this.socketRef.emit(SOCKET_IO_CLIENT_REQUEST_PATH, _objectSpread({
+            type: SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG
+          }, _this.config));
+        }
         _this.onConnectCallback();
       });
       this.socketRef.on("disconnect", function () {
@@ -563,7 +576,7 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
 }();
 var _default = SocketIOClientGenerator;
 exports["default"] = _default;
-},{"../helpers/constants/index.js":6,"@babel/runtime/helpers/classCallCheck":14,"@babel/runtime/helpers/createClass":15,"@babel/runtime/helpers/defineProperty":16,"@babel/runtime/helpers/interopRequireDefault":17,"socket.io-client":51}],6:[function(require,module,exports){
+},{"../helpers/constants/index.js":6,"@babel/runtime/helpers/classCallCheck":15,"@babel/runtime/helpers/createClass":16,"@babel/runtime/helpers/defineProperty":17,"@babel/runtime/helpers/interopRequireDefault":18,"socket.io-client":52}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -581,6 +594,8 @@ var SOCKET_IO_CLIENT_RESULT_PATH = "/asr_result";
 var SOCKET_IO_CLIENT_REQUEST_PATH = "/asr_request";
 var SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET = "SplitPacket";
 var SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET = "FinalSplitPacket";
+var SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME = "FinalFrame";
+var SOCKET_IO_CLIENT_RESPONSE_COMMAND_PACKET = "SpokenCommand";
 var SOCKET_IO_CLIENT_FRAME_OVERLAP = 1.0;
 var SOCKET_IO_CLIENT_BUFFER_OFFSET = 0.5;
 var SOCKET_IO_CLIENT_AUDIO_FORMAT = "webm";
@@ -589,6 +604,9 @@ var SOCKET_IO_CLIENT_DISABLE_DISFLUENCIES = "True";
 var SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION = "True";
 var SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION = "True";
 var SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION = "True";
+var SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG = "CONFIG";
+var SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA = "DATA";
+var SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED = "CONFIG_APPLIED";
 var MICROPHONE_FRAME_LENGTH = 0.6;
 var MICROPHONE_BIT_RATE_SAMPLES = 16000;
 var MICROPHONE_TIMESLICE = 500;
@@ -604,6 +622,8 @@ var projectConstants = {
   SOCKET_IO_CLIENT_REQUEST_PATH: SOCKET_IO_CLIENT_REQUEST_PATH,
   SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET: SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET,
   SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET: SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET,
+  SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME: SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME,
+  SOCKET_IO_CLIENT_RESPONSE_COMMAND_PACKET: SOCKET_IO_CLIENT_RESPONSE_COMMAND_PACKET,
   SOCKET_IO_CLIENT_FRAME_OVERLAP: SOCKET_IO_CLIENT_FRAME_OVERLAP,
   SOCKET_IO_CLIENT_BUFFER_OFFSET: SOCKET_IO_CLIENT_BUFFER_OFFSET,
   SOCKET_IO_CLIENT_AUDIO_FORMAT: SOCKET_IO_CLIENT_AUDIO_FORMAT,
@@ -612,6 +632,9 @@ var projectConstants = {
   SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION: SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION,
   SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION: SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION,
   SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION: SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION,
+  SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG: SOCKET_IO_CLIENT_MESSAGE_TYPE_CONFIG,
+  SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA: SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA,
+  SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED: SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED,
   MICROPHONE_FRAME_LENGTH: MICROPHONE_FRAME_LENGTH,
   MICROPHONE_BIT_RATE_SAMPLES: MICROPHONE_BIT_RATE_SAMPLES,
   MICROPHONE_TIMESLICE: MICROPHONE_TIMESLICE
@@ -682,14 +705,29 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 var _index = _interopRequireDefault(require("../constants/index.js"));
+var SOCKET_IO_CLIENT_RESPONSE_COMMAND_PACKET = _index["default"].SOCKET_IO_CLIENT_RESPONSE_COMMAND_PACKET;
+var checkIfCommandPacket = function checkIfCommandPacket(data) {
+  return data.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_COMMAND_PACKET);
+};
+var _default = checkIfCommandPacket;
+exports["default"] = _default;
+},{"../constants/index.js":6,"@babel/runtime/helpers/interopRequireDefault":18}],9:[function(require,module,exports){
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var _index = _interopRequireDefault(require("../constants/index.js"));
 var SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET = _index["default"].SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET,
   SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET = _index["default"].SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET;
 var checkIfFinalPacket = function checkIfFinalPacket(data) {
-  return !data.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET) || data.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET) && data.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET) && data.headers.SplitPacket === true && data.headers.FinalSplitPacket === true;
+  return !data.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET) || data.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET) && data.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET) && data.headers[SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET] === true && data.headers[SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET] === true;
 };
 var _default = checkIfFinalPacket;
 exports["default"] = _default;
-},{"../constants/index.js":6,"@babel/runtime/helpers/interopRequireDefault":17}],9:[function(require,module,exports){
+},{"../constants/index.js":6,"@babel/runtime/helpers/interopRequireDefault":18}],10:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -731,7 +769,7 @@ function generateApiUrl(_ref) {
 }
 var _default = generateApiUrl;
 exports["default"] = _default;
-},{"../constants/index.js":6,"@babel/runtime/helpers/interopRequireDefault":17}],10:[function(require,module,exports){
+},{"../constants/index.js":6,"@babel/runtime/helpers/interopRequireDefault":18}],11:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -749,7 +787,7 @@ function generateReservationUrl(_ref) {
 }
 var _default = generateReservationUrl;
 exports["default"] = _default;
-},{"../constants/index.js":6,"@babel/runtime/helpers/interopRequireDefault":17}],11:[function(require,module,exports){
+},{"../constants/index.js":6,"@babel/runtime/helpers/interopRequireDefault":18}],12:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -761,15 +799,17 @@ var _checkIfFinalPacket = _interopRequireDefault(require("./checkIfFinalPacket.j
 var _generateApiUrl = _interopRequireDefault(require("./generateApiUrl.js"));
 var _base64ArrayBuffer = _interopRequireDefault(require("./base64ArrayBuffer.js"));
 var _generateReservationUrl = _interopRequireDefault(require("./generateReservationUrl.js"));
+var _checkIfCommandPacket = _interopRequireDefault(require("./checkIfCommandPacket.js"));
 var functions = {
   checkIfFinalPacket: _checkIfFinalPacket["default"],
   generateApiUrl: _generateApiUrl["default"],
   base64ArrayBuffer: _base64ArrayBuffer["default"],
-  generateReservationUrl: _generateReservationUrl["default"]
+  generateReservationUrl: _generateReservationUrl["default"],
+  checkIfCommandPacket: _checkIfCommandPacket["default"]
 };
 var _default = functions;
 exports["default"] = _default;
-},{"./base64ArrayBuffer.js":7,"./checkIfFinalPacket.js":8,"./generateApiUrl.js":9,"./generateReservationUrl.js":10,"@babel/runtime/helpers/interopRequireDefault":17}],12:[function(require,module,exports){
+},{"./base64ArrayBuffer.js":7,"./checkIfCommandPacket.js":8,"./checkIfFinalPacket.js":9,"./generateApiUrl.js":10,"./generateReservationUrl.js":11,"@babel/runtime/helpers/interopRequireDefault":18}],13:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -787,9 +827,15 @@ var _MicrophoneGenerator = _interopRequireDefault(require("./components/Micropho
 var _MicrophoneQueue = _interopRequireDefault(require("./components/MicrophoneQueue.js"));
 var _index = _interopRequireDefault(require("./helpers/constants/index.js"));
 var _index2 = _interopRequireDefault(require("./helpers/functions/index.js"));
-var WAIT_AFTER_MESSAGES = _index["default"].WAIT_AFTER_MESSAGES;
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+var WAIT_AFTER_MESSAGES = _index["default"].WAIT_AFTER_MESSAGES,
+  SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA = _index["default"].SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA,
+  SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED = _index["default"].SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED,
+  SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME = _index["default"].SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME;
 var generateApiUrl = _index2["default"].generateApiUrl,
-  checkIfFinalPacket = _index2["default"].checkIfFinalPacket;
+  checkIfFinalPacket = _index2["default"].checkIfFinalPacket,
+  checkIfCommandPacket = _index2["default"].checkIfCommandPacket;
 var VatisTechClient = /*#__PURE__*/function () {
   function VatisTechClient(_ref) {
     var service = _ref.service,
@@ -797,6 +843,7 @@ var VatisTechClient = /*#__PURE__*/function () {
       language = _ref.language,
       apiKey = _ref.apiKey,
       onData = _ref.onData,
+      onCommandData = _ref.onCommandData,
       log = _ref.log,
       logger = _ref.logger,
       onDestroyCallback = _ref.onDestroyCallback,
@@ -806,7 +853,11 @@ var VatisTechClient = /*#__PURE__*/function () {
       frameOverlap = _ref.frameOverlap,
       bufferOffset = _ref.bufferOffset,
       errorHandler = _ref.errorHandler,
-      waitingAfterMessages = _ref.waitingAfterMessages;
+      waitingAfterMessages = _ref.waitingAfterMessages,
+      config = _ref.config,
+      onConfig = _ref.onConfig,
+      onPartialData = _ref.onPartialData,
+      onFinalData = _ref.onFinalData;
     (0, _classCallCheck2["default"])(this, VatisTechClient);
     (0, _defineProperty2["default"])(this, "microphoneGenerator", void 0);
     (0, _defineProperty2["default"])(this, "instanceReservation", void 0);
@@ -814,6 +865,7 @@ var VatisTechClient = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "socketIOClientGenerator", void 0);
     (0, _defineProperty2["default"])(this, "microphoneQueue", void 0);
     (0, _defineProperty2["default"])(this, "onData", void 0);
+    (0, _defineProperty2["default"])(this, "onCommandData", void 0);
     (0, _defineProperty2["default"])(this, "waitingForFinalPacket", void 0);
     (0, _defineProperty2["default"])(this, "waitingAfterMessages", void 0);
     (0, _defineProperty2["default"])(this, "logger", void 0);
@@ -821,6 +873,15 @@ var VatisTechClient = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "shouldDestroy", void 0);
     (0, _defineProperty2["default"])(this, "onDestroyCallback", void 0);
     (0, _defineProperty2["default"])(this, "errorHandler", void 0);
+    (0, _defineProperty2["default"])(this, "config", void 0);
+    (0, _defineProperty2["default"])(this, "onConfig", void 0);
+    (0, _defineProperty2["default"])(this, "onPartialData", void 0);
+    (0, _defineProperty2["default"])(this, "onFinalData", void 0);
+    if (config) {
+      this.config = config;
+    } else {
+      this.config = undefined;
+    }
     if (errorHandler) {
       this.errorHandler = errorHandler;
     } else {
@@ -866,6 +927,35 @@ var VatisTechClient = /*#__PURE__*/function () {
       this.onData = onData;
     }
 
+    // callback for sending to the user the partial data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
+    if (onPartialData === undefined) {
+      this.onPartialData = function () {};
+    } else {
+      this.onPartialData = onPartialData;
+    }
+
+    // callback for sending to the user the final data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
+    if (onFinalData === undefined) {
+      this.onFinalData = function () {};
+    } else {
+      this.onFinalData = onFinalData;
+    }
+
+    // callback for sending to the user the data that comes as a result for a command from ASR SERVICE through the SocketIOClientGenerator
+    // e.g. data.headers.SpokenCommand === 'NEW_PARAGRAPHS'
+    if (onCommandData === undefined) {
+      this.onCommandData = function () {};
+    } else {
+      this.onCommandData = onCommandData;
+    }
+
+    // callback for sending to the user the data that comes as a result for appling a config from ASR SERVICE through the SocketIOClientGenerator
+    if (onConfig === undefined) {
+      this.onConfig = function () {};
+    } else {
+      this.onConfig = onConfig;
+    }
+
     // instantiante MicrophoneQueue - this will keep all the microphone buffers until they can be sent to the ASR SERVICE through the SocketIOClientGenerator
     this.microphoneQueue = new _MicrophoneQueue["default"]({
       logger: this.logger.bind(this),
@@ -900,6 +990,7 @@ var VatisTechClient = /*#__PURE__*/function () {
       logger: this.logger.bind(this),
       destroyVTC: this.destroy.bind(this),
       errorHandler: this.errorHandler,
+      config: this.config,
       frameLength: frameLength,
       frameOverlap: frameOverlap,
       bufferOffset: bufferOffset
@@ -948,6 +1039,7 @@ var VatisTechClient = /*#__PURE__*/function () {
         this.socketIOClientGenerator = undefined;
         this.microphoneQueue = undefined;
         this.onData = undefined;
+        this.onCommandData = undefined;
         this.waitingForFinalPacket = undefined;
         this.logger = undefined;
         this.log = undefined;
@@ -1040,7 +1132,9 @@ var VatisTechClient = /*#__PURE__*/function () {
       if (this.microphoneQueue === undefined) return;
       this.microphoneQueue.enqueue(data);
       if (this.waitingForFinalPacket < this.waitingAfterMessages && this.microphoneQueue.peek()) {
-        this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
+        if (this.microphoneQueue.peek().type === SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA) {
+          this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
+        }
         this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
       }
     }
@@ -1051,11 +1145,30 @@ var VatisTechClient = /*#__PURE__*/function () {
   }, {
     key: "onSocketIOClientGeneratorOnAsrResultCallback",
     value: function onSocketIOClientGeneratorOnAsrResultCallback(data) {
-      this.onData(JSON.parse(data));
-      if (checkIfFinalPacket(JSON.parse(data))) {
+      var parsedData = JSON.parse(data);
+      if (parsedData.type === SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED) {
+        this.onConfig(parsedData);
+        return;
+      }
+      this.onData(parsedData);
+      if (checkIfCommandPacket(parsedData)) {
+        this.onCommandData(_objectSpread({
+          spokenCommand: parsedData.headers.SpokenCommand
+        }, parsedData));
+      }
+      if (parsedData.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME) && parsedData.headers[SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME]) {
+        if (parsedData.words && parsedData.words.length) {
+          this.onFinalData(parsedData);
+        }
+      } else {
+        this.onPartialData(parsedData);
+      }
+      if (checkIfFinalPacket(parsedData)) {
         this.waitingForFinalPacket = this.waitingForFinalPacket - 1;
         if (this.microphoneQueue.peek() && this.waitingForFinalPacket < this.waitingAfterMessages) {
-          this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
+          if (this.microphoneQueue.peek().type === SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA) {
+            this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
+          }
           this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
         }
       }
@@ -1070,7 +1183,7 @@ var VatisTechClient = /*#__PURE__*/function () {
 }();
 var _default = VatisTechClient;
 exports["default"] = _default;
-},{"./components/ApiKeyGenerator.js":1,"./components/InstanceReservation.js":2,"./components/MicrophoneGenerator.js":3,"./components/MicrophoneQueue.js":4,"./components/SocketIOClientGenerator.js":5,"./helpers/constants/index.js":6,"./helpers/functions/index.js":11,"@babel/runtime/helpers/classCallCheck":14,"@babel/runtime/helpers/createClass":15,"@babel/runtime/helpers/defineProperty":16,"@babel/runtime/helpers/interopRequireDefault":17}],13:[function(require,module,exports){
+},{"./components/ApiKeyGenerator.js":1,"./components/InstanceReservation.js":2,"./components/MicrophoneGenerator.js":3,"./components/MicrophoneQueue.js":4,"./components/SocketIOClientGenerator.js":5,"./helpers/constants/index.js":6,"./helpers/functions/index.js":12,"@babel/runtime/helpers/classCallCheck":15,"@babel/runtime/helpers/createClass":16,"@babel/runtime/helpers/defineProperty":17,"@babel/runtime/helpers/interopRequireDefault":18}],14:[function(require,module,exports){
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
   try {
     var info = gen[key](arg);
@@ -1102,14 +1215,14 @@ function _asyncToGenerator(fn) {
   };
 }
 module.exports = _asyncToGenerator, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
   }
 }
 module.exports = _classCallCheck, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var toPropertyKey = require("./toPropertyKey.js");
 function _defineProperties(target, props) {
   for (var i = 0; i < props.length; i++) {
@@ -1129,7 +1242,7 @@ function _createClass(Constructor, protoProps, staticProps) {
   return Constructor;
 }
 module.exports = _createClass, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{"./toPropertyKey.js":20}],16:[function(require,module,exports){
+},{"./toPropertyKey.js":21}],17:[function(require,module,exports){
 var toPropertyKey = require("./toPropertyKey.js");
 function _defineProperty(obj, key, value) {
   key = toPropertyKey(key);
@@ -1146,14 +1259,14 @@ function _defineProperty(obj, key, value) {
   return obj;
 }
 module.exports = _defineProperty, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{"./toPropertyKey.js":20}],17:[function(require,module,exports){
+},{"./toPropertyKey.js":21}],18:[function(require,module,exports){
 function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : {
     "default": obj
   };
 }
 module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 var _typeof = require("./typeof.js")["default"];
 function _regeneratorRuntime() {
   "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
@@ -1458,7 +1571,7 @@ function _regeneratorRuntime() {
   }, exports;
 }
 module.exports = _regeneratorRuntime, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{"./typeof.js":21}],19:[function(require,module,exports){
+},{"./typeof.js":22}],20:[function(require,module,exports){
 var _typeof = require("./typeof.js")["default"];
 function _toPrimitive(input, hint) {
   if (_typeof(input) !== "object" || input === null) return input;
@@ -1471,7 +1584,7 @@ function _toPrimitive(input, hint) {
   return (hint === "string" ? String : Number)(input);
 }
 module.exports = _toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{"./typeof.js":21}],20:[function(require,module,exports){
+},{"./typeof.js":22}],21:[function(require,module,exports){
 var _typeof = require("./typeof.js")["default"];
 var toPrimitive = require("./toPrimitive.js");
 function _toPropertyKey(arg) {
@@ -1479,7 +1592,7 @@ function _toPropertyKey(arg) {
   return _typeof(key) === "symbol" ? key : String(key);
 }
 module.exports = _toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{"./toPrimitive.js":19,"./typeof.js":21}],21:[function(require,module,exports){
+},{"./toPrimitive.js":20,"./typeof.js":22}],22:[function(require,module,exports){
 function _typeof(obj) {
   "@babel/helpers - typeof";
 
@@ -1490,7 +1603,7 @@ function _typeof(obj) {
   }, module.exports.__esModule = true, module.exports["default"] = module.exports), _typeof(obj);
 }
 module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 // TODO(Babel 8): Remove this file.
 
 var runtime = require("../helpers/regeneratorRuntime")();
@@ -1507,7 +1620,7 @@ try {
   }
 }
 
-},{"../helpers/regeneratorRuntime":18}],23:[function(require,module,exports){
+},{"../helpers/regeneratorRuntime":19}],24:[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -1685,7 +1798,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 
 /**
  * Expose `Backoff`.
@@ -1772,7 +1885,7 @@ Backoff.prototype.setJitter = function(jitter){
 };
 
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -1924,7 +2037,7 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
@@ -3705,7 +3818,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":25,"buffer":26,"ieee754":46}],27:[function(require,module,exports){
+},{"base64-js":26,"buffer":27,"ieee754":47}],28:[function(require,module,exports){
 (function (process){(function (){
 /* eslint-env browser */
 
@@ -3978,7 +4091,7 @@ formatters.j = function (v) {
 };
 
 }).call(this)}).call(this,require('_process'))
-},{"./common":28,"_process":50}],28:[function(require,module,exports){
+},{"./common":29,"_process":51}],29:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -4254,7 +4367,7 @@ function setup(env) {
 
 module.exports = setup;
 
-},{"ms":47}],29:[function(require,module,exports){
+},{"ms":48}],30:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = (() => {
@@ -4269,7 +4382,7 @@ exports.default = (() => {
     }
 })();
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.installTimerFunctions = exports.transports = exports.Transport = exports.protocol = exports.Socket = void 0;
@@ -4283,7 +4396,7 @@ Object.defineProperty(exports, "transports", { enumerable: true, get: function (
 var util_js_1 = require("./util.js");
 Object.defineProperty(exports, "installTimerFunctions", { enumerable: true, get: function () { return util_js_1.installTimerFunctions; } });
 
-},{"./socket.js":31,"./transport.js":32,"./transports/index.js":33,"./util.js":39}],31:[function(require,module,exports){
+},{"./socket.js":32,"./transport.js":33,"./transports/index.js":34,"./util.js":40}],32:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -4875,7 +4988,7 @@ function clone(obj) {
     return o;
 }
 
-},{"./transports/index.js":33,"./util.js":39,"@socket.io/component-emitter":23,"debug":27,"engine.io-parser":44,"parseqs":48,"parseuri":49}],32:[function(require,module,exports){
+},{"./transports/index.js":34,"./util.js":40,"@socket.io/component-emitter":24,"debug":28,"engine.io-parser":45,"parseqs":49,"parseuri":50}],33:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -4998,7 +5111,7 @@ class Transport extends component_emitter_1.Emitter {
 }
 exports.Transport = Transport;
 
-},{"./util.js":39,"@socket.io/component-emitter":23,"debug":27,"engine.io-parser":44}],33:[function(require,module,exports){
+},{"./util.js":40,"@socket.io/component-emitter":24,"debug":28,"engine.io-parser":45}],34:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.transports = void 0;
@@ -5009,7 +5122,7 @@ exports.transports = {
     polling: polling_xhr_js_1.XHR
 };
 
-},{"./polling-xhr.js":34,"./websocket.js":37}],34:[function(require,module,exports){
+},{"./polling-xhr.js":35,"./websocket.js":38}],35:[function(require,module,exports){
 "use strict";
 /* global attachEvent */
 var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -5289,7 +5402,7 @@ function unloadHandler() {
     }
 }
 
-},{"../globalThis.js":29,"../util.js":39,"./polling.js":35,"./xmlhttprequest.js":38,"@socket.io/component-emitter":23,"debug":27}],35:[function(require,module,exports){
+},{"../globalThis.js":30,"../util.js":40,"./polling.js":36,"./xmlhttprequest.js":39,"@socket.io/component-emitter":24,"debug":28}],36:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -5475,7 +5588,7 @@ class Polling extends transport_js_1.Transport {
 }
 exports.Polling = Polling;
 
-},{"../transport.js":32,"debug":27,"engine.io-parser":44,"parseqs":48,"yeast":59}],36:[function(require,module,exports){
+},{"../transport.js":33,"debug":28,"engine.io-parser":45,"parseqs":49,"yeast":60}],37:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -5496,7 +5609,7 @@ exports.WebSocket = globalThis_js_1.default.WebSocket || globalThis_js_1.default
 exports.usingBrowserWebSocket = true;
 exports.defaultBinaryType = "arraybuffer";
 
-},{"../globalThis.js":29}],37:[function(require,module,exports){
+},{"../globalThis.js":30}],38:[function(require,module,exports){
 (function (Buffer){(function (){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -5694,7 +5807,7 @@ class WS extends transport_js_1.Transport {
 exports.WS = WS;
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../transport.js":32,"../util.js":39,"./websocket-constructor.js":36,"buffer":26,"debug":27,"engine.io-parser":44,"parseqs":48,"yeast":59}],38:[function(require,module,exports){
+},{"../transport.js":33,"../util.js":40,"./websocket-constructor.js":37,"buffer":27,"debug":28,"engine.io-parser":45,"parseqs":49,"yeast":60}],39:[function(require,module,exports){
 "use strict";
 // browser shim for xmlhttprequest module
 var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -5721,7 +5834,7 @@ function default_1(opts) {
 }
 exports.default = default_1;
 
-},{"../globalThis.js":29,"has-cors":45}],39:[function(require,module,exports){
+},{"../globalThis.js":30,"has-cors":46}],40:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -5753,7 +5866,7 @@ function installTimerFunctions(obj, opts) {
 }
 exports.installTimerFunctions = installTimerFunctions;
 
-},{"./globalThis.js":29}],40:[function(require,module,exports){
+},{"./globalThis.js":30}],41:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ERROR_PACKET = exports.PACKET_TYPES_REVERSE = exports.PACKET_TYPES = void 0;
@@ -5774,7 +5887,7 @@ Object.keys(PACKET_TYPES).forEach(key => {
 const ERROR_PACKET = { type: "error", data: "parser error" };
 exports.ERROR_PACKET = ERROR_PACKET;
 
-},{}],41:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.decode = exports.encode = void 0;
@@ -5824,7 +5937,7 @@ const decode = (base64) => {
 };
 exports.decode = decode;
 
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const commons_js_1 = require("./commons.js");
@@ -5877,7 +5990,7 @@ const mapBinary = (data, binaryType) => {
 };
 exports.default = decodePacket;
 
-},{"./commons.js":40,"./contrib/base64-arraybuffer.js":41}],43:[function(require,module,exports){
+},{"./commons.js":41,"./contrib/base64-arraybuffer.js":42}],44:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const commons_js_1 = require("./commons.js");
@@ -5922,7 +6035,7 @@ const encodeBlobAsBase64 = (data, callback) => {
 };
 exports.default = encodePacket;
 
-},{"./commons.js":40}],44:[function(require,module,exports){
+},{"./commons.js":41}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.decodePayload = exports.decodePacket = exports.encodePayload = exports.encodePacket = exports.protocol = void 0;
@@ -5962,7 +6075,7 @@ const decodePayload = (encodedPayload, binaryType) => {
 exports.decodePayload = decodePayload;
 exports.protocol = 4;
 
-},{"./decodePacket.js":42,"./encodePacket.js":43}],45:[function(require,module,exports){
+},{"./decodePacket.js":43,"./encodePacket.js":44}],46:[function(require,module,exports){
 
 /**
  * Module exports.
@@ -5981,7 +6094,7 @@ try {
   module.exports = false;
 }
 
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
@@ -6068,7 +6181,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -6232,7 +6345,7 @@ function plural(ms, msAbs, n, name) {
   return Math.round(ms / n) + ' ' + name + (isPlural ? 's' : '');
 }
 
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 /**
  * Compiles a querystring
  * Returns string representation of the object
@@ -6271,7 +6384,7 @@ exports.decode = function(qs){
   return qry;
 };
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 /**
  * Parses an URI
  *
@@ -6341,7 +6454,7 @@ function queryKey(uri, query) {
     return data;
 }
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -6527,7 +6640,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -6598,7 +6711,7 @@ Object.defineProperty(exports, "protocol", { enumerable: true, get: function () 
 
 module.exports = lookup;
 
-},{"./manager.js":52,"./socket.js":54,"./url.js":55,"debug":27,"socket.io-parser":57}],52:[function(require,module,exports){
+},{"./manager.js":53,"./socket.js":55,"./url.js":56,"debug":28,"socket.io-parser":58}],53:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -6995,7 +7108,7 @@ class Manager extends component_emitter_1.Emitter {
 }
 exports.Manager = Manager;
 
-},{"./on.js":53,"./socket.js":54,"@socket.io/component-emitter":23,"backo2":24,"debug":27,"engine.io-client":30,"socket.io-parser":57}],53:[function(require,module,exports){
+},{"./on.js":54,"./socket.js":55,"@socket.io/component-emitter":24,"backo2":25,"debug":28,"engine.io-client":31,"socket.io-parser":58}],54:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.on = void 0;
@@ -7007,7 +7120,7 @@ function on(obj, ev, fn) {
 }
 exports.on = on;
 
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -7517,7 +7630,7 @@ class Socket extends component_emitter_1.Emitter {
 }
 exports.Socket = Socket;
 
-},{"./on.js":53,"@socket.io/component-emitter":23,"debug":27,"socket.io-parser":57}],55:[function(require,module,exports){
+},{"./on.js":54,"@socket.io/component-emitter":24,"debug":28,"socket.io-parser":58}],56:[function(require,module,exports){
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -7589,7 +7702,7 @@ function url(uri, path = "", loc) {
 }
 exports.url = url;
 
-},{"debug":27,"parseuri":49}],56:[function(require,module,exports){
+},{"debug":28,"parseuri":50}],57:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.reconstructPacket = exports.deconstructPacket = void 0;
@@ -7671,7 +7784,7 @@ function _reconstructPacket(data, buffers) {
     return data;
 }
 
-},{"./is-binary.js":58}],57:[function(require,module,exports){
+},{"./is-binary.js":59}],58:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Decoder = exports.Encoder = exports.PacketType = exports.protocol = void 0;
@@ -7954,7 +8067,7 @@ class BinaryReconstructor {
     }
 }
 
-},{"./binary.js":56,"./is-binary.js":58,"@socket.io/component-emitter":23,"debug":27}],58:[function(require,module,exports){
+},{"./binary.js":57,"./is-binary.js":59,"@socket.io/component-emitter":24,"debug":28}],59:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.hasBinary = exports.isBinary = void 0;
@@ -8011,7 +8124,7 @@ function hasBinary(obj, toJSON) {
 }
 exports.hasBinary = hasBinary;
 
-},{}],59:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 'use strict';
 
 var alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_'.split('')
@@ -8081,5 +8194,5 @@ yeast.encode = encode;
 yeast.decode = decode;
 module.exports = yeast;
 
-},{}]},{},[12])(12)
+},{}]},{},[13])(13)
 });

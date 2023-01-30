@@ -1,7 +1,7 @@
 import constants from "../helpers/constants/index.js";
 import functions from "../helpers/functions/index.js";
 
-const { MICROPHONE_BIT_RATE_SAMPLES, MICROPHONE_TIMESLICE } = constants;
+const { MICROPHONE_BIT_RATE_SAMPLES, MICROPHONE_TIMESLICE, SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA } = constants;
 const { base64ArrayBuffer } = functions;
 
 class MicrophoneGenerator {
@@ -36,6 +36,7 @@ class MicrophoneGenerator {
     if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
       this.mediaRecorder.stop();
       this.onDataCallback({
+        type: SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA,
         data: "",
         flush: "True",
         close: "True",
@@ -85,6 +86,7 @@ class MicrophoneGenerator {
             reader.onloadend = () => {
               // You can upload the base64 to server here.
               this.onDataCallback({
+                type: SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA,
                 data: reader.result
                   .replace("data:audio/webm;codecs=opus;base64,", "")
                   .replace("data:audio/webm; codecs=opus;base64,", "")
