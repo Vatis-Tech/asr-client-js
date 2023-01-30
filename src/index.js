@@ -7,9 +7,14 @@ import MicrophoneQueue from "./components/MicrophoneQueue.js";
 import constants from "./helpers/constants/index.js";
 import functions from "./helpers/functions/index.js";
 
-const { WAIT_AFTER_MESSAGES } = constants;
+const {
+  WAIT_AFTER_MESSAGES,
+  SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA,
+  SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED,
+  SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME
+} = constants;
 
-const { generateApiUrl, checkIfFinalPacket } = functions;
+const { generateApiUrl, checkIfFinalPacket, checkIfCommandPacket } = functions;
 
 class VatisTechClient {
   microphoneGenerator;
@@ -18,6 +23,7 @@ class VatisTechClient {
   socketIOClientGenerator;
   microphoneQueue;
   onData;
+  onCommandData;
   waitingForFinalPacket;
   waitingAfterMessages;
   logger;
@@ -25,12 +31,17 @@ class VatisTechClient {
   shouldDestroy;
   onDestroyCallback;
   errorHandler;
+  config;
+  onConfig;
+  onPartialData;
+  onFinalData;
   constructor({
     service,
     model,
     language,
     apiKey,
     onData,
+    onCommandData,
     log,
     logger,
     onDestroyCallback,
@@ -41,11 +52,21 @@ class VatisTechClient {
     bufferOffset,
     errorHandler,
     waitingAfterMessages,
+    config,
+    onConfig,
+    onPartialData,
+    onFinalData
   }) {
+    if (config) {
+      this.config = config;
+    } else {
+      this.config = undefined;
+    }
+
     if (errorHandler) {
       this.errorHandler = errorHandler;
     } else {
-      this.errorHandler = (e) => {};
+      this.errorHandler = (e) => { };
     }
 
     this.log = log;
@@ -55,7 +76,7 @@ class VatisTechClient {
     } else if (this.log === true) {
       this.logger = console.log;
     } else {
-      this.logger = () => {};
+      this.logger = () => { };
     }
 
     this.logger({
@@ -79,22 +100,51 @@ class VatisTechClient {
 
     // callback when successfully destroyed
     if (onDestroyCallback === undefined) {
-      this.onDestroyCallback = () => {};
+      this.onDestroyCallback = () => { };
     } else {
       this.onDestroyCallback = onDestroyCallback;
     }
 
     // callback for sending to the user the data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
     if (onData === undefined) {
-      this.onData = () => {};
+      this.onData = () => { };
     } else {
       this.onData = onData;
+    }
+
+    // callback for sending to the user the partial data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
+    if (onPartialData === undefined) {
+      this.onPartialData = () => { };
+    } else {
+      this.onPartialData = onPartialData;
+    }
+
+    // callback for sending to the user the final data that comes as a result from ASR SERVICE through the SocketIOClientGenerator
+    if (onFinalData === undefined) {
+      this.onFinalData = () => { };
+    } else {
+      this.onFinalData = onFinalData;
+    }
+
+    // callback for sending to the user the data that comes as a result for a command from ASR SERVICE through the SocketIOClientGenerator
+    // e.g. data.headers.SpokenCommand === 'NEW_PARAGRAPHS'
+    if (onCommandData === undefined) {
+      this.onCommandData = () => { };
+    } else {
+      this.onCommandData = onCommandData;
+    }
+
+    // callback for sending to the user the data that comes as a result for appling a config from ASR SERVICE through the SocketIOClientGenerator
+    if (onConfig === undefined) {
+      this.onConfig = () => { };
+    } else {
+      this.onConfig = onConfig;
     }
 
     // instantiante MicrophoneQueue - this will keep all the microphone buffers until they can be sent to the ASR SERVICE through the SocketIOClientGenerator
     this.microphoneQueue = new MicrophoneQueue({
       logger: this.logger.bind(this),
-      errorHandler: this.errorHandler,
+      errorHandler: this.errorHandler
     });
 
     // instantiante ApiKeyGenerator - this will return on the responseCallback the serviceHost and the authToken for the InstanceReservation to reserve a live asr instance based on the apiUrl and apiKey
@@ -121,6 +171,7 @@ class VatisTechClient {
       logger: this.logger.bind(this),
       destroyVTC: this.destroy.bind(this),
       errorHandler: this.errorHandler,
+      config: this.config,
       frameLength,
       frameOverlap,
       bufferOffset,
@@ -166,6 +217,7 @@ class VatisTechClient {
       this.socketIOClientGenerator = undefined;
       this.microphoneQueue = undefined;
       this.onData = undefined;
+      this.onCommandData = undefined;
       this.waitingForFinalPacket = undefined;
       this.logger = undefined;
       this.log = undefined;
@@ -221,7 +273,7 @@ class VatisTechClient {
   initMicrophone() {
     this.microphoneGenerator
       .init()
-      .then(() => {})
+      .then(() => { })
       .catch((err) => {
         this.logger({
           currentState: `@vatis-tech/asr-client-js: Could not initilize the "MicrophoneGenerator" plugin.`,
@@ -242,7 +294,9 @@ class VatisTechClient {
       this.waitingForFinalPacket < this.waitingAfterMessages &&
       this.microphoneQueue.peek()
     ) {
-      this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
+      if (this.microphoneQueue.peek().type === SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA) {
+        this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
+      }
       this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
     }
   }
@@ -251,15 +305,45 @@ class VatisTechClient {
   // if the data was final, and the MicrophoneQueue was not empty, send a new data to the ASR SERVICE through the SocketIOClientGenerator
   // if the data was final, and the MicrophoneQueue was empty, let the MicrophoneGenerator know that, when it gets new data, it can send it to the ASR SERVICE through the SocketIOClientGenerator
   onSocketIOClientGeneratorOnAsrResultCallback(data) {
-    this.onData(JSON.parse(data));
 
-    if (checkIfFinalPacket(JSON.parse(data))) {
+    const parsedData = JSON.parse(data);
+
+
+    if (parsedData.type === SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED) {
+      this.onConfig(parsedData);
+      return;
+    }
+
+    this.onData(parsedData);
+
+    if (checkIfCommandPacket(parsedData)) {
+      this.onCommandData({
+        spokenCommand: parsedData.headers.SpokenCommand,
+        ...parsedData
+      });
+    }
+
+    if (
+      parsedData.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME) &&
+      parsedData.headers[SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME]
+    ) {
+      if (parsedData.words && parsedData.words.length) {
+        this.onFinalData(parsedData);
+      }
+    }
+    else {
+      this.onPartialData(parsedData);
+    }
+
+    if (checkIfFinalPacket(parsedData)) {
       this.waitingForFinalPacket = this.waitingForFinalPacket - 1;
       if (
         this.microphoneQueue.peek() &&
         this.waitingForFinalPacket < this.waitingAfterMessages
       ) {
-        this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
+        if (this.microphoneQueue.peek().type === SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA) {
+          this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
+        }
         this.socketIOClientGenerator.emitData(this.microphoneQueue.dequeue());
       }
     }

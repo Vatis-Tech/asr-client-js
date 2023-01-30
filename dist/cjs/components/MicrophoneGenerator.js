@@ -13,7 +13,8 @@ var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/de
 var _index = _interopRequireDefault(require("../helpers/constants/index.js"));
 var _index2 = _interopRequireDefault(require("../helpers/functions/index.js"));
 var MICROPHONE_BIT_RATE_SAMPLES = _index["default"].MICROPHONE_BIT_RATE_SAMPLES,
-  MICROPHONE_TIMESLICE = _index["default"].MICROPHONE_TIMESLICE;
+  MICROPHONE_TIMESLICE = _index["default"].MICROPHONE_TIMESLICE,
+  SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA = _index["default"].SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA;
 var base64ArrayBuffer = _index2["default"].base64ArrayBuffer;
 var MicrophoneGenerator = /*#__PURE__*/function () {
   function MicrophoneGenerator(_ref) {
@@ -50,6 +51,7 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
       if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
         this.mediaRecorder.stop();
         this.onDataCallback({
+          type: SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA,
           data: "",
           flush: "True",
           close: "True"
@@ -106,6 +108,7 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
                   reader.onloadend = function () {
                     // You can upload the base64 to server here.
                     _this2.onDataCallback({
+                      type: SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA,
                       data: reader.result.replace("data:audio/webm;codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus; base64,", "")
                     });
                   };

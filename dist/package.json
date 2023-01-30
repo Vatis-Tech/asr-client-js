@@ -1,6 +1,6 @@
 {
   "name": "@vatis-tech/asr-client-js",
-  "version": "1.5.0",
+  "version": "1.5.1-next.13",
   "description": "JavaScript client for Vatis Tech ASR services.",
   "main": "cjs/index.js",
   "scripts": {

@@ -109,6 +109,48 @@ const vtc = new VatisTechClient.default({
 
 ## Props
 
+### `config`
+
+This is an **Object** with the following structure:
+
+```
+{
+  "spokenCommandsList": [
+    {
+      "command": "COMMAND_NAME",
+      "regex": [ "regex1", "regex2", "regex3", ... ]
+    },
+    ...
+  ]
+}
+```
+
+Where the value of `spokenCommandsList` is an array of objects that have two properties, `command` and `regex`.
+
+The value of the `command`, i.e. `COMMAND_NAME`, is a **String**.
+
+The value of the `regex`, i.e. `[ "regex1", "regex2", "regex3", ... ]`, is an **Array of Strings**, i.e. `regex1`, `regex2`, `regex3` are **Strings**.
+
+The ideea with this `spokenCommandsList`, is that each time one of the values from the `regex` array is matched in the transcript, it will fire the [onCommandData callback](#oncommanddata), with a special `header` on the data, named `SpokenCommand`.
+The value of the `SpokenCommand` header will be exactly the value of the `command`, i.e. `COMMAND_NAME`.
+
+For example, you can use this `spokenCommandsList` to define rules of when you want a new paragraph:
+
+```
+{
+  "spokenCommandsList": [
+    {
+      "command": "COMMAND_NAME",
+      "regex": [ "new line", "new paragraph", "from the start", "start new line" ]
+    }
+  ]
+}
+```
+
+So each time the back-end algorithm will find in the transcript one of `"new line"`, `"new paragraph"`, `"from the start"`, `"start new line"` phrases, the VTC client will fire the [onCommandData callback](#oncommanddata). This way, in your applocation, you will be able to know, when to start a new paragraph.
+
+When sending a `config` to the client, the first callback to be fired, will be the [onConfig callback](#oncommanddata).
+
 ### `service`
 
 This is a **String** that refers to the service that you would like to use.
@@ -148,7 +190,7 @@ To get one, please follow these instructions:
 
 ### `onData`
 
-This is a **Function** on which you will receive from the back-end the transcript chunks.
+This is a **Function** on which you will receive from the back-end the transcript chunks. **It is a callback it is always fired.**.
 
 It has the following signature:
 
@@ -166,7 +208,110 @@ function onData(data) {
 }
 ```
 
-The `data` object that is received has the following props:
+The `data` object that is received has the following structure:
+
+```
+
+```
+
+#### Notes
+
+So, the `data` can be final frame - i.e. the backend has fully finalized the transcript for those words and the time intervals (start and end time).
+Or can be partial frame - i.e. the backend has not fully finalized the transcript for those words and the time intervals, and it will most likely change until it is overlapped by a final frame.
+
+### `onPartialData`
+
+This is a **Function** on which you will receive from the back-end the partial transcript chunks.
+
+It is identical to what the [onData callback](#ondata) does, just that the `data` will always represent partial frames.
+
+It has the following signature:
+
+```
+const onPartialData = (data) => {
+	/* do something with data */
+}
+```
+
+Or with function names:
+
+```
+function onPartialData(data) {
+	/* do something with data */
+}
+```
+
+#### NOTE
+
+The `data` object that comes on the current `onPartialData` callback overrides the `data` object that came on the previous `onPartialData` callback.
+
+### `onFinalData`
+
+This is a **Function** on which you will receive from the back-end the final transcript chunks.
+
+It is identical to what the [onData callback](#ondata) does, just that the `data` will always represent final frames.
+
+It has the following signature:
+
+```
+const onFinalData = (data) => {
+	/* do something with data */
+}
+```
+
+Or with function names:
+
+```
+function onFinalData(data) {
+	/* do something with data */
+}
+```
+
+#### NOTE
+
+The `data` object that comes from the `onFinalData` callback overrides the `data` object that came on the previous `onPartialData` callback.
+
+### `onConfig`
+
+This is a **Function** on which you will receive from the back-end a message saying if the config was succesfully added ore not.
+
+It has the following signature:
+
+```
+const onConfig = (data) => {
+	/* do something with data */
+}
+```
+
+Where `data` object has the following structure:
+
+```
+
+```
+
+### `onCommandData`
+
+This is a **Function** on which you will receive from the back-end the transcript chunks for speciffic commands.
+
+For example, if you initialize the plugin with a set of commands (e.g. `{spokenCommandsList: [ { "command": "NEW_PARAGRAPH", "regex": ["start new paragraph", "new phrase", "new sentence"] } ] }`), each time the back-end algorithm will find these sets of commands, it will send on this function the data.
+
+It has the following signature:
+
+```
+const onCommandData = (data) => {
+	/* do something with data */
+}
+```
+
+Or with function names:
+
+```
+function onCommandData(data) {
+	/* do something with data */
+}
+```
+
+The `data` object from this callback, is the same as the one from [onData callback](#ondata), but it also has a new property, named `spokenCommand`, with the actual command that triggered the callback.
 
 ### `log`
 
