@@ -1,6 +1,6 @@
 # @vatis-tech/asr-client-js
 
-![version](https://img.shields.io/badge/version-1.5.0-blue.svg)
+![version](https://img.shields.io/badge/version-2.0.1-blue.svg)
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 ![GitHub issues open](https://img.shields.io/github/issues/Vatis-Tech/asr-client-js.svg)
 ![GitHub issues closed](https://img.shields.io/github/issues-closed-raw/Vatis-Tech/asr-client-js.svg)
@@ -113,7 +113,7 @@ const vtc = new VatisTechClient.default({
 
 This is an **Object** with the following structure:
 
-```
+```json
 {
   "spokenCommandsList": [
     {
@@ -121,9 +121,17 @@ This is an **Object** with the following structure:
       "regex": [ "regex1", "regex2", "regex3", ... ]
     },
     ...
+  ],
+  "findReplaceList": [
+    {
+      "replacement": "REPLACEMENT",
+      "regex": [ "regex1", "regex2", "regex3", ... ]
+    }
   ]
 }
 ```
+
+#### `spokenCommandsList`
 
 Where the value of `spokenCommandsList` is an array of objects that have two properties, `command` and `regex`.
 
@@ -136,18 +144,70 @@ The value of the `SpokenCommand` header will be exactly the value of the `comman
 
 For example, you can use this `spokenCommandsList` to define rules of when you want a new paragraph:
 
-```
+```json
 {
   "spokenCommandsList": [
     {
-      "command": "COMMAND_NAME",
-      "regex": [ "new line", "new paragraph", "from the start", "start new line" ]
+      "command": "NEW_LINE",
+      "regex": ["new line", "new paragraph", "from the start", "start new line"]
     }
   ]
 }
 ```
 
-So each time the back-end algorithm will find in the transcript one of `"new line"`, `"new paragraph"`, `"from the start"`, `"start new line"` phrases, the VTC client will fire the [onCommandData callback](#oncommanddata). This way, in your applocation, you will be able to know, when to start a new paragraph.
+So each time the back-end algorithm will find in the transcript one of `"new line"`, `"new paragraph"`, `"from the start"`, `"start new line"` phrases, the VTC client will fire the [onCommandData callback](#oncommanddata). This way, in your application, you will be able to know, when to start a new paragraph.
+
+#### `findReplaceList`
+
+And the value of `findReplaceList` is an array of objects that have two properties, `replacement` and `regex`.
+
+The value of the `replacement`, i.e. `REPLACEMENT`, is a **String**.
+
+The value of the `regex`, i.e. `[ "regex1", "regex2", "regex3", ... ]`, is an **Array of Strings**, i.e. `regex1`, `regex2`, `regex3` are **Strings**.
+
+The ideea with this `findReplaceList`, is that each time one of the values from the `regex` array is matched in the transcript, it will change it to the `replacement`.
+
+For example, you can use this `findReplaceList` to define rules for wrong named entities
+
+```json
+{
+  "findReplaceList": [
+    {
+      "replacement": "SpongeBob",
+      "regex": ["Spange Bwab", "SpanBob", "Spwange Bob", "Sponge Boob"]
+    }
+  ]
+}
+```
+
+So each time the back-end algorithm will find in the transcript one of `"Spange Bwab"`, `"SpanBob"`, `"Spwange Bob"`, `"Sponge Boob"` phrases, it will change it to `"SpongeBob"`.
+
+You can also have replacements as symbols and punctuation marks:
+
+```json
+{
+  "findReplaceList": [
+    {
+      "replacement": "(",
+      "regex": ["open parentheses", "new parentheses"]
+    },
+    {
+      "replacement": ")",
+      "regex": ["close parentheses", "stop parentheses"]
+    },
+    {
+      "replacement": "[",
+      "regex": ["open square brackets", "new square brackets"]
+    },
+    {
+      "replacement": "]",
+      "regex": ["close square brackets", "stop square brackets"]
+    }
+  ]
+}
+```
+
+#### Notes
 
 When sending a `config` to the client, the first callback to be fired, will be the [onConfig callback](#oncommanddata).
 
@@ -210,11 +270,116 @@ function onData(data) {
 
 The `data` object that is received has the following structure:
 
+#### General structure
+
+```json
+{
+  "type": "<str>",
+  "headers": {
+    "key1": "value1",
+    "key2": "value2"
+  }
+}
 ```
 
+#### Timestamped transcription packet
+
+```json
+{
+  "type": "TIMESTAMPED_TRANSCRIPTION",
+  "headers": {},
+  "transcript": "hello world",
+  "words": [
+    {
+      "word": "hello",
+      "start_time": 1350.39,
+      "end_time": 4600.5,
+      "speaker": "Speaker 1",
+      "confidence": 0.96,
+      "entity": null,
+      "entity_group_id": null
+    },
+    {
+      "word": "world",
+      "start_time": 6200.3,
+      "end_time": 8020.0,
+      "speaker": "Speaker 1",
+      "confidence": 0.98,
+      "entity": null,
+      "entity_group_id": null
+    }
+  ]
+}
 ```
 
-#### Notes
+#### Timestamped transcription packet
+
+```json
+{
+  "type": "PROCESSED_TIMESTAMPED_TRANSCRIPTION",
+  "headers": {},
+  "transcript": "Hello, world!",
+  "words": [
+    {
+      "word": "hello",
+      "start_time": 1350.39,
+      "end_time": 4600.5,
+      "speaker": "Speaker 1",
+      "confidence": 0.96,
+      "entity": null,
+      "entity_group_id": null
+    },
+    {
+      "word": "world",
+      "start_time": 6200.3,
+      "end_time": 8020.0,
+      "speaker": "Speaker 1",
+      "confidence": 0.98,
+      "entity": null,
+      "entity_group_id": null
+    }
+  ],
+  "processed_words": [
+    {
+      "word": "Hello,",
+      "start_time": 1350.39,
+      "end_time": 4600.5,
+      "speaker": "Speaker 1",
+      "confidence": 0.96,
+      "entity": null,
+      "entity_group_id": null
+    },
+    {
+      "word": "world!",
+      "start_time": 6200.3,
+      "end_time": 8020.0,
+      "speaker": "Speaker 1",
+      "confidence": 0.98,
+      "entity": null,
+      "entity_group_id": null
+    }
+  ]
+}
+```
+
+#### Headers
+
+| Name                  | Type    | Description                                                                                                |
+| --------------------- | ------- | ---------------------------------------------------------------------------------------------------------- |
+| PacketNumber          | int     | Incremental packet number                                                                                  |
+| Sid                   | string  | Session id                                                                                                 |
+| FrameStartTime        | double  | Frame start time in milliseconds                                                                           |
+| FrameEndTime          | double  | Frame end time in milliseconds                                                                             |
+| FinalFrame            | boolean | Flag for marking that a segment of speech has ended and it won't be updated                                |
+| SilenceDetected       | boolean | Flag to indicate silence was detected on the audio frame                                                   |
+| ProcessingTimeSeconds | double  | Time of inferencing                                                                                        |
+| SplitPacket           | boolean | Flag that indicates the response packet was split and this is one of the pieces                            |
+| FinalSplitPacket      | boolean | Flag that indicates this is the final piece of the split response                                          |
+| SplitId               | string  | Full packet id in format `<packet_number>.<split_id>.<sub-split-id>.<sub-sub-split-id>`                    |
+| RequestBytes          | int     | Additional bytes requested to produce a frame. This is just an estimation, any number of bytes can be sent |
+| SpokenCommand         | string  | Command detected in frame                                                                                  |
+
+#### NOTE
 
 So, the `data` can be final frame - i.e. the backend has fully finalized the transcript for those words and the time intervals (start and end time).
 Or can be partial frame - i.e. the backend has not fully finalized the transcript for those words and the time intervals, and it will most likely change until it is overlapped by a final frame.
@@ -285,8 +450,23 @@ const onConfig = (data) => {
 
 Where `data` object has the following structure:
 
-```
+#### Config applied packet
 
+```json
+{
+  "type": "CONFIG_APPLIED",
+  "headers": {},
+  "config_packet": {
+    "type": "CONFIG",
+    "headers": {},
+    "spokenCommandsList": [
+      {
+        "command": "NEW_PARAGRAPH",
+        "regex": ["new line"]
+      }
+    ]
+  }
+}
 ```
 
 ### `onCommandData`
