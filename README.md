@@ -573,6 +573,10 @@ Default is `0.3 seconds`.
 
 This is a **number** that needs to be _> 0_. It represents the number of message to be sent to the ASR Service, before waiting for a response. Default is `5`.
 
+### `EnableOnCommandFinalFrame`
+
+This is a **boolean**, and if set to `true`, it means, that each time the transcription sees one command, it will trigger a final frame there.
+
 ## Methods
 
 ### `destroy`
