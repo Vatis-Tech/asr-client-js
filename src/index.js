@@ -35,6 +35,7 @@ class VatisTechClient {
   onConfig;
   onPartialData;
   onFinalData;
+  EnableOnCommandFinalFrame;
   constructor({
     service,
     model,
@@ -55,8 +56,15 @@ class VatisTechClient {
     config,
     onConfig,
     onPartialData,
-    onFinalData
+    onFinalData,
+    EnableOnCommandFinalFrame
   }) {
+    if (EnableOnCommandFinalFrame === true) {
+      this.EnableOnCommandFinalFrame = true;
+    } else {
+      this.EnableOnCommandFinalFrame = false;
+    }
+
     if (config) {
       this.config = config;
     } else {
@@ -175,6 +183,7 @@ class VatisTechClient {
       frameLength,
       frameOverlap,
       bufferOffset,
+      EnableOnCommandFinalFrame,
     });
 
     // instantiante MicrophoneGenerator - this will return on the this.onMicrophoneGeneratorDataCallback the data that it captures from the user's microphone
