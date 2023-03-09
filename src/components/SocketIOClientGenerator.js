@@ -37,6 +37,7 @@ class SocketIOClientGenerator {
   errorHandler;
   sendClosePacket;
   config;
+  EnableOnCommandFinalFrame;
   constructor({
     onConnectCallback,
     onAsrResultCallback,
@@ -46,13 +47,16 @@ class SocketIOClientGenerator {
     frameOverlap,
     bufferOffset,
     errorHandler,
-    config
+    config,
+    EnableOnCommandFinalFrame
   }) {
     this.errorHandler = errorHandler;
 
     this.logger = logger;
 
     this.config = config;
+
+    this.EnableOnCommandFinalFrame = EnableOnCommandFinalFrame;
 
     this.logger({
       currentState: `@vatis-tech/asr-client-js: Instantianting the "SocketIOClientGenerator" plugin.`,
@@ -102,6 +106,7 @@ class SocketIOClientGenerator {
           SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION,
         EnableEntitiesRecognition: SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION,
         EnableNumeralsConversion: SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION,
+        EnableOnCommandFinalFrame: this.EnableOnCommandFinalFrame
       },
     });
     this.socketRef.on("connect", () => {
