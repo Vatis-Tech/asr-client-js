@@ -45,7 +45,8 @@ var VatisTechClient = /*#__PURE__*/function () {
       config = _ref.config,
       onConfig = _ref.onConfig,
       onPartialData = _ref.onPartialData,
-      onFinalData = _ref.onFinalData;
+      onFinalData = _ref.onFinalData,
+      EnableOnCommandFinalFrame = _ref.EnableOnCommandFinalFrame;
     (0, _classCallCheck2["default"])(this, VatisTechClient);
     (0, _defineProperty2["default"])(this, "microphoneGenerator", void 0);
     (0, _defineProperty2["default"])(this, "instanceReservation", void 0);
@@ -65,6 +66,12 @@ var VatisTechClient = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "onConfig", void 0);
     (0, _defineProperty2["default"])(this, "onPartialData", void 0);
     (0, _defineProperty2["default"])(this, "onFinalData", void 0);
+    (0, _defineProperty2["default"])(this, "EnableOnCommandFinalFrame", void 0);
+    if (EnableOnCommandFinalFrame === true) {
+      this.EnableOnCommandFinalFrame = true;
+    } else {
+      this.EnableOnCommandFinalFrame = false;
+    }
     if (config) {
       this.config = config;
     } else {
@@ -181,7 +188,8 @@ var VatisTechClient = /*#__PURE__*/function () {
       config: this.config,
       frameLength: frameLength,
       frameOverlap: frameOverlap,
-      bufferOffset: bufferOffset
+      bufferOffset: bufferOffset,
+      EnableOnCommandFinalFrame: EnableOnCommandFinalFrame
     });
 
     // instantiante MicrophoneGenerator - this will return on the this.onMicrophoneGeneratorDataCallback the data that it captures from the user's microphone

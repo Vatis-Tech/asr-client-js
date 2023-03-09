@@ -37,7 +37,8 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
       frameOverlap = _ref.frameOverlap,
       bufferOffset = _ref.bufferOffset,
       errorHandler = _ref.errorHandler,
-      config = _ref.config;
+      config = _ref.config,
+      EnableOnCommandFinalFrame = _ref.EnableOnCommandFinalFrame;
     (0, _classCallCheck2["default"])(this, SocketIOClientGenerator);
     (0, _defineProperty2["default"])(this, "socketRef", void 0);
     (0, _defineProperty2["default"])(this, "streamHost", void 0);
@@ -52,9 +53,11 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "errorHandler", void 0);
     (0, _defineProperty2["default"])(this, "sendClosePacket", void 0);
     (0, _defineProperty2["default"])(this, "config", void 0);
+    (0, _defineProperty2["default"])(this, "EnableOnCommandFinalFrame", void 0);
     this.errorHandler = errorHandler;
     this.logger = logger;
     this.config = config;
+    this.EnableOnCommandFinalFrame = EnableOnCommandFinalFrame;
     this.logger({
       currentState: "@vatis-tech/asr-client-js: Instantianting the \"SocketIOClientGenerator\" plugin.",
       description: "@vatis-tech/asr-client-js: In this plugin, the connection between @vatis-tech/asr-client-js plugin and Vatis Tech LIVE ASR service is established. This plugin will send the data that is stored inside the MicrophoneQueue to the LIVE ASR service, and will receive the transcript for that data. And on the \"onData\" callback, will send the received transcript."
@@ -97,7 +100,8 @@ var SocketIOClientGenerator = /*#__PURE__*/function () {
           DisableDisfluencies: SOCKET_IO_CLIENT_DISABLE_DISFLUENCIES,
           EnablePunctuationCapitalization: SOCKET_IO_CLIENT_ENABLE_PUNCTUATION_CAPITALIZATION,
           EnableEntitiesRecognition: SOCKET_IO_CLIENT_ENABLE_ENTITIES_RECOGNITION,
-          EnableNumeralsConversion: SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION
+          EnableNumeralsConversion: SOCKET_IO_CLIENT_ENABLE_NUMERALS_CONVERSION,
+          EnableOnCommandFinalFrame: this.EnableOnCommandFinalFrame
         }
       });
       this.socketRef.on("connect", function () {
