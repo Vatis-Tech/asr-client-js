@@ -50,12 +50,6 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
     value: function destroy() {
       if (this.mediaRecorder && this.mediaRecorder.state !== "inactive") {
         this.mediaRecorder.stop();
-        this.onDataCallback({
-          type: SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA,
-          data: "",
-          flush: "True",
-          close: "True"
-        });
       }
       if (this.stream) {
         this.stream.getTracks().forEach(function (track) {

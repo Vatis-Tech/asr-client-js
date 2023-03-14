@@ -67,6 +67,8 @@ var VatisTechClient = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "onPartialData", void 0);
     (0, _defineProperty2["default"])(this, "onFinalData", void 0);
     (0, _defineProperty2["default"])(this, "EnableOnCommandFinalFrame", void 0);
+    (0, _defineProperty2["default"])(this, "flushPacketWasSent", void 0);
+    this.flushPacketWasSent = false;
     if (EnableOnCommandFinalFrame === true) {
       this.EnableOnCommandFinalFrame = true;
     } else {
@@ -212,18 +214,11 @@ var VatisTechClient = /*#__PURE__*/function () {
           hard: false
         },
         hard = _ref2.hard;
-      // check if there is still data to be received or to be sent
-      if ((this.waitingForFinalPacket > 0 || !this.microphoneQueue.isEmpty) && hard !== true) {
-        // let the messaging know that we want the client to be destroyed
-        this.shouldDestroy = true;
-        // pause the microphone so it won't record anymore
-        this.microphoneGenerator.pause();
-      } else {
+      // stop the microphone - i.e. stop data being recorded by the MediaRecorder
+      this.microphoneGenerator.destroy();
+      if (hard) {
         // notify destruction
         this.onDestroyCallback();
-
-        // stop the microphone - i.e. stop data being recorded by the MediaRecorder
-        this.microphoneGenerator.destroy();
 
         // destroy the socket
         this.socketIOClientGenerator.destroy();
@@ -248,6 +243,23 @@ var VatisTechClient = /*#__PURE__*/function () {
         this.onMicrophoneGeneratorDataCallback = false;
         this.onSocketIOClientGeneratorOnAsrResultCallback = false;
         this.onDestroyCallback = false;
+      } else {
+        // let the messaging know that we want the client to be destroyed
+        this.shouldDestroy = true;
+        setTimeout(function () {
+          this.socketIOClientGenerator.emitData({
+            type: SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA,
+            data: "",
+            flush: "True",
+            close: "True"
+          });
+          this.flushPacketWasSent = true;
+          if (this.waitingForFinalPacket < 0) {
+            this.waitingForFinalPacket = 1;
+          } else {
+            this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
+          }
+        }.bind(this), 500);
       }
     }
 
@@ -370,8 +382,10 @@ var VatisTechClient = /*#__PURE__*/function () {
       }
 
       // check if the user tried to destroy the VTC client
-      if (this.waitingForFinalPacket === 0 && this.microphoneQueue.isEmpty && this.shouldDestroy) {
-        this.destroy();
+      if (this.waitingForFinalPacket === 0 && this.microphoneQueue.isEmpty && this.shouldDestroy && this.flushPacketWasSent) {
+        this.destroy({
+          hard: true
+        });
       }
     }
   }]);
