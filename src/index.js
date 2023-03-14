@@ -36,6 +36,7 @@ class VatisTechClient {
   onPartialData;
   onFinalData;
   EnableOnCommandFinalFrame;
+  flushPacketWasSent;
   constructor({
     service,
     model,
@@ -59,6 +60,8 @@ class VatisTechClient {
     onFinalData,
     EnableOnCommandFinalFrame
   }) {
+    this.flushPacketWasSent = false;
+
     if (EnableOnCommandFinalFrame === true) {
       this.EnableOnCommandFinalFrame = true;
     } else {
@@ -200,21 +203,11 @@ class VatisTechClient {
 
   // this will make everything undefined on the this instance - i.e. this instance will not be of any use anymore
   destroy({ hard } = { hard: false }) {
-    // check if there is still data to be received or to be sent
-    if (
-      (this.waitingForFinalPacket > 0 || !this.microphoneQueue.isEmpty) &&
-      hard !== true
-    ) {
-      // let the messaging know that we want the client to be destroyed
-      this.shouldDestroy = true;
-      // pause the microphone so it won't record anymore
-      this.microphoneGenerator.pause();
-    } else {
+    // stop the microphone - i.e. stop data being recorded by the MediaRecorder
+    this.microphoneGenerator.destroy();
+    if (hard) {
       // notify destruction
       this.onDestroyCallback();
-
-      // stop the microphone - i.e. stop data being recorded by the MediaRecorder
-      this.microphoneGenerator.destroy();
 
       // destroy the socket
       this.socketIOClientGenerator.destroy();
@@ -239,6 +232,24 @@ class VatisTechClient {
       this.onMicrophoneGeneratorDataCallback = false;
       this.onSocketIOClientGeneratorOnAsrResultCallback = false;
       this.onDestroyCallback = false;
+    } else {
+      // let the messaging know that we want the client to be destroyed
+      this.shouldDestroy = true;
+
+      setTimeout(function () {
+        this.socketIOClientGenerator.emitData({
+          type: SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA,
+          data: "",
+          flush: "True",
+          close: "True",
+        });
+        this.flushPacketWasSent = true;
+        if (this.waitingForFinalPacket < 0) {
+          this.waitingForFinalPacket = 1;
+        } else {
+          this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
+        }
+      }.bind(this), 500);
     }
   }
 
@@ -361,9 +372,10 @@ class VatisTechClient {
     if (
       this.waitingForFinalPacket === 0 &&
       this.microphoneQueue.isEmpty &&
-      this.shouldDestroy
+      this.shouldDestroy &&
+      this.flushPacketWasSent
     ) {
-      this.destroy();
+      this.destroy({ hard: true });
     }
   }
 }
