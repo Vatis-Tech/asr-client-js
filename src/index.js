@@ -11,7 +11,8 @@ const {
   WAIT_AFTER_MESSAGES,
   SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA,
   SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED,
-  SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME
+  SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME,
+  MICROPHONE_TIMESLICE
 } = constants;
 
 const { generateApiUrl, checkIfFinalPacket, checkIfCommandPacket } = functions;
@@ -38,6 +39,7 @@ class VatisTechClient {
   EnableOnCommandFinalFrame;
   flushPacketWasSent;
   connectionConfig;
+  microphoneTimeslice;
   constructor({
     service,
     model,
@@ -62,6 +64,12 @@ class VatisTechClient {
     EnableOnCommandFinalFrame,
     connectionConfig
   }) {
+    if (microphoneTimeslice) {
+      this.microphoneTimeslice = microphoneTimeslice;
+    } else {
+      this.microphoneTimeslice = MICROPHONE_TIMESLICE;
+    }
+
     this.flushPacketWasSent = false;
 
     if (EnableOnCommandFinalFrame === true) {
@@ -252,7 +260,7 @@ class VatisTechClient {
         } else {
           this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
         }
-      }.bind(this), 500);
+      }.bind(this), this.microphoneTimeslice + 100);
     }
   }
 
