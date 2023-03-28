@@ -16,6 +16,7 @@ body:
       description: Please specify what version of `@vatis-tech/asr-client-js` you are using, and also, please check if the issue is reproducible with the latest stable version of the plugin.
       multiple: true
       options:
+        - 2.0.5
         - 2.0.4
         - 2.0.3
         - 2.0.2
