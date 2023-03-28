@@ -252,12 +252,12 @@ This is an **Object** with the following structure:
 
 ```json
 {
-  service_host: <<service_host>>,
-  auth_token: <<auth_token>>
+  "service_host": "service_host",
+  "auth_token": "auth_token"
 }
 ```
 
-Where `<<service_host>>` is a string, and the value of it is the host where the **Vatis Tech Transcription Service** is located. And `<<auth_token>>` is a string, that is the **Authentication token** for connecting to the **Vatis Tech Transcription Service**.
+Where `service_host` is a string, and the value of it is the host where the **Vatis Tech Transcription Service** is located. And `auth_token` is a string, that is the **Authentication token** for connecting to the **Vatis Tech Transcription Service**.
 
 #### NOTE
 
