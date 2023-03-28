@@ -14,7 +14,8 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
       responseCallback = _ref.responseCallback,
       apiKey = _ref.apiKey,
       logger = _ref.logger,
-      errorHandler = _ref.errorHandler;
+      errorHandler = _ref.errorHandler,
+      connectionConfig = _ref.connectionConfig;
     (0, _classCallCheck2["default"])(this, ApiKeyGenerator);
     (0, _defineProperty2["default"])(this, "apiUrl", void 0);
     (0, _defineProperty2["default"])(this, "responseCallback", void 0);
@@ -24,6 +25,7 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "xmlHttp", void 0);
     (0, _defineProperty2["default"])(this, "logger", void 0);
     (0, _defineProperty2["default"])(this, "errorHandler", void 0);
+    (0, _defineProperty2["default"])(this, "connectionConfig", void 0);
     this.errorHandler = errorHandler;
     this.logger = logger;
     this.logger({
@@ -33,6 +35,7 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
     this.apiUrl = apiUrl;
     this.responseCallback = responseCallback;
     this.apiKey = apiKey;
+    this.connectionConfig = connectionConfig;
     this.xmlHttp = new XMLHttpRequest();
     this.xmlHttp.onload = this.onLoad.bind(this);
     this.xmlHttp.onerror = this.onError.bind(this);
@@ -44,9 +47,21 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
         currentState: "@vatis-tech/asr-client-js: Initializing the \"ApiKeyGenerator\" plugin.",
         description: "@vatis-tech/asr-client-js: Here it is where the XMLHttpRequest happens to get a valid key for the LIVE ASR  service."
       });
-      this.xmlHttp.open("GET", this.apiUrl);
-      this.xmlHttp.setRequestHeader("Authorization", "Bearer " + this.apiKey);
-      this.xmlHttp.send();
+      if (this.connectionConfig && this.connectionConfig.service_host !== undefined && this.connectionConfig.auth_token !== undefined && typeof this.connectionConfig.service_host === "string" && typeof this.connectionConfig.auth_token === "string") {
+        this.logger({
+          currentState: "@vatis-tech/asr-client-js: Initialized the \"ApiKeyGenerator\" plugin.",
+          description: "@vatis-tech/asr-client-js: A valid key was received from the Vatis Tech API, in order to use the LIVE ASR service."
+        });
+        var bearer = "Bearer ";
+        this.responseCallback({
+          serviceHost: this.connectionConfig.service_host,
+          authToken: "".concat(this.connectionConfig.auth_token.startsWith(bearer) ? "" : bearer).concat(this.connectionConfig.auth_token)
+        });
+      } else {
+        this.xmlHttp.open("GET", this.apiUrl);
+        this.xmlHttp.setRequestHeader("Authorization", "Bearer " + this.apiKey);
+        this.xmlHttp.send();
+      }
     }
   }, {
     key: "onError",

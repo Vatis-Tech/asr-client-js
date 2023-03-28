@@ -1,6 +1,6 @@
 # @vatis-tech/asr-client-js
 
-![version](https://img.shields.io/badge/version-2.0.4-blue.svg)
+![version](https://img.shields.io/badge/version-2.0.5-blue.svg)
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 ![GitHub issues open](https://img.shields.io/github/issues/Vatis-Tech/asr-client-js.svg)
 ![GitHub issues closed](https://img.shields.io/github/issues-closed-raw/Vatis-Tech/asr-client-js.svg)
@@ -239,14 +239,30 @@ At the moment, only `ro_RO` is available.
 
 This is a **String** of your API key.
 
-In order to use this plugin, you will need to use a valid API key.
-
 To get one, please follow these instructions:
 
 1. If you do not have one, please create an account on [https://vatis.tech/](https://vatis.tech/).
 2. Log in to your account on [https://vatis.tech/login](https://vatis.tech/login).
 3. Got to the API key page on your account, [https://vatis.tech/account/api-key](https://vatis.tech/account/api-key).
 4. Copy the API key from there and add it to the `@vatis-tech/asr-client-js` constructor.
+
+### `connectionConfig`
+
+This is an **Object** with the following structure:
+
+```json
+{
+  "service_host": "service_host",
+  "auth_token": "auth_token"
+}
+```
+
+Where `service_host` is a string, and the value of it is the host where the **Vatis Tech Transcription Service** is located. And `auth_token` is a string, that is the **Authentication token** for connecting to the **Vatis Tech Transcription Service**.
+
+#### NOTE
+
+You will only use one of the `connectionConfig` or `apiKey` method to connect to the **Vatis Tech Transcription Service**.
+You will use the `apiKey` when connecting to the **Vatis Tech Cloud API**, and you will use the `connectionConfig` method when using the **Vatis Tech On Premise Installation**, and you will be provided with the necessary `connectionConfig` object.
 
 ### `onData`
 

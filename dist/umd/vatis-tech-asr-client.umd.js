@@ -15,7 +15,8 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
       responseCallback = _ref.responseCallback,
       apiKey = _ref.apiKey,
       logger = _ref.logger,
-      errorHandler = _ref.errorHandler;
+      errorHandler = _ref.errorHandler,
+      connectionConfig = _ref.connectionConfig;
     (0, _classCallCheck2["default"])(this, ApiKeyGenerator);
     (0, _defineProperty2["default"])(this, "apiUrl", void 0);
     (0, _defineProperty2["default"])(this, "responseCallback", void 0);
@@ -25,6 +26,7 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "xmlHttp", void 0);
     (0, _defineProperty2["default"])(this, "logger", void 0);
     (0, _defineProperty2["default"])(this, "errorHandler", void 0);
+    (0, _defineProperty2["default"])(this, "connectionConfig", void 0);
     this.errorHandler = errorHandler;
     this.logger = logger;
     this.logger({
@@ -34,6 +36,7 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
     this.apiUrl = apiUrl;
     this.responseCallback = responseCallback;
     this.apiKey = apiKey;
+    this.connectionConfig = connectionConfig;
     this.xmlHttp = new XMLHttpRequest();
     this.xmlHttp.onload = this.onLoad.bind(this);
     this.xmlHttp.onerror = this.onError.bind(this);
@@ -45,9 +48,21 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
         currentState: "@vatis-tech/asr-client-js: Initializing the \"ApiKeyGenerator\" plugin.",
         description: "@vatis-tech/asr-client-js: Here it is where the XMLHttpRequest happens to get a valid key for the LIVE ASR  service."
       });
-      this.xmlHttp.open("GET", this.apiUrl);
-      this.xmlHttp.setRequestHeader("Authorization", "Bearer " + this.apiKey);
-      this.xmlHttp.send();
+      if (this.connectionConfig && this.connectionConfig.service_host !== undefined && this.connectionConfig.auth_token !== undefined && typeof this.connectionConfig.service_host === "string" && typeof this.connectionConfig.auth_token === "string") {
+        this.logger({
+          currentState: "@vatis-tech/asr-client-js: Initialized the \"ApiKeyGenerator\" plugin.",
+          description: "@vatis-tech/asr-client-js: A valid key was received from the Vatis Tech API, in order to use the LIVE ASR service."
+        });
+        var bearer = "Bearer ";
+        this.responseCallback({
+          serviceHost: this.connectionConfig.service_host,
+          authToken: "".concat(this.connectionConfig.auth_token.startsWith(bearer) ? "" : bearer).concat(this.connectionConfig.auth_token)
+        });
+      } else {
+        this.xmlHttp.open("GET", this.apiUrl);
+        this.xmlHttp.setRequestHeader("Authorization", "Bearer " + this.apiKey);
+        this.xmlHttp.send();
+      }
     }
   }, {
     key: "onError",
@@ -830,7 +845,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 var WAIT_AFTER_MESSAGES = _index["default"].WAIT_AFTER_MESSAGES,
   SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA = _index["default"].SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA,
   SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED = _index["default"].SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED,
-  SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME = _index["default"].SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME;
+  SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME = _index["default"].SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME,
+  MICROPHONE_TIMESLICE = _index["default"].MICROPHONE_TIMESLICE;
 var generateApiUrl = _index2["default"].generateApiUrl,
   checkIfFinalPacket = _index2["default"].checkIfFinalPacket,
   checkIfCommandPacket = _index2["default"].checkIfCommandPacket;
@@ -856,7 +872,8 @@ var VatisTechClient = /*#__PURE__*/function () {
       onConfig = _ref.onConfig,
       onPartialData = _ref.onPartialData,
       onFinalData = _ref.onFinalData,
-      EnableOnCommandFinalFrame = _ref.EnableOnCommandFinalFrame;
+      EnableOnCommandFinalFrame = _ref.EnableOnCommandFinalFrame,
+      connectionConfig = _ref.connectionConfig;
     (0, _classCallCheck2["default"])(this, VatisTechClient);
     (0, _defineProperty2["default"])(this, "microphoneGenerator", void 0);
     (0, _defineProperty2["default"])(this, "instanceReservation", void 0);
@@ -878,6 +895,13 @@ var VatisTechClient = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "onFinalData", void 0);
     (0, _defineProperty2["default"])(this, "EnableOnCommandFinalFrame", void 0);
     (0, _defineProperty2["default"])(this, "flushPacketWasSent", void 0);
+    (0, _defineProperty2["default"])(this, "connectionConfig", void 0);
+    (0, _defineProperty2["default"])(this, "microphoneTimeslice", void 0);
+    if (microphoneTimeslice) {
+      this.microphoneTimeslice = microphoneTimeslice;
+    } else {
+      this.microphoneTimeslice = MICROPHONE_TIMESLICE;
+    }
     this.flushPacketWasSent = false;
     if (EnableOnCommandFinalFrame === true) {
       this.EnableOnCommandFinalFrame = true;
@@ -980,7 +1004,8 @@ var VatisTechClient = /*#__PURE__*/function () {
       responseCallback: this.initInstanceReservation.bind(this),
       apiKey: apiKey,
       logger: this.logger.bind(this),
-      errorHandler: this.errorHandler
+      errorHandler: this.errorHandler,
+      connectionConfig: connectionConfig
     });
 
     // instantiante InstanceReservation - this will return on the responseCallback the streamUrl, reservationToken, and podName for the SocketIOClientGenerator to connect based on the serviceHost and authToken
@@ -1069,7 +1094,7 @@ var VatisTechClient = /*#__PURE__*/function () {
           } else {
             this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
           }
-        }.bind(this), 500);
+        }.bind(this), this.microphoneTimeslice + 100);
       }
     }
 

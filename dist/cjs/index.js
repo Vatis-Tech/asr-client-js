@@ -20,7 +20,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 var WAIT_AFTER_MESSAGES = _index["default"].WAIT_AFTER_MESSAGES,
   SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA = _index["default"].SOCKET_IO_CLIENT_MESSAGE_TYPE_DATA,
   SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED = _index["default"].SOCKET_IO_SERVER_MESSAGE_TYPE_CONFIG_APPLIED,
-  SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME = _index["default"].SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME;
+  SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME = _index["default"].SOCKET_IO_CLIENT_RESPONSE_FINAL_FRAME,
+  MICROPHONE_TIMESLICE = _index["default"].MICROPHONE_TIMESLICE;
 var generateApiUrl = _index2["default"].generateApiUrl,
   checkIfFinalPacket = _index2["default"].checkIfFinalPacket,
   checkIfCommandPacket = _index2["default"].checkIfCommandPacket;
@@ -46,7 +47,8 @@ var VatisTechClient = /*#__PURE__*/function () {
       onConfig = _ref.onConfig,
       onPartialData = _ref.onPartialData,
       onFinalData = _ref.onFinalData,
-      EnableOnCommandFinalFrame = _ref.EnableOnCommandFinalFrame;
+      EnableOnCommandFinalFrame = _ref.EnableOnCommandFinalFrame,
+      connectionConfig = _ref.connectionConfig;
     (0, _classCallCheck2["default"])(this, VatisTechClient);
     (0, _defineProperty2["default"])(this, "microphoneGenerator", void 0);
     (0, _defineProperty2["default"])(this, "instanceReservation", void 0);
@@ -68,6 +70,13 @@ var VatisTechClient = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "onFinalData", void 0);
     (0, _defineProperty2["default"])(this, "EnableOnCommandFinalFrame", void 0);
     (0, _defineProperty2["default"])(this, "flushPacketWasSent", void 0);
+    (0, _defineProperty2["default"])(this, "connectionConfig", void 0);
+    (0, _defineProperty2["default"])(this, "microphoneTimeslice", void 0);
+    if (microphoneTimeslice) {
+      this.microphoneTimeslice = microphoneTimeslice;
+    } else {
+      this.microphoneTimeslice = MICROPHONE_TIMESLICE;
+    }
     this.flushPacketWasSent = false;
     if (EnableOnCommandFinalFrame === true) {
       this.EnableOnCommandFinalFrame = true;
@@ -170,7 +179,8 @@ var VatisTechClient = /*#__PURE__*/function () {
       responseCallback: this.initInstanceReservation.bind(this),
       apiKey: apiKey,
       logger: this.logger.bind(this),
-      errorHandler: this.errorHandler
+      errorHandler: this.errorHandler,
+      connectionConfig: connectionConfig
     });
 
     // instantiante InstanceReservation - this will return on the responseCallback the streamUrl, reservationToken, and podName for the SocketIOClientGenerator to connect based on the serviceHost and authToken
@@ -259,7 +269,7 @@ var VatisTechClient = /*#__PURE__*/function () {
           } else {
             this.waitingForFinalPacket = this.waitingForFinalPacket + 1;
           }
-        }.bind(this), 500);
+        }.bind(this), this.microphoneTimeslice + 100);
       }
     }
 
