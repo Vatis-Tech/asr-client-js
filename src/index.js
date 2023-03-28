@@ -37,6 +37,7 @@ class VatisTechClient {
   onFinalData;
   EnableOnCommandFinalFrame;
   flushPacketWasSent;
+  connectionConfig;
   constructor({
     service,
     model,
@@ -58,7 +59,8 @@ class VatisTechClient {
     onConfig,
     onPartialData,
     onFinalData,
-    EnableOnCommandFinalFrame
+    EnableOnCommandFinalFrame,
+    connectionConfig
   }) {
     this.flushPacketWasSent = false;
 
@@ -165,6 +167,7 @@ class VatisTechClient {
       apiKey: apiKey,
       logger: this.logger.bind(this),
       errorHandler: this.errorHandler,
+      connectionConfig: connectionConfig
     });
 
     // instantiante InstanceReservation - this will return on the responseCallback the streamUrl, reservationToken, and podName for the SocketIOClientGenerator to connect based on the serviceHost and authToken
