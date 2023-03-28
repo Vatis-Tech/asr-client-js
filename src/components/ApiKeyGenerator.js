@@ -7,7 +7,8 @@ class ApiKeyGenerator {
   xmlHttp;
   logger;
   errorHandler;
-  constructor({ apiUrl, responseCallback, apiKey, logger, errorHandler }) {
+  connectionConfig;
+  constructor({ apiUrl, responseCallback, apiKey, logger, errorHandler, connectionConfig }) {
     this.errorHandler = errorHandler;
 
     this.logger = logger;
@@ -20,6 +21,7 @@ class ApiKeyGenerator {
     this.apiUrl = apiUrl;
     this.responseCallback = responseCallback;
     this.apiKey = apiKey;
+    this.connectionConfig = connectionConfig;
     this.xmlHttp = new XMLHttpRequest();
     this.xmlHttp.onload = this.onLoad.bind(this);
     this.xmlHttp.onerror = this.onError.bind(this);
@@ -30,9 +32,21 @@ class ApiKeyGenerator {
       description: `@vatis-tech/asr-client-js: Here it is where the XMLHttpRequest happens to get a valid key for the LIVE ASR  service.`,
     });
 
-    this.xmlHttp.open("GET", this.apiUrl);
-    this.xmlHttp.setRequestHeader("Authorization", "Bearer " + this.apiKey);
-    this.xmlHttp.send();
+    if (this.connectionConfig && this.connectionConfig.service_host !== undefined && this.connectionConfig.auth_token !== undefined){
+      this.logger({
+        currentState: `@vatis-tech/asr-client-js: Initialized the "ApiKeyGenerator" plugin.`,
+        description: `@vatis-tech/asr-client-js: A valid key was received from the Vatis Tech API, in order to use the LIVE ASR service.`,
+      });
+      
+      this.responseCallback({
+        serviceHost: this.connectionConfig.service_host,
+        authToken: this.connectionConfig.auth_token,
+      });
+    } else {
+      this.xmlHttp.open("GET", this.apiUrl);
+      this.xmlHttp.setRequestHeader("Authorization", "Bearer " + this.apiKey);
+      this.xmlHttp.send();
+    }
   }
   onError(e) {
     this.logger({
