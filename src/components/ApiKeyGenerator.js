@@ -32,15 +32,23 @@ class ApiKeyGenerator {
       description: `@vatis-tech/asr-client-js: Here it is where the XMLHttpRequest happens to get a valid key for the LIVE ASR  service.`,
     });
 
-    if (this.connectionConfig && this.connectionConfig.service_host !== undefined && this.connectionConfig.auth_token !== undefined){
+    if (
+        this.connectionConfig && 
+        this.connectionConfig.service_host !== undefined && 
+        this.connectionConfig.auth_token !== undefined && 
+        typeof this.connectionConfig.service_host === "string" && 
+        typeof this.connectionConfig.auth_token === "string"
+    ) {
       this.logger({
         currentState: `@vatis-tech/asr-client-js: Initialized the "ApiKeyGenerator" plugin.`,
         description: `@vatis-tech/asr-client-js: A valid key was received from the Vatis Tech API, in order to use the LIVE ASR service.`,
       });
+
+      const bearer = "Bearer ";
       
       this.responseCallback({
         serviceHost: this.connectionConfig.service_host,
-        authToken: this.connectionConfig.auth_token,
+        authToken: `${this.connectionConfig.auth_token.startsWith(bearer) ? "" : bearer}${this.connectionConfig.auth_token}`,
       });
     } else {
       this.xmlHttp.open("GET", this.apiUrl);
