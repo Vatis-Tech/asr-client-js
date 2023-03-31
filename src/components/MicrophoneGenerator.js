@@ -11,8 +11,11 @@ class MicrophoneGenerator {
   blobState;
   mediaRecorder;
   microphoneTimeslice;
+  microphoneDeviceId;
   errorHandler;
-  constructor({ onDataCallback, logger, microphoneTimeslice, errorHandler }) {
+  constructor({ onDataCallback, logger, microphoneTimeslice, errorHandler, microphoneDeviceId }) {
+    this.microphoneDeviceId = microphoneDeviceId;
+
     this.errorHandler = errorHandler;
 
     this.logger = logger;
@@ -59,8 +62,28 @@ class MicrophoneGenerator {
       description: `@vatis-tech/asr-client-js: The MicrophoneGenerator will request for the user's microphone.`,
     });
 
+    const mediaDevicesOptions = { video: false, audio: true };
+
+    if (this.microphoneDeviceId && navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+      await navigator.mediaDevices
+        .enumerateDevices()
+        .then((devices) => {
+          let availableDevices = devices.filter(device => device.deviceId === this.microphoneDeviceId);
+          if (availableDevices.length) {
+            mediaDevicesOptions.audio = {
+              deviceId: {
+                exact: this.microphoneDeviceId
+              }
+            }
+          }
+        })
+        .catch((err) => {
+          console.error(`${err.name}: ${err.message}`);
+        });
+    }
+
     await navigator.mediaDevices
-      .getUserMedia({ video: false, audio: true })
+      .getUserMedia(mediaDevicesOptions)
       .then((stream) => {
         this.stream = stream;
 
