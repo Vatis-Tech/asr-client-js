@@ -40,6 +40,7 @@ class VatisTechClient {
   flushPacketWasSent;
   connectionConfig;
   microphoneTimeslice;
+  microphoneDeviceId;
   constructor({
     service,
     model,
@@ -62,8 +63,11 @@ class VatisTechClient {
     onPartialData,
     onFinalData,
     EnableOnCommandFinalFrame,
-    connectionConfig
+    connectionConfig,
+    microphoneDeviceId
   }) {
+    this.microphoneDeviceId = microphoneDeviceId;
+
     if (microphoneTimeslice) {
       this.microphoneTimeslice = microphoneTimeslice;
     } else {
@@ -206,6 +210,7 @@ class VatisTechClient {
       logger: this.logger.bind(this),
       errorHandler: this.errorHandler,
       microphoneTimeslice,
+      microphoneDeviceId
     });
 
     // initilize ApiKeyGenerator (if successful it will initilize SocketIOClientGenerator (if successful it will initilize the MicrophoneGenerator))
