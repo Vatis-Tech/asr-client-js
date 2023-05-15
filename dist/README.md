@@ -613,6 +613,14 @@ Call this method, if you want to pause for a while the recording.
 
 After calling the `pause` method, you can call this one to resume recording.
 
+### `microphoneDeviceId`
+
+This is to specify which `audioinput` device id, should be used by the client. If `undefined` or the browser does not have that `audioinput` device id, it will select a default one.
+You can read more on the following links:
+
+- [https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices)
+- [https://developer.mozilla.org/en-US/docs/Web/API/MediaDeviceInfo](https://developer.mozilla.org/en-US/docs/Web/API/MediaDeviceInfo)
+
 ## Browser Support
 
 We officially support the latest versions of the following browsers:

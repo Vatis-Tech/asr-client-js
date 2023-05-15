@@ -214,7 +214,8 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
     var onDataCallback = _ref.onDataCallback,
       logger = _ref.logger,
       microphoneTimeslice = _ref.microphoneTimeslice,
-      errorHandler = _ref.errorHandler;
+      errorHandler = _ref.errorHandler,
+      microphoneDeviceId = _ref.microphoneDeviceId;
     (0, _classCallCheck2["default"])(this, MicrophoneGenerator);
     (0, _defineProperty2["default"])(this, "stream", void 0);
     (0, _defineProperty2["default"])(this, "onDataCallback", void 0);
@@ -222,7 +223,9 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "blobState", void 0);
     (0, _defineProperty2["default"])(this, "mediaRecorder", void 0);
     (0, _defineProperty2["default"])(this, "microphoneTimeslice", void 0);
+    (0, _defineProperty2["default"])(this, "microphoneDeviceId", void 0);
     (0, _defineProperty2["default"])(this, "errorHandler", void 0);
+    this.microphoneDeviceId = microphoneDeviceId;
     this.errorHandler = errorHandler;
     this.logger = logger;
     this.logger({
@@ -269,6 +272,7 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
     value: function () {
       var _init = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
         var _this = this;
+        var mediaDevicesOptions;
         return _regenerator["default"].wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
@@ -276,11 +280,32 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
                 currentState: "@vatis-tech/asr-client-js: Initializing the \"MicrophoneGenerator\" plugin.",
                 description: "@vatis-tech/asr-client-js: The MicrophoneGenerator will request for the user's microphone."
               });
-              _context.next = 3;
-              return navigator.mediaDevices.getUserMedia({
+              mediaDevicesOptions = {
                 video: false,
                 audio: true
-              }).then(function (stream) {
+              };
+              if (!(this.microphoneDeviceId && navigator.mediaDevices && navigator.mediaDevices.enumerateDevices)) {
+                _context.next = 5;
+                break;
+              }
+              _context.next = 5;
+              return navigator.mediaDevices.enumerateDevices().then(function (devices) {
+                var availableDevices = devices.filter(function (device) {
+                  return device.deviceId === _this.microphoneDeviceId;
+                });
+                if (availableDevices.length) {
+                  mediaDevicesOptions.audio = {
+                    deviceId: {
+                      exact: _this.microphoneDeviceId
+                    }
+                  };
+                }
+              })["catch"](function (err) {
+                console.error("".concat(err.name, ": ").concat(err.message));
+              });
+            case 5:
+              _context.next = 7;
+              return navigator.mediaDevices.getUserMedia(mediaDevicesOptions).then(function (stream) {
                 _this.stream = stream;
                 var options = {
                   mimeType: "audio/webm",
@@ -344,7 +369,7 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
                 });
                 _this.errorHandler(err);
               });
-            case 3:
+            case 7:
             case "end":
               return _context.stop();
           }
@@ -873,7 +898,8 @@ var VatisTechClient = /*#__PURE__*/function () {
       onPartialData = _ref.onPartialData,
       onFinalData = _ref.onFinalData,
       EnableOnCommandFinalFrame = _ref.EnableOnCommandFinalFrame,
-      connectionConfig = _ref.connectionConfig;
+      connectionConfig = _ref.connectionConfig,
+      microphoneDeviceId = _ref.microphoneDeviceId;
     (0, _classCallCheck2["default"])(this, VatisTechClient);
     (0, _defineProperty2["default"])(this, "microphoneGenerator", void 0);
     (0, _defineProperty2["default"])(this, "instanceReservation", void 0);
@@ -897,6 +923,8 @@ var VatisTechClient = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "flushPacketWasSent", void 0);
     (0, _defineProperty2["default"])(this, "connectionConfig", void 0);
     (0, _defineProperty2["default"])(this, "microphoneTimeslice", void 0);
+    (0, _defineProperty2["default"])(this, "microphoneDeviceId", void 0);
+    this.microphoneDeviceId = microphoneDeviceId;
     if (microphoneTimeslice) {
       this.microphoneTimeslice = microphoneTimeslice;
     } else {
@@ -1034,7 +1062,8 @@ var VatisTechClient = /*#__PURE__*/function () {
       onDataCallback: this.onMicrophoneGeneratorDataCallback.bind(this),
       logger: this.logger.bind(this),
       errorHandler: this.errorHandler,
-      microphoneTimeslice: microphoneTimeslice
+      microphoneTimeslice: microphoneTimeslice,
+      microphoneDeviceId: microphoneDeviceId
     });
 
     // initilize ApiKeyGenerator (if successful it will initilize SocketIOClientGenerator (if successful it will initilize the MicrophoneGenerator))

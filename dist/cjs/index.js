@@ -48,7 +48,8 @@ var VatisTechClient = /*#__PURE__*/function () {
       onPartialData = _ref.onPartialData,
       onFinalData = _ref.onFinalData,
       EnableOnCommandFinalFrame = _ref.EnableOnCommandFinalFrame,
-      connectionConfig = _ref.connectionConfig;
+      connectionConfig = _ref.connectionConfig,
+      microphoneDeviceId = _ref.microphoneDeviceId;
     (0, _classCallCheck2["default"])(this, VatisTechClient);
     (0, _defineProperty2["default"])(this, "microphoneGenerator", void 0);
     (0, _defineProperty2["default"])(this, "instanceReservation", void 0);
@@ -72,6 +73,8 @@ var VatisTechClient = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "flushPacketWasSent", void 0);
     (0, _defineProperty2["default"])(this, "connectionConfig", void 0);
     (0, _defineProperty2["default"])(this, "microphoneTimeslice", void 0);
+    (0, _defineProperty2["default"])(this, "microphoneDeviceId", void 0);
+    this.microphoneDeviceId = microphoneDeviceId;
     if (microphoneTimeslice) {
       this.microphoneTimeslice = microphoneTimeslice;
     } else {
@@ -209,7 +212,8 @@ var VatisTechClient = /*#__PURE__*/function () {
       onDataCallback: this.onMicrophoneGeneratorDataCallback.bind(this),
       logger: this.logger.bind(this),
       errorHandler: this.errorHandler,
-      microphoneTimeslice: microphoneTimeslice
+      microphoneTimeslice: microphoneTimeslice,
+      microphoneDeviceId: microphoneDeviceId
     });
 
     // initilize ApiKeyGenerator (if successful it will initilize SocketIOClientGenerator (if successful it will initilize the MicrophoneGenerator))
