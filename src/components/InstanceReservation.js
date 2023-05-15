@@ -64,7 +64,7 @@ class InstanceReservation {
     const response = JSON.parse(this.xmlHttp.responseText);
     this.streamUrl = response.stream_url;
     this.reservationToken = response.token;
-    this.streamHost = response.stream_host;
+    this.streamHost = response.stream_host.startsWith("http") ? response.stream_host : `http://${response.stream_host}`;
     this.responseCallback({
       streamHost: this.streamHost,
       streamUrl: this.streamUrl,
