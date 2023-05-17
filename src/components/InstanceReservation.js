@@ -61,10 +61,16 @@ class InstanceReservation {
       description: `@vatis-tech/asr-client-js: A live asr instance has been reserved.`,
     });
 
+    let streamHostType = "http://";
+
+    if (this.serviceHost.startsWith("https")) {
+      streamHostType = "https://";
+    }
+
     const response = JSON.parse(this.xmlHttp.responseText);
     this.streamUrl = response.stream_url;
     this.reservationToken = response.token;
-    this.streamHost = response.stream_host.startsWith("http") ? response.stream_host : `http://${response.stream_host}`;
+    this.streamHost = response.stream_host.startsWith("http") ? response.stream_host : `${streamHostType}${response.stream_host}`;
     this.responseCallback({
       streamHost: this.streamHost,
       streamUrl: this.streamUrl,
