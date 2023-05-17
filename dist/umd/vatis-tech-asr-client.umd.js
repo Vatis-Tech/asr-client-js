@@ -174,10 +174,14 @@ var InstanceReservation = /*#__PURE__*/function () {
         currentState: "@vatis-tech/asr-client-js: Initialized the \"InstanceReservation\" plugin.",
         description: "@vatis-tech/asr-client-js: A live asr instance has been reserved."
       });
+      var streamHostType = "http://";
+      if (this.serviceHost.startsWith("https")) {
+        streamHostType = "https://";
+      }
       var response = JSON.parse(this.xmlHttp.responseText);
       this.streamUrl = response.stream_url;
       this.reservationToken = response.token;
-      this.streamHost = response.stream_host.startsWith("http") ? response.stream_host : "http://".concat(response.stream_host);
+      this.streamHost = response.stream_host.startsWith("http") ? response.stream_host : "".concat(streamHostType).concat(response.stream_host);
       this.responseCallback({
         streamHost: this.streamHost,
         streamUrl: this.streamUrl,
