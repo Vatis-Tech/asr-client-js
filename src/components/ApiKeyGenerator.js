@@ -33,11 +33,11 @@ class ApiKeyGenerator {
     });
 
     if (
-        this.connectionConfig && 
-        this.connectionConfig.service_host !== undefined && 
-        this.connectionConfig.auth_token !== undefined && 
-        typeof this.connectionConfig.service_host === "string" && 
-        typeof this.connectionConfig.auth_token === "string"
+      this.connectionConfig &&
+      this.connectionConfig.service_host !== undefined &&
+      this.connectionConfig.auth_token !== undefined &&
+      typeof this.connectionConfig.service_host === "string" &&
+      typeof this.connectionConfig.auth_token === "string"
     ) {
       this.logger({
         currentState: `@vatis-tech/asr-client-js: Initialized the "ApiKeyGenerator" plugin.`,
@@ -45,10 +45,11 @@ class ApiKeyGenerator {
       });
 
       const bearer = "Bearer ";
-      
+
       this.responseCallback({
         serviceHost: this.connectionConfig.service_host,
         authToken: `${this.connectionConfig.auth_token.startsWith(bearer) ? "" : bearer}${this.connectionConfig.auth_token}`,
+        useSameServiceHostOnWsConnection: this.connectionConfig.use_same_service_host_on_ws_connection === true ? true : false
       });
     } else {
       this.xmlHttp.open("GET", this.apiUrl);
