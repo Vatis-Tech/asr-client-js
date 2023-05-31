@@ -253,11 +253,13 @@ This is an **Object** with the following structure:
 ```json
 {
   "service_host": "service_host",
+  "use_same_service_host_on_ws_connection": true | false,
   "auth_token": "auth_token"
 }
 ```
 
 Where `service_host` is a string, and the value of it is the host where the **Vatis Tech Transcription Service** is located. And `auth_token` is a string, that is the **Authentication token** for connecting to the **Vatis Tech Transcription Service**.
+The `use_same_service_host_on_ws_connection` specifies if the returned live service IP should be ignored when making the connection, and the `service_host` should be used instead. It defaults to `false`.
 
 #### NOTE
 
