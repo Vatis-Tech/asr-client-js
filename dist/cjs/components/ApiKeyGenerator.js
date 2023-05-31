@@ -55,7 +55,8 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
         var bearer = "Bearer ";
         this.responseCallback({
           serviceHost: this.connectionConfig.service_host,
-          authToken: "".concat(this.connectionConfig.auth_token.startsWith(bearer) ? "" : bearer).concat(this.connectionConfig.auth_token)
+          authToken: "".concat(this.connectionConfig.auth_token.startsWith(bearer) ? "" : bearer).concat(this.connectionConfig.auth_token),
+          useSameServiceHostOnWsConnection: this.connectionConfig.use_same_service_host_on_ws_connection === true ? true : false
         });
       } else {
         this.xmlHttp.open("GET", this.apiUrl);

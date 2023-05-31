@@ -305,10 +305,12 @@ var VatisTechClient = /*#__PURE__*/function () {
     key: "initInstanceReservation",
     value: function initInstanceReservation(_ref3) {
       var serviceHost = _ref3.serviceHost,
-        authToken = _ref3.authToken;
+        authToken = _ref3.authToken,
+        useSameServiceHostOnWsConnection = _ref3.useSameServiceHostOnWsConnection;
       this.instanceReservation.init({
         serviceHost: serviceHost,
-        authToken: authToken
+        authToken: authToken,
+        useSameServiceHostOnWsConnection: useSameServiceHostOnWsConnection
       });
     }
 
