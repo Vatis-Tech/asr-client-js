@@ -11,6 +11,7 @@ class InstanceReservation {
   xmlHttp;
   logger;
   errorHandler;
+  useSameServiceHostOnWsConnection;
   constructor({ responseCallback, logger, errorHandler }) {
     this.errorHandler = errorHandler;
 
@@ -25,9 +26,10 @@ class InstanceReservation {
     this.xmlHttp.onload = this.onLoad.bind(this);
     this.xmlHttp.onerror = this.onError.bind(this);
   }
-  init({ serviceHost, authToken }) {
+  init({ serviceHost, authToken, useSameServiceHostOnWsConnection }) {
     this.serviceHost = serviceHost;
     this.authToken = authToken;
+    this.useSameServiceHostOnWsConnection = useSameServiceHostOnWsConnection;
 
     this.logger({
       currentState: `@vatis-tech/asr-client-js: Initializing the "InstanceReservation" plugin.`,
@@ -72,7 +74,7 @@ class InstanceReservation {
     this.reservationToken = response.token;
     this.streamHost = response.stream_host.startsWith("http") ? response.stream_host : `${streamHostType}${response.stream_host}`;
     this.responseCallback({
-      streamHost: this.streamHost,
+      streamHost: this.useSameServiceHostOnWsConnection ? this.serviceHost : this.streamHost,
       streamUrl: this.streamUrl,
       reservationToken: this.reservationToken,
       authToken: this.authToken,

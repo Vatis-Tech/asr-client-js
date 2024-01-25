@@ -56,7 +56,8 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
         var bearer = "Bearer ";
         this.responseCallback({
           serviceHost: this.connectionConfig.service_host,
-          authToken: "".concat(this.connectionConfig.auth_token.startsWith(bearer) ? "" : bearer).concat(this.connectionConfig.auth_token)
+          authToken: "".concat(this.connectionConfig.auth_token.startsWith(bearer) ? "" : bearer).concat(this.connectionConfig.auth_token),
+          useSameServiceHostOnWsConnection: this.connectionConfig.use_same_service_host_on_ws_connection === true ? true : false
         });
       } else {
         this.xmlHttp.open("GET", this.apiUrl);
@@ -124,6 +125,7 @@ var InstanceReservation = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "xmlHttp", void 0);
     (0, _defineProperty2["default"])(this, "logger", void 0);
     (0, _defineProperty2["default"])(this, "errorHandler", void 0);
+    (0, _defineProperty2["default"])(this, "useSameServiceHostOnWsConnection", void 0);
     this.errorHandler = errorHandler;
     this.logger = logger;
     this.logger({
@@ -139,9 +141,11 @@ var InstanceReservation = /*#__PURE__*/function () {
     key: "init",
     value: function init(_ref2) {
       var serviceHost = _ref2.serviceHost,
-        authToken = _ref2.authToken;
+        authToken = _ref2.authToken,
+        useSameServiceHostOnWsConnection = _ref2.useSameServiceHostOnWsConnection;
       this.serviceHost = serviceHost;
       this.authToken = authToken;
+      this.useSameServiceHostOnWsConnection = useSameServiceHostOnWsConnection;
       this.logger({
         currentState: "@vatis-tech/asr-client-js: Initializing the \"InstanceReservation\" plugin.",
         description: "@vatis-tech/asr-client-js: Here it is where the XMLHttpRequest happens to reserve a live asr instance."
@@ -183,7 +187,7 @@ var InstanceReservation = /*#__PURE__*/function () {
       this.reservationToken = response.token;
       this.streamHost = response.stream_host.startsWith("http") ? response.stream_host : "".concat(streamHostType).concat(response.stream_host);
       this.responseCallback({
-        streamHost: this.streamHost,
+        streamHost: this.useSameServiceHostOnWsConnection ? this.serviceHost : this.streamHost,
         streamUrl: this.streamUrl,
         reservationToken: this.reservationToken,
         authToken: this.authToken
@@ -1159,10 +1163,12 @@ var VatisTechClient = /*#__PURE__*/function () {
     key: "initInstanceReservation",
     value: function initInstanceReservation(_ref3) {
       var serviceHost = _ref3.serviceHost,
-        authToken = _ref3.authToken;
+        authToken = _ref3.authToken,
+        useSameServiceHostOnWsConnection = _ref3.useSameServiceHostOnWsConnection;
       this.instanceReservation.init({
         serviceHost: serviceHost,
-        authToken: authToken
+        authToken: authToken,
+        useSameServiceHostOnWsConnection: useSameServiceHostOnWsConnection
       });
     }
 

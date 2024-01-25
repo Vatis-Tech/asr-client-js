@@ -287,8 +287,8 @@ class VatisTechClient {
 
   // initilize InstanceReservation
   // get a reserved link for socket.io-client
-  initInstanceReservation({ serviceHost, authToken }) {
-    this.instanceReservation.init({ serviceHost, authToken });
+  initInstanceReservation({ serviceHost, authToken, useSameServiceHostOnWsConnection }) {
+    this.instanceReservation.init({ serviceHost, authToken, useSameServiceHostOnWsConnection });
   }
 
   // initilize SocketIOClientGenerator
