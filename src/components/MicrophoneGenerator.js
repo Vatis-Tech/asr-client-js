@@ -13,7 +13,7 @@ class MicrophoneGenerator {
   microphoneTimeslice;
   microphoneDeviceId;
   errorHandler;
-  constructor({ onDataCallback, logger, microphoneTimeslice, errorHandler, microphoneDeviceId }) {
+  constructor({ onDataCallback, onBlobDataCallback, logger, microphoneTimeslice, errorHandler, microphoneDeviceId }) {
     this.microphoneDeviceId = microphoneDeviceId;
 
     this.errorHandler = errorHandler;
@@ -26,6 +26,7 @@ class MicrophoneGenerator {
     });
 
     this.onDataCallback = onDataCallback;
+    this.onBlobDataCallback = onBlobDataCallback;
 
     if (microphoneTimeslice) {
       this.microphoneTimeslice = microphoneTimeslice;
@@ -110,6 +111,8 @@ class MicrophoneGenerator {
                   .replace("data:audio/webm; codecs=opus; base64,", ""),
               });
             };
+
+            this.onBlobDataCallback(e.data);
 
             reader.readAsDataURL(e.data);
             // if (e.data.size > 0) {
