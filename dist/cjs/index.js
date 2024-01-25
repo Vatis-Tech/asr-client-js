@@ -51,6 +51,7 @@ var VatisTechClient = /*#__PURE__*/function () {
       connectionConfig = _ref.connectionConfig,
       microphoneDeviceId = _ref.microphoneDeviceId;
     (0, _classCallCheck2["default"])(this, VatisTechClient);
+    (0, _defineProperty2["default"])(this, "blobCollectorChunks", void 0);
     (0, _defineProperty2["default"])(this, "microphoneGenerator", void 0);
     (0, _defineProperty2["default"])(this, "instanceReservation", void 0);
     (0, _defineProperty2["default"])(this, "apiKeyGenerator", void 0);
@@ -74,6 +75,7 @@ var VatisTechClient = /*#__PURE__*/function () {
     (0, _defineProperty2["default"])(this, "connectionConfig", void 0);
     (0, _defineProperty2["default"])(this, "microphoneTimeslice", void 0);
     (0, _defineProperty2["default"])(this, "microphoneDeviceId", void 0);
+    this.blobCollectorChunks = [];
     this.microphoneDeviceId = microphoneDeviceId;
     if (microphoneTimeslice) {
       this.microphoneTimeslice = microphoneTimeslice;
@@ -210,6 +212,7 @@ var VatisTechClient = /*#__PURE__*/function () {
     // instantiante MicrophoneGenerator - this will return on the this.onMicrophoneGeneratorDataCallback the data that it captures from the user's microphone
     this.microphoneGenerator = new _MicrophoneGenerator["default"]({
       onDataCallback: this.onMicrophoneGeneratorDataCallback.bind(this),
+      onBlobDataCallback: this.onBlobDataCallback.bind(this),
       logger: this.logger.bind(this),
       errorHandler: this.errorHandler,
       microphoneTimeslice: microphoneTimeslice,
@@ -403,6 +406,42 @@ var VatisTechClient = /*#__PURE__*/function () {
           hard: true
         });
       }
+    }
+
+    // this function collects all blob recorded from user's microphone so you can download the recording
+  }, {
+    key: "onBlobDataCallback",
+    value: function onBlobDataCallback(blobData) {
+      this.blobCollectorChunks.push(blobData);
+    }
+
+    // this function actually downloads the recording
+  }, {
+    key: "onDownloadRecording",
+    value: function onDownloadRecording() {
+      try {
+        var audioBlob = new Blob(this.blobCollectorChunks, {
+          "type": "audio/webm"
+        });
+        var audioUrl = URL.createObjectURL(audioBlob);
+        var anchor = document.createElement("a");
+        anchor.style.display = "none";
+        document.body.appendChild(anchor);
+        anchor.href = audioUrl;
+        anchor.download = "audio.webm";
+        anchor.click();
+        window.URL.revokeObjectURL(audioUrl);
+        anchor === null || anchor === void 0 ? void 0 : anchor.remove();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    // this function returns for the user the recording as blob chunks
+  }, {
+    key: "getRecordingAsBlobChunks",
+    value: function getRecordingAsBlobChunks() {
+      return this.blobCollectorChunks;
     }
   }]);
   return VatisTechClient;
