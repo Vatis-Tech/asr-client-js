@@ -13,5 +13,4 @@ var blobToBase64 = function blobToBase64(blob) {
     };
   });
 };
-var _default = blobToBase64;
-exports["default"] = _default;
+var _default = exports["default"] = blobToBase64;

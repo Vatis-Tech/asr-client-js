@@ -10,5 +10,4 @@ var SOCKET_IO_CLIENT_RESPONSE_COMMAND_PACKET = _index["default"].SOCKET_IO_CLIEN
 var checkIfCommandPacket = function checkIfCommandPacket(data) {
   return data.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_COMMAND_PACKET);
 };
-var _default = checkIfCommandPacket;
-exports["default"] = _default;
+var _default = exports["default"] = checkIfCommandPacket;

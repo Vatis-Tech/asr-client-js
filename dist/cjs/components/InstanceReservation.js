@@ -95,5 +95,4 @@ var InstanceReservation = /*#__PURE__*/function () {
   }]);
   return InstanceReservation;
 }();
-var _default = InstanceReservation;
-exports["default"] = _default;
+var _default = exports["default"] = InstanceReservation;

@@ -11,5 +11,4 @@ var SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET = _index["default"].SOCKET_IO_CLIENT_
 var checkIfFinalPacket = function checkIfFinalPacket(data) {
   return !data.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET) || data.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET) && data.headers.hasOwnProperty(SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET) && data.headers[SOCKET_IO_CLIENT_RESPONSE_SPLIT_PACKET] === true && data.headers[SOCKET_IO_CLIENT_RESPONSE_FINAL_SPLIT_PACKET] === true;
 };
-var _default = checkIfFinalPacket;
-exports["default"] = _default;
+var _default = exports["default"] = checkIfFinalPacket;

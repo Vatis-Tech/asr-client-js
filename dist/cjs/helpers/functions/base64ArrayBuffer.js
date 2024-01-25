@@ -50,5 +50,4 @@ function base64ArrayBuffer(arrayBuffer) {
   }
   return base64;
 }
-var _default = base64ArrayBuffer;
-exports["default"] = _default;
+var _default = exports["default"] = base64ArrayBuffer;

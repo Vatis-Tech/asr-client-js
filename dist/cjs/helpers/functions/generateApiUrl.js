@@ -37,5 +37,4 @@ function generateApiUrl(_ref) {
   }
   return apiUrl;
 }
-var _default = generateApiUrl;
-exports["default"] = _default;
+var _default = exports["default"] = generateApiUrl;

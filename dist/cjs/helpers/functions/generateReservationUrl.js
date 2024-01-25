@@ -13,5 +13,4 @@ function generateReservationUrl(_ref) {
   reservationUrl = reservationUrl.replace("<service_host>", serviceHost);
   return reservationUrl;
 }
-var _default = generateReservationUrl;
-exports["default"] = _default;
+var _default = exports["default"] = generateReservationUrl;

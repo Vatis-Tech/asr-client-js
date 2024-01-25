@@ -95,5 +95,4 @@ var ApiKeyGenerator = /*#__PURE__*/function () {
   }]);
   return ApiKeyGenerator;
 }();
-var _default = ApiKeyGenerator;
-exports["default"] = _default;
+var _default = exports["default"] = ApiKeyGenerator;

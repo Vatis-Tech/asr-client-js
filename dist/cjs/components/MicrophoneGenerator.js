@@ -198,5 +198,4 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
   }]);
   return MicrophoneGenerator;
 }();
-var _default = MicrophoneGenerator;
-exports["default"] = _default;
+var _default = exports["default"] = MicrophoneGenerator;

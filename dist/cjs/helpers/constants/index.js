@@ -60,5 +60,4 @@ var projectConstants = {
   MICROPHONE_BIT_RATE_SAMPLES: MICROPHONE_BIT_RATE_SAMPLES,
   MICROPHONE_TIMESLICE: MICROPHONE_TIMESLICE
 };
-var _default = projectConstants;
-exports["default"] = _default;
+var _default = exports["default"] = projectConstants;

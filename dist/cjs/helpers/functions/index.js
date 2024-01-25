@@ -17,5 +17,4 @@ var functions = {
   generateReservationUrl: _generateReservationUrl["default"],
   checkIfCommandPacket: _checkIfCommandPacket["default"]
 };
-var _default = functions;
-exports["default"] = _default;
+var _default = exports["default"] = functions;

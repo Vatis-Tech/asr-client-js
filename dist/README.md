@@ -623,6 +623,40 @@ You can read more on the following links:
 - [https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices)
 - [https://developer.mozilla.org/en-US/docs/Web/API/MediaDeviceInfo](https://developer.mozilla.org/en-US/docs/Web/API/MediaDeviceInfo)
 
+### onDownloadRecording
+
+Call this methos if you want to download the audio file as `audio/webm` type.
+
+### getRecordingAsBlobChunks
+
+Call this methos if you want to get all chunks from your michrophone as blobs.
+
+You can then use this to download the audio as you wish. Below is an example of downloading as `audio/webm`.
+
+```javascript
+// ... code
+try {
+  const allBlobData = vtc.getRecordingAsBlobChunks();
+  if (allBlobData && allBlobData.length) {
+    const audioBlob = new Blob(allBlobData, {
+      type: "audio/webm",
+    });
+    const audioUrl = URL.createObjectURL(audioBlob);
+    const anchor = document.createElement("a");
+    anchor.style.display = "none";
+    document.body.appendChild(anchor);
+    anchor.href = audioUrl;
+    anchor.download = "audio.webm";
+    anchor.click();
+    window.URL.revokeObjectURL(audioUrl);
+    anchor?.remove();
+  }
+} catch (error) {
+  console.error(error);
+}
+// ... code
+```
+
 ## Browser Support
 
 We officially support the latest versions of the following browsers:

@@ -44,5 +44,4 @@ var MicrophoneQueue = /*#__PURE__*/function () {
   }]);
   return MicrophoneQueue;
 }();
-var _default = MicrophoneQueue;
-exports["default"] = _default;
+var _default = exports["default"] = MicrophoneQueue;
