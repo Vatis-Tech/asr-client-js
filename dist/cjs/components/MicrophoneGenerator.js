@@ -19,6 +19,7 @@ var base64ArrayBuffer = _index2["default"].base64ArrayBuffer;
 var MicrophoneGenerator = /*#__PURE__*/function () {
   function MicrophoneGenerator(_ref) {
     var onDataCallback = _ref.onDataCallback,
+      onBlobDataCallback = _ref.onBlobDataCallback,
       logger = _ref.logger,
       microphoneTimeslice = _ref.microphoneTimeslice,
       errorHandler = _ref.errorHandler,
@@ -40,6 +41,7 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
       description: "@vatis-tech/asr-client-js: This is the constructor of MicrophoneGenerator class. This class, when it will be initialized, will ask user's permission for microphone usage. If accepted, the data from the microphone will be sent to the LIVE ASR service, using the SocketIOClientGenerator instance."
     });
     this.onDataCallback = onDataCallback;
+    this.onBlobDataCallback = onBlobDataCallback;
     if (microphoneTimeslice) {
       this.microphoneTimeslice = microphoneTimeslice;
     } else {
@@ -131,6 +133,7 @@ var MicrophoneGenerator = /*#__PURE__*/function () {
                       data: reader.result.replace("data:audio/webm;codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus;base64,", "").replace("data:audio/webm; codecs=opus; base64,", "")
                     });
                   };
+                  this.onBlobDataCallback(e.data);
                   reader.readAsDataURL(e.data);
                   // if (e.data.size > 0) {
                   //   if (this.blobState) {

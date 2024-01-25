@@ -18,6 +18,7 @@ const {
 const { generateApiUrl, checkIfFinalPacket, checkIfCommandPacket } = functions;
 
 class VatisTechClient {
+  blobCollectorChunks;
   microphoneGenerator;
   instanceReservation;
   apiKeyGenerator;
@@ -66,6 +67,7 @@ class VatisTechClient {
     connectionConfig,
     microphoneDeviceId
   }) {
+    this.blobCollectorChunks = [];
     this.microphoneDeviceId = microphoneDeviceId;
 
     if (microphoneTimeslice) {
@@ -207,6 +209,7 @@ class VatisTechClient {
     // instantiante MicrophoneGenerator - this will return on the this.onMicrophoneGeneratorDataCallback the data that it captures from the user's microphone
     this.microphoneGenerator = new MicrophoneGenerator({
       onDataCallback: this.onMicrophoneGeneratorDataCallback.bind(this),
+      onBlobDataCallback: this.onBlobDataCallback.bind(this),
       logger: this.logger.bind(this),
       errorHandler: this.errorHandler,
       microphoneTimeslice,
@@ -393,6 +396,36 @@ class VatisTechClient {
     ) {
       this.destroy({ hard: true });
     }
+  }
+
+  // this function collects all blob recorded from user's microphone so you can download the recording
+  onBlobDataCallback(blobData) {
+    this.blobCollectorChunks.push(blobData);
+  }
+
+  // this function actually downloads the recording
+  onDownloadRecording() {
+    try {
+      const audioBlob = new Blob(this.blobCollectorChunks, {
+        "type": "audio/webm"
+      });
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const anchor = document.createElement("a");
+      anchor.style.display = "none";
+      document.body.appendChild(anchor);
+      anchor.href = audioUrl;
+      anchor.download = "audio.webm"
+      anchor.click();
+      window.URL.revokeObjectURL(audioUrl);
+      anchor?.remove();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // this function returns for the user the recording as blob chunks
+  getRecordingAsBlobChunks() {
+    return this.blobCollectorChunks;
   }
 }
 

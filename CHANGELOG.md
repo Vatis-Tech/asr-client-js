@@ -51,6 +51,25 @@ No fixes were made.
 
 Each time you add new changes to this file, please add them bellow this line - i.e. between the [insertion](#insterion) section and the last version added.
 
+## [2.0.9] - 2024-01-25
+
+### Added
+
+- `onDownloadRecording` method function that downloads the recoreded microphone as `audio/webm`
+- `getRecordingAsBlobChunks` method function that returns all the recoreded microphone chunks as an array of blob
+
+### Changed
+
+No changes were made.
+
+### Removed
+
+Nothing was removed.
+
+### Fixed
+
+No fixes were made.
+
 ## [1.4.0] - 2022-06-13
 
 ### Added
